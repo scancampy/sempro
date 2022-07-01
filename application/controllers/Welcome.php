@@ -22,9 +22,20 @@ class Welcome extends CI_Controller {
 	{
 		$data = array();
 		if($this->input->post('btnlogin')) {
-//	$hash =  password_hash("password",PASSWORD_DEFAULT );
-	
-//	echo password_verify("passwordx", $hash)
+			$this->form_validation->set_rules('userid', 'NRP / NPK', 'required');
+			$this->form_validation->set_rules('password', 'Password', 'required');
+			$this->form_validation->set_error_delimiters('<li>', '</li>');
+
+			if ($this->form_validation->run() == FALSE) {
+                $data['error'] = validation_errors(); 
+            } else { 
+				if($this->User_model->do_login()) {
+					// create session & redirect
+				} else {
+					// display error
+					$data['error'] = '<li>NRP/NPK atau password salah.</li>';
+				}
+			}
 
 		}
 		$this->load->view('v_login', $data);
