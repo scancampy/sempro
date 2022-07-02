@@ -13,7 +13,10 @@ class User_model extends CI_Model {
                 {
                       $this->password = $row->password;
                       if(password_verify($this->input->post('password', TRUE), $this->password)) {
-                        return true;
+                        //update last login
+                        $this->db->where('username', $this->input->post('userid', TRUE));
+                        $this->db->update('user', array('last_login' => date('Y-m-d H:i:s')));
+                        return $row;
                       }
                 }
                 return false;
