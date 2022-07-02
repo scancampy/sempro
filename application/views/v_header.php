@@ -25,6 +25,10 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/daterangepicker/daterangepicker.css'); ?>">
   <!-- summernote -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/summernote/summernote-bs4.min.css'); ?>">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css'); ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css'); ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css'); ?>">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -65,7 +69,7 @@
           <img src="<?php echo base_url('assets/img/default_avatar.jpg'); ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block"><?php echo $this->session->userdata('user')->info->name; ?></a>
         </div>
       </div>
 
@@ -87,14 +91,14 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="<?php echo base_url('dashboard'); ?>" class="nav-link active">
+            <a href="<?php echo base_url('dashboard'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'dashboard') { echo  'active'; } ?>">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Dashboard
               </p>
             </a>
           </li>
-          <li class="nav-item <?php //menu-open ?>">
+          <li class="nav-item <?php if($this->uri->segment(1) == 'master') { echo  'menu-open'; } ?>">
             <a href="#" class="nav-link <?php //active ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -104,7 +108,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
+                <a href="<?php echo base_url('master/student'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'student') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Mahasiswa</p>
                 </a>
