@@ -22,6 +22,12 @@ class User_model extends CI_Model {
                 return false;
         }
 
+        public function resetpass($username, $newpass) {
+                $data = array('password' =>  password_hash($newpass, PASSWORD_DEFAULT));
+                $this->db->where('username', $username);
+                $this->db->update('user', $data);
+        }
+
         public function get_last_ten_entries()
         {
                 $query = $this->db->get('entries', 10);

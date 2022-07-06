@@ -116,7 +116,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
+                <a href="<?php echo base_url('master/lecturer'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'lecturer') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dosen</p>
                 </a>
