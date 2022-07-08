@@ -10,6 +10,7 @@ class Student_model extends CI_Model {
 
 
         public function del($nrp) {
+                $this->db->trans_start();
                 $q = $this->db->get_where('student', array('nrp' => $nrp));
                 $this->db->where('username', $nrp);
                 $this->db->delete('user_roles');
@@ -19,6 +20,7 @@ class Student_model extends CI_Model {
 
                 $this->db->where('nrp', $nrp);
                 $this->db->delete('student');
+                $this->db->trans_complete();
 
                 if($q->num_rows() > 0) {
                         return true;
@@ -52,6 +54,7 @@ class Student_model extends CI_Model {
                 $i =0;
                 $valid = false;
                 $numbercreated = 0;
+                $this->db->trans_start();
                 while (($row = fgetcsv($csv, 10000, ",")) != FALSE) //get row vales
                 {                    
                     if($i==0 && strtolower($row[0]) =='nrp' && strtolower($row[1]) == 'nama'  && strtolower($row[2]) == 'status' && strtolower($row[3]) == 'ips' && strtolower($row[4]) == 'ipk' && strtolower($row[5]) == 'ipkm') {
@@ -91,6 +94,7 @@ class Student_model extends CI_Model {
 
                     $i++;
                 }
+                $this->db->trans_complete();
 
                 if($valid == false) {
                         return $valid;

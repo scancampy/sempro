@@ -27,11 +27,12 @@
             <div class="card">
               <div class="card-header">
                 <div class="row">
-                  <div class="col-10">
+                  <div class="col-9">
                     <h3 class="card-title">Data Dosen</h3>
                   </div>
-                  <div class="col-2">
-                    <button type="button"  class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">Upload CSV</button>
+                  <div class="col-3 text-right">
+                    <button type="button"  class="btn  btn-primary btn-sm" data-toggle="modal" data-target="#modal-add">Tambah Dosen</button>
+                    <button type="button"  class="btn  btn-default btn-sm" data-toggle="modal" data-target="#modal-default">Upload CSV</button>
                   </div>
                 </div>
                 
@@ -54,7 +55,9 @@
                   <tr>
                     <td><?php echo $row->npk; ?></td>
                     <td><?php echo $row->nama; ?></td>
-                    <td><button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-warning editbtn"  data-toggle="modal" data-target="#modal-edit" >Reset Password</button> <a href="<?php echo base_url('master/lecturer/del/'.$row->npk); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td >
+                      <button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-info editbtnlecturer"  data-toggle="modal" data-target="#modal-edit-lecturer" >Edit</button>
+                      <button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-warning editbtn"  data-toggle="modal" data-target="#modal-edit" >Reset</button> <a href="<?php echo base_url('master/lecturer/del/'.$row->npk); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>
@@ -138,6 +141,80 @@
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
             <button type="submit" name="btnedit" value="btnedit" class="btn btn-primary">Reset Password</button>
+          </div>
+        </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  
+  <div class="modal fade" id="modal-edit-lecturer">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="<?php echo base_url('master/lecturer'); ?>" enctype="multipart/form-data" method="post">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Data Dosen</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <label for="npkeditlecturer" class="col-sm-4 col-form-label">NPK</label>
+              <div class="col-sm-8">
+                <input type="text" name="npkeditlecturer" readonly class="form-control" id="npkeditlecturer" >
+              </div>
+            </div>
+           <div class="form-group row">
+              <label for="namaeditlecturer" class="col-sm-4 col-form-label">Nama</label>
+              <div class="col-sm-8">
+                <input type="text" name="namaeditlecturer" class="form-control" id="namaeditlecturer" >
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+            <button type="submit" name="btnubah" value="btnubah" class="btn btn-primary">Ubah</button>
+          </div>
+        </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+   <div class="modal fade" id="modal-add">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="<?php echo base_url('master/lecturer'); ?>" enctype="multipart/form-data" method="post">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Data Dosen Baru</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <label for="npknew" class="col-sm-4 col-form-label">NPK</label>
+              <div class="col-sm-8">
+                <input type="text" name="npknew" class="form-control" id="npknew" >
+              </div>
+            </div>
+           <div class="form-group row">
+              <label for="namanew" class="col-sm-4 col-form-label">Nama</label>
+              <div class="col-sm-8">
+                <input type="text" name="namanew" class="form-control" id="namanew" >
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+            <button type="submit" name="btntambah" value="btntambah" class="btn btn-primary">Tambah</button>
           </div>
         </form>
         </div>

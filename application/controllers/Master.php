@@ -150,6 +150,23 @@ class Master extends CI_Controller {
 			}
 		}
 
+		// TAMBAH DOSEN
+		if($this->input->post('btntambah')) {
+			if($this->Lecturer_model->add($this->input->post('npknew'), $this->input->post('namanew'))) {
+				$this->session->set_flashdata('notif', 'success_add');
+			} else {
+				$this->session->set_flashdata('notif', 'failed_add');
+			}
+			redirect('master/lecturer');
+		}
+
+		// EDIT DOSEN
+		if($this->input->post('btnubah')) {
+			$this->Lecturer_model->update_data($this->input->post('npkeditlecturer'), $this->input->post('namaeditlecturer'));
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/lecturer');
+		}
+
 		// UPLOAD CSV
 		if($this->input->post('btnupload')) {
 			$csv = $_FILES['filecsv']['tmp_name'];
@@ -234,6 +251,33 @@ class Master extends CI_Controller {
     		';
     	}
 
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data dosen"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah dosen"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'failed_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "Gagal tambah dosen. NPK sudah ada."
+			      });
+    		';
+    	}
+
     	// EDIT BTN
     	$data['js'] .= '
     		$("body").on("click",".editbtn", function() {
@@ -244,9 +288,235 @@ class Master extends CI_Controller {
     		});
     	';
 
+    	$data['js'] .= '
+    		$("body").on("click",".editbtnlecturer", function() {
+    			var npk = $(this).attr("targetnpk");
+    			var nama = $(this).attr("targetnama");
+    			$("#npkeditlecturer").val(npk);
+    			$("#namaeditlecturer").val(nama);
+    		});
+    	';
+
     	$data['js'] .= 'bsCustomFileInput.init(); ';
 		$this->load->view('v_header', $data);
 		$this->load->view('master/v_lecturer', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function lab($delaction = null, $dellab = null) {
+		$data = array();
+		
+		// LOAD LAB
+		$res = $this->Lab_model->get();
+		$data['lab'] = $res;
+		
+		// TAMBAH LAB
+		if($this->input->post('btntambah')) {
+			$this->Lab_model->add($this->input->post('namanew'), $this->input->post('namapendeknew'));	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/lab');
+		}
+
+		// EDIT LAB
+		if($this->input->post('btnubah')) {
+			$this->Lab_model->update_data($this->input->post('idedit'),$this->input->post('namaedit'), $this->input->post('namapendekedit'));
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/lab');
+		}
+
+		// DEL LAB
+		if($delaction != null) {
+			if($this->Lab_model->del($dellab)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/lab');
+			}
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah lab"
+			      });
+    		';
+    	}
+
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var nama = $(this).attr("targetnama");
+    			var namapendek = $(this).attr("targetnamapendek");
+    			$("#idedit").val(id);
+    			$("#namaedit").val(nama);
+    			$("#namapendekedit").val(namapendek);
+    		});
+    	';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_lab', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function roles($delaction = null, $dellab = null) {
+		$data = array();
+		
+
+		// LOAD DOSEN
+		$data['lecturer'] = $this->Lecturer_model->get();
+
+		// LOAD LAB
+		$data['lab'] = $this->Lab_model->get();
+		
+		// TAMBAH ROLES
+		if($this->input->post('btntambah')) {
+			$this->Lab_model->add($this->input->post('namanew'), $this->input->post('namapendeknew'));	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/lab');
+		}
+
+		// EDIT LAB
+		if($this->input->post('btnubah')) {
+			$this->Lab_model->update_data($this->input->post('idedit'),$this->input->post('namaedit'), $this->input->post('namapendekedit'));
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/lab');
+		}
+
+		// DEL LAB
+		if($delaction != null) {
+			if($this->Lab_model->del($dellab)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/lab');
+			}
+		}
+
+		
+
+		// DATA TABLE
+	/*	$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+*/
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah lab"
+			      });
+    		';
+    	}
+
+    	// RADIO WD
+    	$data['js'] .= '
+			$("input:radio[id=jabatanwd]").on("change", function() {
+				if($(this).attr("checked")) {
+					$("#divlab").hide();
+				}
+			});
+
+			$("input:radio[id=jabatankalab]").on("change", function() {
+				if($(this).attr("checked")) {					
+					$("#divlab").show();
+				}
+			});
+    	';
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var nama = $(this).attr("targetnama");
+    			var namapendek = $(this).attr("targetnamapendek");
+    			$("#idedit").val(id);
+    			$("#namaedit").val(nama);
+    			$("#namapendekedit").val(namapendek);
+    		});
+    	';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_roles', $data);
 		$this->load->view('v_footer', $data);
 	}
 }

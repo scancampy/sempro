@@ -99,7 +99,7 @@
                     <td><?php echo $row->ips; ?></td>
                     <td><?php echo $row->ipk; ?></td>
                     <td><?php echo $row->ipkm; ?></td>
-                    <td><button targetnrp="<?php echo $row->nrp; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-warning editbtn"  data-toggle="modal" data-target="#modal-edit" >Reset Password</button> <a href="<?php echo base_url('master/student/del/'.$row->nrp); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td ><button targetnrp="<?php echo $row->nrp; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-warning editbtn"  data-toggle="modal" data-target="#modal-edit" >Reset Password</button> <a href="<?php echo base_url('master/student/del/'.$row->nrp); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>

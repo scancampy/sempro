@@ -6,6 +6,7 @@ class Lecturer_model extends CI_Model {
 
 
         public function del($npk) {
+                $this->db->trans_start();
                 $q = $this->db->get_where('lecturer', array('npk' => $npk));
                 $this->db->where('username', $npk);
                 $this->db->delete('user_roles');
@@ -16,6 +17,8 @@ class Lecturer_model extends CI_Model {
                 $this->db->where('npk', $npk);
                 $this->db->delete('lecturer');
 
+                $this->db->trans_complete();
+
                 if($q->num_rows() > 0) {
                         return true;
                 } else {
@@ -24,6 +27,7 @@ class Lecturer_model extends CI_Model {
         }
 
         public function get($npk = '', $nama = '') {
+                $this->db->trans_start();
                 if($npk != '') {
                         $this->db->like('npk', $npk);
                 }
@@ -34,13 +38,47 @@ class Lecturer_model extends CI_Model {
 
                 $this->db->order_by('nama', 'asc');
                 $q = $this->db->get('lecturer'); 
+
+                $this->db->trans_complete();
                 return $q->result();                       
+        }
+
+        public function update_data($npk, $nama) {
+                $this->db->trans_start();
+                $data = array('nama' => $nama);
+                $this->db->where('npk', $npk);
+                $this->db->update('lecturer', $data);
+
+                $this->db->trans_complete();
+        }
+
+        public function add($npk, $nama) {
+                // cek apakah npk sudah ada
+
+              
+                $q = $this->db->get_where('lecturer', array('npk' => $npk));
+                if($q->num_rows() > 0) {
+                        return false;
+                } else {
+                        $this->db->trans_start();
+                        $this->npk = $npk;
+                        $this->nama = $nama;
+                        $data = array('username' => $this->npk, 'password' => password_hash("password", PASSWORD_DEFAULT), 'user_type' => 'lecturer');
+                        $this->db->insert('user', $data);
+                        $this->db->insert('user_roles', array('username' => $this->npk, 'roles' => 'lecturer'));
+                        $this->db->insert('lecturer', $this);
+
+                        $this->db->trans_complete();
+
+                        return true;
+                }
         }
 
         public function update($csv) {
                 $i =0;
                 $valid = false;
                 $numbercreated = 0;
+                $this->db->trans_start();
                 while (($row = fgetcsv($csv, 10000, ",")) != FALSE) //get row vales
                 {  
                     if($i==0 && strtolower($row[0]) =='npk' && strtolower($row[1]) == 'nama') {
@@ -77,6 +115,7 @@ class Lecturer_model extends CI_Model {
                     $i++;
                 }
 
+                $this->db->trans_complete();
                 if($valid == false) {
                         return $valid;
                 } else {

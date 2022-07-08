@@ -120,6 +120,18 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dosen</p>
                 </a>
+              </li>              
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/lab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'lab') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Lab</p>
+                </a>
+              </li>             
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/roles'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'jabatan') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Setting Jabatan</p>
+                </a>
               </li>
             </ul>
           </li>
