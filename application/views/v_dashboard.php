@@ -21,6 +21,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <!-- Timelime example  -->
         <div class="row">
           .
         </div>

@@ -14,7 +14,19 @@ class Dashboard extends CI_Controller {
 	{
 		$data = array();
 		$this->load->view('v_header',$data);
-		$this->load->view('v_dashboard', $data);
+
+        $roles = $this->session->userdata('user')->roles;
+		foreach($roles as $role) {
+            if($role->roles == 'student') { 
+            	$this->load->view('v_dashboard_student', $data);
+            	break;
+            } else {
+            	$this->load->view('v_dashboard', $data);
+            	break;
+            }
+        }
+         
+		
 		$this->load->view('v_footer', $data);
 	}
 

@@ -11,7 +11,7 @@ class Staff_model extends CI_Model {
 
                 if (isset($row))
                 {
-                        return $row;   
+                        return $query->result();   
                 }
                 return false;
         }

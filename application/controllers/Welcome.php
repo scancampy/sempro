@@ -27,6 +27,18 @@ class Welcome extends CI_Controller {
 					if($login->user_type == 'staff') {
 						$login->info = $this->Staff_model->get($login->username);
 					}
+
+					if($login->user_type == 'lecturer') {
+						$login->info = $this->Lecturer_model->get($login->username);
+					}
+
+					if($login->user_type == 'student') {
+						$login->info = $this->Student_model->get($login->username);
+					}
+
+					// get roles
+					$login->roles = $this->Roles_model->get($login->username);
+
 					// get user data
 					$this->session->set_userdata('user', $login);
 					redirect('dashboard');

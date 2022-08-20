@@ -19,6 +19,10 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css'); ?>">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/css/adminlte.min.css'); ?>">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2/css/select2.min.css'); ?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'); ?>">
+  
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css'); ?>">
   <!-- Daterange picker -->
@@ -71,7 +75,7 @@
           <img src="<?php echo base_url('assets/img/default_avatar.jpg'); ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo $this->session->userdata('user')->info->name; ?></a>
+          <a href="#" class="d-block"><?php echo $this->session->userdata('user')->info[0]->nama; ?></a>
         </div>
       </div>
 
@@ -100,7 +104,11 @@
               </p>
             </a>
           </li>
-          <li class="nav-item <?php if($this->uri->segment(1) == 'master') { echo  'menu-open'; } ?>">
+          <?php 
+          $roles = $this->session->userdata('user')->roles;
+          foreach($roles as $role) {
+            if($role->roles == 'admin') { ?>
+              <li class="nav-item menu-open">
             <a href="#" class="nav-link <?php //active ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -109,6 +117,13 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/periode'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'periode') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Periode/Semester</p>
+                </a>
+              </li>
+             
               <li class="nav-item">
                 <a href="<?php echo base_url('master/student'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'student') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -120,6 +135,12 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dosen</p>
                 </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/guardian'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'guardian') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dosen Wali</p>
+                </a>
               </li>              
               <li class="nav-item">
                 <a href="<?php echo base_url('master/lab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'lab') { echo  'active'; } ?>">
@@ -128,22 +149,58 @@
                 </a>
               </li>             
               <li class="nav-item">
-                <a href="<?php echo base_url('master/roles'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'jabatan') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('master/roles'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'roles') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Setting Jabatan</p>
+                </a>
+              </li>            
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/eligibility'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'eligibility') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Setting Eligibility</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/course'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'course') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Mata Kuliah</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
+
+            <?php } else if($role->roles == 'kalab') { ?>
+ <li class="nav-item menu-open">
+            <a href="#" class="nav-link <?php //active ?>">
+              <i class="nav-icon fas fa-users"></i>
               <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
+                Kalab
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo base_url('kalab/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Topik</p>
+                </a>
+              </li>
+            </ul>
           </li>
+             <?php } else if($role->roles == 'student') { ?>
+               <li class="nav-item">
+                <a href="<?php echo base_url('proposal/student'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>
+                    Proposal
+                  </p>
+                </a>
+              </li>
+            <?php }
+          }
+          ?>
+         
           <li class="nav-header">SETTINGS</li>
           <li class="nav-item">
             <a href="pages/calendar.html" class="nav-link">

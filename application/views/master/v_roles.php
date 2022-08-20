@@ -48,13 +48,14 @@
                   </tr>
                   </thead>
                   <tbody>
-                    <?php if(isset($lab)) { 
-                      foreach($lab as $row) { 
+                    <?php if(isset($roles)) { 
+                      foreach($roles as $row) { 
                       ?>
                   <tr>
+                    <td><?php echo $row->username; ?></td>
                     <td><?php echo $row->nama; ?></td>
-                    <td><?php echo $row->nama_pendek; ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetnamapendek="<?php echo $row->nama_pendek; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/lab/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td><?php if($row->roles =='wd') { echo 'Wakil Dekan'; } else if($row->roles=='kalab') { echo 'Kalab '.$row->namalab; } ?></td>
+                    <td ><button targetid="<?php echo $row->id; ?>" targetusername="<?php echo $row->username; ?>" targetroles="<?php echo $row->roles; ?>" targetlabid="<?php echo $row->id_lab; ?>"  class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/roles/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>
@@ -87,7 +88,7 @@
               <div class="col-sm-10">
                 <select class="form-control" name="npk" id="npk">
                   <?php foreach($lecturer as $row) { ?>
-                  <option><?php echo $row->nama; ?></option>
+                  <option value="<?php echo $row->npk; ?>"><?php echo $row->nama; ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -96,11 +97,11 @@
                <label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
               <div class="col-sm-10" style="padding-top:8px;">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="jabatan" id="jabatankalab" checked="">
+                  <input class="form-check-input" type="radio" name="jabatan" value="kalab" id="jabatankalab" checked="">
                   <label class="form-check-label">Kalab</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="jabatan" id="jabatanwd" checked="">
+                  <input class="form-check-input" type="radio" name="jabatan" value="wd" id="jabatanwd" checked="">
                   <label class="form-check-label">Wakil Dekan</label>
                 </div>
               </div>
@@ -110,7 +111,7 @@
               <div class="col-sm-8">
                 <select class="form-control" name="lab" id="lab">
                   <?php foreach($lab as $row) { ?>
-                  <option><?php echo $row->nama; ?></option>
+                  <option value="<?php echo $row->id; ?>"><?php echo $row->nama; ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -130,27 +131,48 @@
     <!-- /.modal -->
 
     <div class="modal fade" id="modal-edit">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <form method="post" action="<?php echo base_url('master/lab'); ?>" enctype="multipart/form-data" method="post">
+          <form method="post" action="<?php echo base_url('master/roles'); ?>" enctype="multipart/form-data" method="post">
           <div class="modal-header">
-            <h4 class="modal-title">Edit Lab</h4>
+            <h4 class="modal-title">Edit Jabatan</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
            <div class="form-group row">
-              <label for="namaedit" class="col-sm-4 col-form-label">Nama</label>
-              <div class="col-sm-8">
-                <input type="text" name="namaedit" class="form-control" id="namaedit" >
-                <input type="hidden" name="idedit" id="idedit" >
+              <label for="npkedit" class="col-sm-2 col-form-label">Dosen</label>
+              <div class="col-sm-10">
+                <input type="hidden" id="hid_roles_id" name="hid_roles_id" />
+                <select class="form-control" disabled name="npkedit" id="npkedit">
+                  <?php foreach($lecturer as $row) { ?>
+                  <option value="<?php echo $row->npk; ?>"><?php echo $row->nama; ?></option>
+                  <?php } ?>
+                </select>
               </div>
             </div>
             <div class="form-group row">
-              <label for="namapendekedit" class="col-sm-4 col-form-label">Singkatan</label>
+               <label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
+              <div class="col-sm-10" style="padding-top:8px;">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="jabatanedit" value="kalab" id="jabatankalabedit" checked="">
+                  <label class="form-check-label">Kalab</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="jabatanedit" value="wd" id="jabatanwdedit" checked="">
+                  <label class="form-check-label">Wakil Dekan</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" id="divlabedit" style="display:none;">
+              <label for="labedit" class="col-sm-2 col-form-label">Lab</label>
               <div class="col-sm-8">
-                <input type="text" name="namapendekedit" class="form-control" id="namapendekedit" >
+                <select class="form-control" name="labedit" id="labedit">
+                  <?php foreach($lab as $row) { ?>
+                  <option value="<?php echo $row->id; ?>"><?php echo $row->nama; ?></option>
+                  <?php } ?>
+                </select>
               </div>
             </div>
 
