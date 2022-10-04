@@ -6,7 +6,10 @@ class Eligibility_model extends CI_Model {
         public $nama_alias;
         public $nilai;
 
-        public function get() {
+        public function get($where = '') {
+                if($where != '') {
+                         $this->db->where($where);
+                }
                 $this->db->order_by('id','asc');
                 $q = $this->db->get('setting_eligibility');
                 return $q->result();                       

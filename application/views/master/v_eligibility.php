@@ -38,6 +38,7 @@
                   <thead>
                   <tr>
                     <th>Nama</th>
+                    <th>Keterangan</th>
                     <th>Nilai</th>
                     <th>Aksi</th>
                   </tr>
@@ -48,6 +49,7 @@
                       ?>
                   <tr>
                     <td><?php echo $row->nama; ?></td>
+                    <td><?php echo $row->keterangan; ?></td>
                     <td><?php echo $row->nilai; ?></td>
                     <td ><button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetnamaalias="<?php echo $row->nama_alias; ?>" targetnilai="<?php echo $row->nilai; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button>
                     </td>

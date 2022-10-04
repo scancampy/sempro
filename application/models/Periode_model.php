@@ -29,6 +29,18 @@ class Periode_model extends CI_Model {
                 return $q->result();                       
         }
 
+        public function get_periode_from_topik($topiks) {
+                $data = array();
+                foreach($topiks as $value) {
+                        $this->db->join('periode', 'periode.id = topik_periode.id_periode', 'left');
+                        $this->db->select('topik_periode.*, periode.nama');
+                        $q = $this->db->get_where('topik_periode', array('id_topik' => $value->id));
+                        $data[] = $q->result();
+                }
+
+                return $data;
+        }
+
         public function add($nama, $is_active = 0) {
                 if($is_active == 1) {
                         $this->db->update('periode', array('is_active' => 0));

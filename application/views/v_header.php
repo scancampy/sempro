@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css'); ?>">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/css/adminlte.min.css'); ?>">
+  <!-- BS Stepper -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/bs-stepper/css/bs-stepper.min.css'); ?>">
   <!-- Select2 -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2/css/select2.min.css'); ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'); ?>">
@@ -135,13 +137,7 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dosen</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo base_url('master/guardian'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'guardian') { echo  'active'; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dosen Wali</p>
-                </a>
-              </li>              
+              </li>                           
               <li class="nav-item">
                 <a href="<?php echo base_url('master/lab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'lab') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -170,30 +166,47 @@
             </ul>
           </li>
 
-            <?php } else if($role->roles == 'kalab') { ?>
- <li class="nav-item menu-open">
+            <?php } else if($role->roles == 'lecturer') { ?>
+          <li class="nav-item menu-open">
             <a href="#" class="nav-link <?php //active ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Kalab
+                Dosen
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo base_url('kalab/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('lecturer/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Topik</p>
                 </a>
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+                <a href="<?php echo base_url('lecturer/proposal'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Proposal
+                  </p>
+                </a>
+              </li>
              <?php } else if($role->roles == 'student') { ?>
                <li class="nav-item">
-                <a href="<?php echo base_url('proposal/student'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('proposal/student'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'proposal') { echo  'active'; } ?>">
                   <i class="nav-icon fas fa-book"></i>
                   <p>
                     Proposal
+                  </p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('transkrip/student'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'transkrip') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>
+                    Transkrip
                   </p>
                 </a>
               </li>

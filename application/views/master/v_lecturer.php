@@ -44,6 +44,7 @@
                   <tr>
                     <th>NPK</th>
                     <th>Nama</th>
+                    <th>Lab</th>
                     <th>Aksi</th>
                   </tr>
                   </thead>
@@ -55,8 +56,9 @@
                   <tr>
                     <td><?php echo $row->npk; ?></td>
                     <td><?php echo $row->nama; ?></td>
+                    <td><?php echo $row->namalab; ?></td>
                     <td >
-                      <button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-info editbtnlecturer"  data-toggle="modal" data-target="#modal-edit-lecturer" >Edit</button>
+                      <button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" targetlab="<?php echo $row->lab_id; ?>" class="btn btn-xs btn-info editbtnlecturer"  data-toggle="modal" data-target="#modal-edit-lecturer" >Edit</button>
                       <button targetnpk="<?php echo $row->npk; ?>" targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-warning editbtn"  data-toggle="modal" data-target="#modal-edit" >Reset</button> <a href="<?php echo base_url('master/lecturer/del/'.$row->npk); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
@@ -174,6 +176,18 @@
               </div>
             </div>
 
+           <div class="form-group row">
+              <label for="editlab" class="col-sm-4 col-form-label">Lab</label>
+              <div class="col-sm-8">
+                <select class="form-control" id="editlab" name="edit_lab_id">
+                  <option value="0">[Pilih Lab]</option>
+                  <?php foreach($lab as $l) { ?>
+                    <option value="<?php echo $l->id; ?>"><?php echo $l->nama; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -210,7 +224,17 @@
                 <input type="text" name="namanew" class="form-control" id="namanew" >
               </div>
             </div>
-
+           <div class="form-group row">
+              <label for="lab" class="col-sm-4 col-form-label">Lab</label>
+              <div class="col-sm-8">
+                <select class="form-control" id="lab" name="lab_id">
+                  <option value="0">[Pilih Lab]</option>
+                  <?php foreach($lab as $l) { ?>
+                    <option value="<?php echo $l->id; ?>"><?php echo $l->nama; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>

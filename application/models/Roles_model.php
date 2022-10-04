@@ -72,7 +72,6 @@ class Roles_model extends CI_Model {
                                         $this->db->where('npk', $row->username);
                                         $this->db->update('user_lab', $data);
 
-                                        echo $this->db->last_query();
                                         $this->db->trans_complete();
                                         return true;
                                 }
@@ -129,6 +128,42 @@ class Roles_model extends CI_Model {
                 $q = $this->db->get('user_roles');       
 
                 return $q->result();
+        }
+
+        public function is_kalab($npk, $topikid) {
+                // cek apakah kalab
+                $cek = $this->db->get_where('topik', array('id' => $topikid));
+
+                if($cek->num_rows() > 0) {
+                        $rcek = $cek->row();
+                        $q = $this->db->get_where('user_lab', array('npk' => $npk, 'id_lab' => $rcek->id_lab));
+                        if($q->num_rows() > 0) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                } else {
+                        return false;
+                }
+                
+        }
+
+        public function is_role_kalab($npk) {
+                $q = $this->db->get_where('user_lab', array('npk' => $npk));
+                if($q->num_rows() > 0) {
+                        return true;
+                } else {
+                        return false;
+                }
+        }
+
+        public function is_role_wd($npk) {
+               $q = $this->db->get_where('user_roles', array('username' => $npk, 'roles' => 'wd'));
+                if($q->num_rows() > 0) {
+                        return true;
+                } else {
+                        return false;
+                }
         }
 }
 

@@ -3,6 +3,7 @@ class Lecturer_model extends CI_Model {
 
         public $npk;
         public $nama;
+        public $lab_id;
 
 
         public function del($npk) {
@@ -26,7 +27,7 @@ class Lecturer_model extends CI_Model {
                 }
         }
 
-        public function get($npk = '', $nama = '') {
+        public function get($npk = '', $nama = '', $lab_id = '') {
                 $this->db->trans_start();
                 if($npk != '') {
                         $this->db->like('npk', $npk);
@@ -35,24 +36,38 @@ class Lecturer_model extends CI_Model {
                 if($nama != '') {
                         $this->db->like('nama', $nama);
                 }
+                if($lab_id != '') {
+                        $this->db->like('lab_id', $lab_id);
+                }
 
+                $this->db->join('lab', 'lab.id = lecturer.lab_id', 'left');
+                $this->db->select('lecturer.*, lab.nama as "namalab"');
                 $this->db->order_by('nama', 'asc');
                 $q = $this->db->get('lecturer'); 
 
                 $this->db->trans_complete();
+
                 return $q->result();                       
         }
 
-        public function update_data($npk, $nama) {
+        public function get_with_beban() {
+                $this->db->join('lab', 'lab.id = lecturer.lab_id', 'left');
+                $this->db->select('lecturer.*, lab.nama as "namalab", (SELECT COUNT(student_topik.lecturer1_npk) FROM student_topik WHERE student_topik.lecturer1_npk = lecturer.npk) AS "beban1", (SELECT COUNT(student_topik.lecturer2_npk) FROM student_topik WHERE student_topik.lecturer2_npk = lecturer.npk) as "beban2" ');
+                $this->db->order_by('nama', 'asc');
+                $q = $this->db->get('lecturer'); 
+                return $q->result();
+        }
+
+        public function update_data($npk, $nama, $lab_id) {
                 $this->db->trans_start();
-                $data = array('nama' => $nama);
+                $data = array('nama' => $nama, 'lab_id' => $lab_id);
                 $this->db->where('npk', $npk);
                 $this->db->update('lecturer', $data);
 
                 $this->db->trans_complete();
         }
 
-        public function add($npk, $nama) {
+        public function add($npk, $nama, $lab_id) {
                 // cek apakah npk sudah ada
 
               
@@ -63,6 +78,7 @@ class Lecturer_model extends CI_Model {
                         $this->db->trans_start();
                         $this->npk = $npk;
                         $this->nama = $nama;
+                        $this->lab_id = $lab_id;
                         $data = array('username' => $this->npk, 'password' => password_hash("password", PASSWORD_DEFAULT), 'user_type' => 'lecturer');
                         $this->db->insert('user', $data);
                         $this->db->insert('user_roles', array('username' => $this->npk, 'roles' => 'lecturer'));

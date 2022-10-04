@@ -386,6 +386,8 @@ class Master extends CI_Controller {
 		// LOAD DOSEN
 		$res = $this->Lecturer_model->get();
 		$data['lecturer'] = $res;
+
+		$data['lab'] = $this->Lab_model->get();
 		
 
 		// RESET PASS
@@ -399,7 +401,7 @@ class Master extends CI_Controller {
 
 		// TAMBAH DOSEN
 		if($this->input->post('btntambah')) {
-			if($this->Lecturer_model->add($this->input->post('npknew'), $this->input->post('namanew'))) {
+			if($this->Lecturer_model->add($this->input->post('npknew'), $this->input->post('namanew'), $this->input->post('lab_id'))) {
 				$this->session->set_flashdata('notif', 'success_add');
 			} else {
 				$this->session->set_flashdata('notif', 'failed_add');
@@ -409,7 +411,7 @@ class Master extends CI_Controller {
 
 		// EDIT DOSEN
 		if($this->input->post('btnubah')) {
-			$this->Lecturer_model->update_data($this->input->post('npkeditlecturer'), $this->input->post('namaeditlecturer'));
+			$this->Lecturer_model->update_data($this->input->post('npkeditlecturer'), $this->input->post('namaeditlecturer'), $this->input->post('edit_lab_id'));
 			$this->session->set_flashdata('notif', 'success_edit');
 			redirect('master/lecturer');
 		}
@@ -530,8 +532,10 @@ class Master extends CI_Controller {
     		$("body").on("click",".editbtn", function() {
     			var npk = $(this).attr("targetnpk");
     			var nama = $(this).attr("targetnama");
+    			var lab_id = $(this).attr("targetlab");
     			$("#npkedit").val(npk);
     			$("#namaedit").val(nama);
+    			$("#editlab").val(lab_id);
     		});
     	';
 
