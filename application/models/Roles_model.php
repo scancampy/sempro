@@ -5,6 +5,11 @@ class Roles_model extends CI_Model {
         public $username;
         public $roles;
 
+        public function del_by_username($username) {
+                $this->db->where('username', $username);
+                $this->db->delete('user_roles');
+        }
+
         public function del($id) {
                 $q = $this->db->get_where('user_roles', array('id' => $id));
 
@@ -133,10 +138,10 @@ class Roles_model extends CI_Model {
         public function is_kalab($npk, $topikid) {
                 // cek apakah kalab
                 $cek = $this->db->get_where('topik', array('id' => $topikid));
-
                 if($cek->num_rows() > 0) {
                         $rcek = $cek->row();
                         $q = $this->db->get_where('user_lab', array('npk' => $npk, 'id_lab' => $rcek->id_lab));
+
                         if($q->num_rows() > 0) {
                                 return true;
                         } else {
@@ -150,6 +155,7 @@ class Roles_model extends CI_Model {
 
         public function is_role_kalab($npk) {
                 $q = $this->db->get_where('user_lab', array('npk' => $npk));
+               // echo $this->db->last_query();
                 if($q->num_rows() > 0) {
                         return true;
                 } else {

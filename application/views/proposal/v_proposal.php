@@ -72,20 +72,26 @@
                     <td><?php echo $row->namalab; ?></td>
                     <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
                     <td >
-                      <?php
+                       <?php
                         if($row->is_rejected == 1) {
                           echo '<span class="badge badge-danger">Proposal Ditolak</span>';
                         } else if($row->kalab_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->wd_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi WD</span>';
-                        } else if($row->is_rejected == null) {
-                          echo '<span class="badge badge-error">Proposal Ditolak</span>';
                         } else if($row->lecturer1_npk == null) {
                           echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
+                        }  else if($row->judul == '') {
+                          echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
+                        } else if($row->judul != '' && $row->lecturer1_validate_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Judul Dosbing</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
-                        } 
+                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
+                          echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
+                        } else if($row->is_st_created == 1) {
+                          echo '<span class="badge badge-success">ST Sudah Terbit</span>';
+                        }
                       ?>
 
                       <?php /*
@@ -159,7 +165,7 @@
                     <div class="line"></div>
                     <div class="step  <?php if($row->wd_verified_date != null) { echo 'active'; } ?> text-center" data-target="#information-part">
                      
-                        <span class="bs-stepper-circle">2</span><br/>
+                        <span class="bs-stepper-circle <?php if(!is_null($row->wd_npk_rejected)) { echo 'bg-red'; } ?>"><?php if(!is_null($row->wd_npk_rejected)) { echo '<i class="fas fa-times bg-red"></i>'; } else { echo '2'; } ?></span><br/>
                         <span class="bs-stepper-label"><small>Validasi WD</small></span>
                     </div>
                     <div class="line"></div>
@@ -168,13 +174,23 @@
                         <span class="bs-stepper-label"><small>Kalab Pilih Dosbing</small></span>
                     </div>
                     <div class="line"></div>
-                    <div class="step text-center" data-target="#information-part">                     
+                    <div class="step text-center <?php if($row->judul != NULL ) { echo 'active'; } ?>" data-target="#information-part">                     
                         <span class="bs-stepper-circle">4</span><br/>
+                        <span class="bs-stepper-label"><small>Mahasiswa Input Judul</small></span>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step text-center <?php if($row->judul != NULL && $row->lecturer1_validate_title != NULL) { echo 'active'; } ?>" data-target="#information-part">                     
+                        <span class="bs-stepper-circle">5</span><br/>
+                        <span class="bs-stepper-label"><small>Dosbing Validasi Judul</small></span>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step text-center <?php if($row->is_verified ==1) { echo 'active'; } ?>" data-target="#information-part">                     
+                        <span class="bs-stepper-circle">6</span><br/>
                         <span class="bs-stepper-label"><small>Validasi WD</small></span>
                     </div>
                      <div class="line"></div>
-                    <div class="step text-center" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">5</span><br/>
+                    <div class="step text-center <?php if($row->is_st_created ==1) { echo 'active'; } ?>" data-target="#information-part">                     
+                        <span class="bs-stepper-circle">7</span><br/>
                         <span class="bs-stepper-label"><small>Surat Tugas</small></span>
                     </div>
                   </div>

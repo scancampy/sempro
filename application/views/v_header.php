@@ -163,35 +163,48 @@
                   <p>Mata Kuliah</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/admintu'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'admintu') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Admin Tata Usaha</p>
+                </a>
+              </li>
             </ul>
           </li>
-
-            <?php } else if($role->roles == 'lecturer') { ?>
+            <?php } else if($role->roles == 'adminst') { ?>
           <li class="nav-item menu-open">
             <a href="#" class="nav-link <?php //active ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                Dosen
+                Admin TU
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo base_url('lecturer/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('admintu/stskripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'admintu') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Topik</p>
+                  <p>ST Skripsi</p>
                 </a>
               </li>
             </ul>
+          </li>    
+            <?php } else if($role->roles == 'lecturer') { ?>
+          <li class="nav-item">
+              <a href="<?php echo base_url('lecturer/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Topik</p>
+              </a>              
           </li>
           <li class="nav-item">
-                <a href="<?php echo base_url('lecturer/proposal'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Proposal
-                  </p>
-                </a>
-              </li>
+            <a href="<?php echo base_url('lecturer/proposal'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Proposal
+              </p>
+            </a>
+          </li>
              <?php } else if($role->roles == 'student') { ?>
                <li class="nav-item">
                 <a href="<?php echo base_url('proposal/student'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'proposal') { echo  'active'; } ?>">

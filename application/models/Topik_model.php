@@ -7,6 +7,7 @@ class Topik_model extends CI_Model {
         public $id_lab;
         public $kuota;
         public $is_deleted= 0;
+        public $is_active = 1;
         public $lecturer_npk;
 
         public function validasi_kalab($id, $kalab_npk_verified) {
@@ -43,13 +44,14 @@ class Topik_model extends CI_Model {
                 }
         }
 
-        public function add($nama, $id_lab, $kuota, $judul ='',$lecturer_npk) {
+        public function add($nama, $id_lab, $kuota, $judul ='',$lecturer_npk, $is_active = 1) {
                 //$this->db->trans_start();
                 $this->nama = $nama;
                 $this->id_lab = $id_lab;
                 $this->kuota = $kuota;
                 $this->judul = $judul;
                 $this->lecturer_npk = $lecturer_npk;
+                $this->is_active = $is_active;
 
                 $this->db->insert('topik', $this);
 
@@ -81,7 +83,15 @@ class Topik_model extends CI_Model {
                 }
         }
 
-        public function get($id = '', $id_lab = '', $is_deleted = 0, $lecturer_npk = '', $periode = 'all', $kalab_npk_verified = null) {
+        public function get_need_validate($idlab) {
+                $this->db->where('kalab_verified_date', NULL);
+                $this->db->where('id_lab', $idlab);
+
+                $q = $this->db->get('topik');
+                return $q->num_rows();
+        }
+
+        public function get($id = '', $id_lab = '', $is_deleted = 0, $lecturer_npk = '', $periode = 1, $kalab_npk_verified = null) {
                 $this->db->trans_start();
                 if($id != '') {
                         $this->db->where('topik.id', $id);
@@ -102,9 +112,10 @@ class Topik_model extends CI_Model {
                         $this->db->where('topik.kalab_verified_date IS NOT NULL');
                 }
 
-                if($periode != 'all' && $periode != '') {
-                        $this->db->where(' topik.id IN (SELECT topik_periode.id_topik FROM topik_periode WHERE topik_periode.id_periode = "'.$periode.'" ) ');
+                if($periode != 'all') {
+                        $this->db->where(' topik.is_active = '.$periode);
                 }
+                
 
                 $this->db->where('topik.is_deleted', $is_deleted);
                 $this->db->join('lab','lab.id = topik.id_lab');
@@ -160,8 +171,58 @@ class Topik_model extends CI_Model {
                                 $r = $this->db->get_where('topik_course', array('id_topik' => $topikid));
 
                                 foreach($r->result()  as $value) {
+                                        $this->db->where('kode_mk = "'.$value->kode_mk.'" OR old_kode_mk1 = "'.$value->kode_mk.'" OR old_kode_mk2 = "'.$value->kode_mk.'" OR old_kode_mk3 = "'.$value->kode_mk.'" ');
+                                        $a = $this->db->get('course');
+                                        $hasil = $a->row();
+
                                         // cari mknya di student_transcript
-                                        $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $value->kode_mk));
+                                        if($hasil->kode_mk != '') {
+                                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->kode_mk));
+                                                if($l->num_rows() > 0) {
+                                                        $resl = $l->row();
+                                                        if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
+
+                                                                return 'req_not_valid';
+                                                        }
+                                                        
+                                                } 
+                                        }
+
+                                        if($hasil->old_kode_mk1 != '') {
+                                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk1));
+                                                if($l->num_rows() > 0) {
+                                                        $resl = $l->row();
+                                                        if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
+                                                                
+                                                                return 'req_not_valid';
+                                                        }
+                                                        
+                                                } 
+                                        }
+
+                                        if($hasil->old_kode_mk2 != '') {
+                                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk2));
+                                                if($l->num_rows() > 0) {
+                                                        $resl = $l->row();
+                                                        if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
+                                                                return 'req_not_valid';
+                                                        }
+                                                        
+                                                } 
+                                        }
+
+                                        if($hasil->old_kode_mk3 != '') {
+                                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk3));
+                                                if($l->num_rows() > 0) {
+                                                        $resl = $l->row();
+                                                        if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
+                                                                return 'req_not_valid';
+                                                        }
+                                                        
+                                                } 
+                                        }
+
+                                        /*$l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $value->kode_mk));
                                         if($l->num_rows() > 0) {
                                                 $resl = $l->row();
                                                 if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
@@ -170,11 +231,13 @@ class Topik_model extends CI_Model {
                                                 
                                         } else {
                                                 return 'req_not_valid';
-                                        }
+                                        }*/
                                 }
 
                                 if($chekvalid) {
                                         return 'valid';
+                                } else {
+                                        return 'req_not_valid';
                                 }
                         } else {
                                 return 'active_topic_found';

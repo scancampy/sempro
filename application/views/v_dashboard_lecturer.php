@@ -85,224 +85,77 @@
              </div>
            <?php } ?>
 
-             <?php if(isset($iskalab)) {
-              if($iskalab != false && count($student_kalab) >0  ) {
+           <?php  if(@$iskalab == true) {  ?>
 
-              ?>
-             <div class="col-12">
-                <div class="card card card-outline card-primary">
-                  <div class="card-header">
-                    <h3 class="card-title">Data Proposal - <span class="badge badge-info">Kalab Cek Syarat &amp; Validasi</span></h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                      </button>
-                    </div>               
+            <?php if($topic_need_validate >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/topic'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $topic_need_validate; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Topik</strong><br/>Membutuhkan validasi anda</span>
                   </div>
-              <!-- /.card-header -->
-                  <div class="card-body ">
-                    <?php if(count($student_kalab) >0 ) { ?>
-                    <div class="alert alert-info alert-dismissible">
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                      <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                      Terdapat <?php echo count($student_kalab); ?> proposal mahasiswa dengan topik di lab anda yang butuh pengecekan syarat dan validasi
-                    </div>
-                  <?php }?>
-
-                  <table id="example3" class="table table-bordered table-hover">
-                      <thead>
-                      <tr>
-                        <th>Topik</th>
-                        <th>Mahasiswa</th>
-                        <th>Tgl. Pengajuan</th>
-                        <th>Proses Pengajuan</th>
-                        <th>Aksi</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                        <?php if(isset($student_kalab)) { 
-                          foreach($student_kalab as $row) {
-                         
-                          ?>
-                      <tr>                    
-                        <td><?php echo $row->nama; ?></td>
-                        <td><?php echo $row->namamhs.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
-                        <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
-                        <td >
-                          <ul>
-                            <li class="text-secondary"><small class="text-success"><i class="nav-icon fas fa-check"></i> Proposal masuk proses pengajuan</small></li>
-                            <li class="text-secondary">
-                             <?php if(!is_null($row->guardian_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Dosen Wali mengecek syarat</small></li>
-                            <li class="text-secondary"><small>Kalab mengecek syarat dan validasi</small></li>
-                            <li class="text-secondary"><small>WD mengecek syarat dan persetujuan</small></li>
-                            <li class="text-secondary"><small>Mahasiswa mengisi judul</small></li>
-                            <li class="text-secondary"><small>Kalab menentukan Dosbing</small></li>
-                          </ul>
-                        </td>
-                        <td>
-                          <a href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-primary">Detail</a>
-                        </td>
-                      </tr>
-
-                        <?php } }  ?>
-                      </tfoot>
-                    </table>
-                  </div>
-
-                  
+                  <!-- /.info-box-content -->
                 </div>
-             </div>
-           <?php } } ?>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
 
-           <?php if(isset($iskalab)) {
-                    if($iskalab != false  && count($needdosbing) >0 ) { ?>
-<div class="col-12">
-                <div class="card card card-outline card-primary">
-                  <div class="card-header">
-                    <h3 class="card-title">Data Proposal - <span class="badge badge-success">Kalab Menentukan Dosbing</span></h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                      </button>
-                    </div>               
+        <?php 
+             if(isset($student_kalab)) { if(count($student_kalab) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-success "><?php echo count($student_kalab); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda</span>
                   </div>
-              <!-- /.card-header -->
-                  <div class="card-body ">
-                    <?php if(count($needdosbing) >0 ) { ?>
-                    <div class="alert alert-info alert-dismissible">
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                      <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                      Terdapat <?php echo count($needdosbing); ?> proposal mahasiswa dengan topik di lab anda yang butuh penentuan dosbing
-                    </div>
-                  <?php }?>
-
-                  <table id="example3" class="table table-bordered table-hover">
-                      <thead>
-                      <tr>
-                        <th>Topik</th>
-                        <th>Mahasiswa</th>
-                        <th>Tgl. Pengajuan</th>
-                        <th>Proses Pengajuan</th>
-                        <th>Aksi</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                        <?php if(isset($needdosbing)) { 
-                          foreach($needdosbing as $row) {
-                         
-                          ?>
-                      <tr>                    
-                        <td><?php echo $row->nama; 
-                          if($row->judul != '') { echo '<br/><br/><small>Judul:<br/><strong>'.$row->judul.'</strong></small>'; }
-                        ?></td>
-                        <td><?php echo $row->namamhs.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
-                        <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
-                        <td >
-                          <ul>
-                            <li class="text-secondary"><small class="text-success"><i class="nav-icon fas fa-check"></i> Proposal masuk proses pengajuan</small></li>
-                            <li class="text-secondary">
-                             <?php if(!is_null($row->guardian_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Dosen Wali mengecek syarat</small></li>
-                            <li class="text-secondary">
-                              <?php if(!is_null($row->kalab_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab mengecek syarat dan validasi</small></li>
-                            <li class="text-secondary"><?php if(!is_null($row->is_verified==1)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>WD mengecek syarat dan persetujuan</small></li>
-                            <li class="text-secondary"><?php if(!is_null($row->judul != '')) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Mahasiswa mengisi judul</small></li>
-                            <li class="text-secondary"><small>Kalab menentukan Dosbing</small></li>
-                          </ul>
-                        </td>
-                        <td>
-                          <a href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-primary">Detail</a>
-                        </td>
-                      </tr>
-
-                        <?php } }  ?>
-                      </tfoot>
-                    </table>
-                  </div>
-
-                  
+                  <!-- /.info-box-content -->
                 </div>
-             </div>
-           <?php } } ?>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
+
+        <?php if(isset($needdosbing)) { if(count($needdosbing) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-warning "><?php echo count($needdosbing); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan pemilihan dosbing</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
+           <?php } ?>
+            
+
+          
 
            <?php if($wd != false) { ?>
-            <div class="col-12">
-             <div class="card card card-outline card-primary">
-                  <div class="card-header">
-                    <h3 class="card-title">Data Proposal - WD Cek Syarat &amp; Persetujuan</h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                      </button>
-                    </div>               
+            <?php if(count($wd_topic) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo count($wd_topic); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda</span>
                   </div>
-              <!-- /.card-header -->
-                  <div class="card-body ">
-                    <?php if(count($wd_topic) >0 ) { ?>
-                    <div class="alert alert-info alert-dismissible">
-                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                      <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                      Terdapat <?php echo count($wd_topic); ?> proposal mahasiswa yang butuh pengecekan syarat dan persetujuan
-                    </div>
-                  <?php }?>
-
-                  <table id="example3" class="table table-bordered table-hover">
-                      <thead>
-                      <tr>
-                        <th>Topik</th>
-                        <th>Mahasiswa</th>
-                        <th>Tgl. Pengajuan</th>
-                        <th>Proses Pengajuan</th>
-                        <th>Aksi</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                        <?php if(isset($wd_topic)) { 
-                          foreach($wd_topic as $row) {
-                         
-                          ?>
-                      <tr>                    
-                        <td><?php echo $row->nama; ?></td>
-                        <td><?php echo $row->namamhs.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
-                        <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
-                        <td >
-                          <ul>
-                            <li class="text-secondary"><small class="text-success"><i class="nav-icon fas fa-check"></i> Proposal masuk proses pengajuan</small></li>
-                            <li class="text-secondary">
-                             <?php if(!is_null($row->guardian_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Dosen Wali mengecek syarat</small></li>
-                            <li class="text-secondary"><?php if(!is_null($row->kalab_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab mengecek syarat dan validasi</small></li>
-                            <li class="text-secondary"><small>WD mengecek syarat dan persetujuan</small></li>
-                            <li class="text-secondary"><small>Mahasiswa mengisi judul</small></li>
-                            <li class="text-secondary"><small>Kalab menentukan Dosbing</small></li>
-                          </ul>
-                        </td>
-                        <td>
-                          <a href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-primary">Detail</a>
-                        </td>
-                      </tr>
-
-                        <?php } }  ?>
-                      </tfoot>
-                    </table>
-                  </div>
-
-                  
+                  <!-- /.info-box-content -->
                 </div>
-             </div>
-           </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
            <?php }?>
          </div>
       </div><!-- /.container-fluid -->

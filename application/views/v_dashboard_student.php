@@ -34,11 +34,20 @@
                 <div class="card-body">
                   <div class="row">
                   <div class="col-12">
-                    <div class="alert alert-warning alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                  Hasil cek eligbilitas menyatakan anda belum dapat memilih topik tugas akhir
-                </div>
+                    <?php if($eligible_check) { ?>
+                      <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Hasil Cek Prasyarat</h5>
+                        Hasil cek eligbilitas menyatakan anda berhak memilih topik skripsi
+                      </div>
+                    <?php  } else { ?>
+                      <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                        Hasil cek eligbilitas menyatakan anda belum dapat memilih topik skripsi
+                      </div>
+                    <?php } ?>
+                    
                     <div class="card">
                       <div class="card-header">
                         <h3 class="card-title">Cek Eligibilitas</h3>

@@ -52,14 +52,16 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="angkatan" class="col-sm-3 col-form-label">Dibuka untuk semester</label>
+                    <label for="angkatan" class="col-sm-3 col-form-label">Status Topik</label>
                     <div class="col-sm-9">
-                      <?php foreach($periode as $row) {  ?>
                       <div class="form-check">
-                        <input type="checkbox" <?php if($row->is_active == 1) { echo 'checked'; } ?> class="form-check-input" id="periodecheck_<?php echo $i; ?>_<?php echo $row->id; ?>" value="<?php echo $row->id; ?>" name="periodecheck<?php echo $i; ?>[]">
-                        <label class="form-check-label" for="periodecheck_<?php echo $i; ?>_<?php echo $row->id; ?>" ><?php echo $row->nama; ?></label>
-                      </div>
-                      <?php } ?>                      
+                          <input class="form-check-input" checked  type="radio" name="radioaktif<?php echo $i; ?>" id="radioaktif" value="1">
+                          <label for="radioaktif"  class="form-check-label">Aktif (topik dapat dipilih oleh mahasiswa)</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="radioaktif<?php echo $i; ?>" id="radiotidakaktif" value="0">
+                          <label for="radiotidakaktif" class="form-check-label">Tidak Aktif (topik tidak dapat dicari dan dipilih oleh mahasiswa)</label>
+                        </div>                      
                     </div>
                   </div>
                   <div class="form-group row">
@@ -79,7 +81,7 @@
                           <option value="AB">AB</option>
                           <option value="B">B</option>
                           <option value="BC">BC</option>    
-                          <option value="C">C</option>                        
+                          <option value="C" selected>C</option>                        
                        </select>
                     </div>
                   </div>
@@ -100,7 +102,7 @@
                           <option value="AB">AB</option>
                           <option value="B">B</option>
                           <option value="BC">BC</option>
-                          <option value="C">C</option>                        
+                          <option value="C" selected>C</option>                        
                        </select>
                     </div>
                   </div>

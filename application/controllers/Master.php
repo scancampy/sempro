@@ -15,6 +15,10 @@ class Master extends CI_Controller {
 		redirect('dashboard');
 	}
 
+	public function update_roles() {
+		$this->Lecturer_model->update_roles();
+	}
+
 	public function student($delaction = null, $delnrp = null) {
 		$data = array();
 		
@@ -143,9 +147,9 @@ class Master extends CI_Controller {
 
 		// EDIT COURSE
 		if($this->input->post('btnedit')) {
-			$this->User_model->resetpass($this->input->post('nrpedit'), $this->input->post('passwordedit'));
-			$this->session->set_flashdata('notif', 'success_reset');
-			redirect('master/student');
+			$this->Course_model->update_course($this->input->post('hid_mk_id'),$this->input->post('kode_mk_lama1_edit'), $this->input->post('kode_mk_lama2_edit'),$this->input->post('kode_mk_lama3_edit'), $this->input->post('namaedit') );
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/course');
 		}
 
 		// UPLOAD CSV
@@ -153,12 +157,12 @@ class Master extends CI_Controller {
 			$csv = $_FILES['filecsv']['tmp_name'];
 
 			
-			$delimiters = array('|', ';', '^', "\t");
-            $delimiter = ',';
+			//$delimiters = array('|', ';', '^', "\t");
+            //$delimiter = ',';
 
             $str = file_get_contents($csv);
-            $str = str_replace($delimiters, $delimiter, $str);
-            $cek =  file_put_contents($csv, $str);
+            //$str = str_replace($delimiters, $delimiter, $str);
+            //$cek =  file_put_contents($csv, $str);
 
             $handle = fopen($csv,"r");
 
@@ -230,11 +234,11 @@ class Master extends CI_Controller {
     		';
     	}
 
-    	if($this->session->flashdata('notif') == 'success_reset') {
+    	if($this->session->flashdata('notif') == 'success_edit') {
     		$data['js'] .= '
     			Toast.fire({
 			        icon: "success",
-			        title: "Sukses reset password mahasiswa"
+			        title: "Sukses update data mata kuliah"
 			      });
     		';
     	}
@@ -244,10 +248,16 @@ class Master extends CI_Controller {
     		$("body").on("click",".editbtn", function() {
     			var id = $(this).attr("targetid");
     			var nama = $(this).attr("targetnama");
+    			var kode1 = $(this).attr("targetkode1");
+    			var kode2 = $(this).attr("targetkode2");
+    			var kode3 = $(this).attr("targetkode3");
     			var kode = $(this).attr("targetkode");
     			$("#hid_mk_id").val(id);
     			$("#namaedit").val(nama);
     			$("#kode_mk_edit").val(kode);
+    			$("#kode_mk_lama1_edit").val(kode1);
+    			$("#kode_mk_lama2_edit").val(kode2);
+    			$("#kode_mk_lama3_edit").val(kode3);
     		});
     	';
 
@@ -551,6 +561,150 @@ class Master extends CI_Controller {
     	$data['js'] .= 'bsCustomFileInput.init(); ';
 		$this->load->view('v_header', $data);
 		$this->load->view('master/v_lecturer', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function admintu($delaction = null, $delusername = null) {
+		$data = array();
+		
+		// LOAD ADMIN TU
+		$res = $this->Staff_model->get_admin();
+		$data['admintu'] = $res;
+		
+		// TAMBAH ADMINTU
+		if($this->input->post('btntambah')) {
+			$hasil = $this->User_model->add($this->input->post('usernamenew'),'password', 'staff');
+			if($hasil == "success") {
+				$this->Staff_model->add($this->input->post('usernamenew'), $this->input->post('namanew'));
+				$this->Roles_model->add($this->input->post('usernamenew'), 'adminst');
+				$this->session->set_flashdata('notif', 'success_add');
+			}  else {
+				$this->session->set_flashdata('notif', 'failed_add');
+			}
+
+			redirect('master/admintu');
+		}
+
+		// EDIT ADMIN TU
+		if($this->input->post('btnubah')) {
+			$this->Staff_model->update_data($this->input->post('usernameedit'), $this->input->post('namaedit'));
+
+			if($this->input->post('passwordedit')) {
+				$this->User_model->resetpass($this->input->post('usernameedit'), $this->input->post('passwordedit'));
+			}
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/admintu');
+		}
+
+		// DEL ADMIN TU
+		if($delaction != null) {
+			$this->Staff_model->del($delusername);
+			$this->Roles_model->del_by_username($delusername);
+			$this->User_model->del($delusername);
+			$this->session->set_flashdata('notif', 'success_del');
+			redirect('master/admintu');
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    	if($this->session->flashdata('notif') == 'invalid_csv') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "File CSV tidak sesuai template"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_csv') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses menambahkan data dosen"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data dosen"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_reset') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses reset password dosen"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data admin TU"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah admin TU"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'failed_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "Gagal tambah admin TU. Username sudah ada."
+			      });
+    		';
+    	}
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtnadmintu", function() {
+    			var username = $(this).attr("targetusername");
+    			var nama = $(this).attr("targetnama");
+    			$("#usernameedit").val(username);
+    			$("#namaedit").val(nama);
+    		});
+    	';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_admintu', $data);
 		$this->load->view('v_footer', $data);
 	}
 

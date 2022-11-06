@@ -5,6 +5,22 @@ class Lecturer_model extends CI_Model {
         public $nama;
         public $lab_id;
 
+        public function update_roles() {
+                $this->db->where('roles', 'lecturer');
+                $this->db->delete('user_roles');
+
+                $q = $this->db->get('lecturer');
+                $hitung = 0;
+                foreach($q->result()  as $row) {
+                          $data = array('username' => $row->npk, 'roles' => 'lecturer');
+                                $this->db->insert('user_roles',$data);
+                                $hitung++;
+                        
+                }
+
+                echo $hitung;
+        }
+
 
         public function del($npk) {
                 $this->db->trans_start();

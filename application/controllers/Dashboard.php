@@ -18,12 +18,13 @@ class Dashboard extends CI_Controller {
         $roles = $this->session->userdata('user')->roles;
         $data['info'] = $this->session->userdata('user')->info;
 
+      
 		foreach($roles as $role) {
             if($role->roles == 'student') { 
             	$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
-            	//$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
+            	$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
             	//print_r($skripsi[0]->nilai);
-            	//$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
+            	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
             	$data['eligible'] = $this->Student_model->cek_eligible($data['info'][0]->nrp);
             	$data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
 
@@ -55,8 +56,10 @@ class Dashboard extends CI_Controller {
             		}
             	}
 
+            	$data['eligible_check'] = $eligbile;
             	if($eligbile) {
             		$this->Student_model->set_eligible($data['info'][0]->nrp);
+            		
             	}
 
             	$this->load->view('v_dashboard_student', $data);
@@ -70,6 +73,9 @@ class Dashboard extends CI_Controller {
             	if($data['wd']) {
             		$data['wd_topic'] = $this->Student_topik_model->get_wd_topic();
             	} else {
+            		// ambil topik yang butuh validasi kalab
+            		$data['topic_need_validate'] = $this->Topik_model->get_need_validate($data['info'][0]->lab_id);
+
             		// ambil proposal yg butuh validasi kalab
 	            	$data['student_kalab'] = $this->Student_topik_model->get_kalab_topic($data['info'][0]->npk);
 	            	$data['iskalab'] = $this->Roles_model->is_role_kalab($data['info'][0]->npk);

@@ -89,19 +89,30 @@ class Student_model extends CI_Model {
         public function check_mk_in_ks($nrp, $kodemk) {
                 $dbsim = $this->load->database('sim',TRUE);
                 $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'ThnAkademik' => '2022', 'Semester' => 'Gasal'));
-               // print_r($q->result());
-                $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'KodeMK' => $kodemk));
-                if($q->num_rows() > 0) {
-                        return true;
-                } else {
-                        return false;
+                
+                $kodeskripsi = explode(',',$kodemk);
+
+                $hasileligible = false;
+
+                foreach($kodeskripsi as $value) {
+                        $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'KodeMK' => $value));
+
+                        if($q->num_rows() > 0) {
+                                $hasileligible = true;
+                                break;
+                        } 
+                
                 }
+
+                return $hasileligible;
         }
 
         public function connect_sim($nrp) {
                 $dbsim = $this->load->database('sim',TRUE);
                 $q = $dbsim->get_where('v_FarTranskrip', array('NRP' => $nrp));
                 
+                //print_r($q->result());
+
                 $this->db->delete('student_transcript', array('student_nrp' => $nrp));
 
                 $rangenilai = array('A' => 4, 'AB' => 3.5, 'B' => 3, 'BC' => 2.5, 'C' => 2, 'D' => 1, 'E' => 0,'E*' => 0);
@@ -114,7 +125,7 @@ class Student_model extends CI_Model {
                                 'semester' => $value->Semester,
                                 'nisbi' => $value->KodeNisbi,
                                 'nisbi_value' => $rangenilai[$value->KodeNisbi],
-                                'sks' => 3
+                                'sks' => $value->sks
                         );
                         $this->db->insert('student_transcript', $data);
                 }
@@ -237,13 +248,57 @@ class Student_model extends CI_Model {
         }
 
         public function is_eligible_course($kode_mk, $nrp) {
-                 $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $kode_mk));
+                $this->db->where('kode_mk = "'.$kode_mk.'" OR old_kode_mk1 = "'.$kode_mk.'" OR old_kode_mk2 = "'.$kode_mk.'" OR old_kode_mk3 = "'.$kode_mk.'" OR old_kode_mk4 = "'.$kode_mk.'" ');
+                $a = $this->db->get('course');
+               // echo $this->db->last_query();
+               // die();
 
-                if($q->num_rows() >0) {
-                        return $q->row();
-                } else {
-                        return false;
+                $hasil = $a->row();
+                $eligbile = false;
+
+                if($hasil->kode_mk != '') {
+                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->kode_mk));
+                        if($q->num_rows() >0) {
+                                $eligbile = true;
+                                return $q->row();
+                        }
                 }
+
+                if($hasil->old_kode_mk1 != '') {
+                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk1));
+                        if($q->num_rows() >0) {
+                                $eligbile = true;
+                                return $q->row();
+                        }
+                }
+
+                if($hasil->old_kode_mk2 != '') {
+                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk2));
+                        if($q->num_rows() >0) {
+                                $eligbile = true;
+                                return $q->row();
+                        }
+                }
+
+                if($hasil->old_kode_mk3 != '') {
+                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk3));
+                        if($q->num_rows() >0) {
+                                $eligbile = true;
+                                return $q->row();
+                        }
+                }
+
+                if($hasil->old_kode_mk4 != '') {
+                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk4));
+                        if($q->num_rows() >0) {
+                                $eligbile = true;
+                                return $q->row();
+                        }
+                }
+
+                return false;              
+
+                
         }
 
 }

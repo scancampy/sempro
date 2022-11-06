@@ -31,10 +31,14 @@ class Proposal extends CI_Controller {
             } 
         }
 
-    if($this->input->post('btnsubmitjudul')) {
+    if($this->input->post('btnsimpanjudul')) {
     	 $info = $this->session->userdata('user');
     	 if($info->user_type == 'student') {
-    	 		$this->Student_topik_model->update_judul($id, $this->input->post('judul'));
+    	 		if(trim($this->input->post('juduledit')) =="") {
+    	 			$this->session->set_flashdata('notif', 'failed_judul');
+						redirect('proposal/detail/'.$id);
+    	 		}
+    	 		$this->Student_topik_model->update_judul($id, $this->input->post('juduledit'));
     	 		$this->session->set_flashdata('notif', 'success_judul');
 					redirect('proposal/detail/'.$id);
     	 }
@@ -56,6 +60,25 @@ class Proposal extends CI_Controller {
           $this->session->set_flashdata('notif', 'success_kalab');
 					redirect('proposal/detail/'.$id);
         }
+    }
+
+    if($this->input->post('btnwdfinalsubmit')) {
+    	$info = $this->session->userdata('user');
+    	 $wd = $this->Roles_model->is_role_wd($info->info[0]->npk);
+       if($wd) {
+       	$radiovalidasiwd = $this->input->post('radiovalidasifinalwd');
+       	$reason = $this->input->post('final_alasan_ditolak');
+
+       	if($radiovalidasiwd == "ditolak") {
+       		$this->Student_topik_model->wd_final_is_reject($info->info[0]->npk,$id, $reason);
+       		$this->session->set_flashdata('notif', 'success_wd_reject_final');
+					redirect('proposal/detail/'.$id);
+       	} else {
+       		$this->Student_topik_model->wd_final_is_verified($info->info[0]->npk,$id);
+       		$this->session->set_flashdata('notif', 'success_wd_final');
+					redirect('proposal/detail/'.$id);
+       	}
+       }
     }
 
     if($this->input->post('btnwdsubmit')) {
@@ -93,6 +116,15 @@ class Proposal extends CI_Controller {
       }
     }
 
+    if($this->input->post('btndosbingvalidasijudul')) {
+    	$info = $this->session->userdata('user');
+      if($info->user_type == 'lecturer') {
+      	$this->Student_topik_model->dosbing_validate_juduL($info->info[0]->npk, $id);
+      	$this->session->set_flashdata('notif', 'success_dosbing_validasi_judul');
+					redirect('proposal/detail/'.$id);
+      }      
+    }
+
 		$data['detail'] = $this->Student_topik_model->get('', $id);
 		if(count($data['detail']) ==0 ) {
 			redirect('');
@@ -103,7 +135,7 @@ class Proposal extends CI_Controller {
 		$data['student'] = $this->Student_model->get($data['detail'][0]->student_nrp);
 		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
             	
-	//	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
+	 $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
             	
 		$data['transcript_prasyarat'] = $this->Student_model->get_transcript($data['prasyarat'], $data['detail'][0]->student_nrp);
 
@@ -138,16 +170,44 @@ class Proposal extends CI_Controller {
 						$info = $this->session->userdata('user');
 	          if($info->user_type == 'lecturer') {
 		          $data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
+		          
 		          $data['dosbing'] = $this->Lecturer_model->get_with_beban();
 
 		        }
         }
 
+
         if(!is_null($data['detail'][0]->lecturer1_npk) && !is_null($data['detail'][0]->lecturer2_npk)){
 						$info = $this->session->userdata('user');
 	          if($info->user_type == 'lecturer') {
 		          $data['wd'] = $this->Roles_model->is_role_wd($info->info[0]->npk);
+
+		          if(!is_null($data['detail'][0]->wd_final_npk_rejected)) {
+								$data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
+		          	$data['dosbing'] = $this->Lecturer_model->get_with_beban();
+
+		          }
 		        }
+        }
+
+        // Cek Role Isi Judul by Maasiswa
+        if(!is_null($data['detail'][0]->lecturer1_npk) && is_null($data['detail'][0]->lecturer1_validate_title)) {
+        	$info = $this->session->userdata('user');
+        	if($info->user_type == 'student') {
+        		if($data['detail'][0]->student_nrp == $info->roles[0]->username) {
+        			$data['is_student'] = true;	
+        		}        		
+        	}
+        }
+
+        // Cek Role Validasi Judul by Dosbing 1
+        if(!is_null($data['detail'][0]->lecturer1_npk) && !is_null($data['detail'][0]->judul) && is_null($data['detail'][0]->lecturer1_validate_date)) {
+        	$info = $this->session->userdata('user');
+        	if($info->user_type == 'lecturer') {
+        		if($data['detail'][0]->lecturer1_npk == $info->info[0]->npk) {
+        			$data['is_dosbing'] = true;
+        		}
+        	}
         }
 
         // NOTIF
@@ -211,6 +271,15 @@ class Proposal extends CI_Controller {
 				}
 			});
 
+			$("#cekjudul").on("click", function() {
+				if($("#cekjudul").is(":checked")) {
+						$("#btndosbingvalidasijudul").prop("disabled", false); 
+				} else {
+					
+						$("#btndosbingvalidasijudul").prop("disabled", true); 
+				}
+			});
+
 			$("#ceksyaratkalab").on("click", function() {
 				if($("#ceksyaratkalab").is(":checked")) {
 						$("#btnkalabsubmit").prop("disabled", false); 
@@ -266,11 +335,48 @@ class Proposal extends CI_Controller {
   		';
   	}
 
+  	if($this->session->flashdata('notif') == 'success_wd_reject_final') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menolak proposal mahasiswa"
+		      });
+  		';
+  	}
+
+  	 if($this->session->flashdata('notif') == 'success_wd_final') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menyetujui proposal mahasiswa"
+		      });
+  		';
+  	}
+
+
   	 if($this->session->flashdata('notif') == 'success_judul') {
   		$data['js'] .= '
   			Toast.fire({
 		        icon: "success",
 		        title: "Sukses menyimpan judul proposal"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'failed_judul') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "error",
+		        title: "Gagal menyimpan judul proposal"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'success_dosbing_validasi_judul') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses memvalidasi judul proposal"
 		      });
   		';
   	}
@@ -342,7 +448,7 @@ class Proposal extends CI_Controller {
 		$pilihdosenpembuat = $this->input->get('pilihdosenpembuat');
 		if($pilihdosenpembuat == 'all') { $pilihdosenpembuat = ''; }
 
-		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $pilihdosenpembuat,'all', true);
+		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $pilihdosenpembuat,1, true);
 
 		// GET KUOTA
 		$data['kuota'] = array();
@@ -364,6 +470,7 @@ class Proposal extends CI_Controller {
 		$rangenilai = array('A' => 4, 'AB' => 3.5, 'B' => 3, 'BC' => 2.5, 'C' => 2, 'D' => 1, 'E' => 0,'E*' => 0);
 		foreach($data['prasyarat'] as $idx => $value) {
 			if(isset($value[0])) {
+			
 				// ini untuk checking mk prasyarat 1. Jika transkrip mhs memenuhi maka true
 				$cek = $this->Student_model->is_eligible_course($value[0]->kode_mk, $info[0]->nrp);
 				if($cek == false) {
@@ -462,12 +569,12 @@ class Proposal extends CI_Controller {
 		$data['lab'] = $this->Lab_model->get();
 
 		// GET STUDENT TOPIC
-		$data['student_topic'] = $this->Student_topik_model->get($info[0]->nrp);
+		$data['student_topic'] = $this->Student_topik_model->get($info[0]->nrp,'',0);
 
 		// CEK IS TOPIC ACTIVE
 		$data['active_topic'] = $this->Student_topik_model->get($info[0]->nrp,'',0,0);
 
-		print_r($data['active_topic']);
+		//print_r($data['active_topic']);
 		
 		// PILIH TOPIK
 		if($this->input->post('btnpilih')) {

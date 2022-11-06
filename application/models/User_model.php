@@ -22,34 +22,28 @@ class User_model extends CI_Model {
                 return false;
         }
 
+        public function add($username, $password, $user_type) {
+                // cek dulu username exist atau ga
+                $q = $this->db->get_where('user', array('username' => $username));
+
+                if($q->num_rows() == 0) {
+                        $data = array('username' => $username, 'password' => password_hash($newpass, PASSWORD_DEFAULT), 'user_type' => $user_type );
+                        $this->db->insert('user', $data);
+                        return "success";
+                } else {
+                        return "user_exist";
+                }
+        }
+
         public function resetpass($username, $newpass) {
                 $data = array('password' =>  password_hash($newpass, PASSWORD_DEFAULT));
                 $this->db->where('username', $username);
                 $this->db->update('user', $data);
         }
 
-        public function get_last_ten_entries()
-        {
-                $query = $this->db->get('entries', 10);
-                return $query->result();
-        }
-
-        public function insert_entry()
-        {
-                $this->title    = $_POST['title']; // please read the below note
-                $this->content  = $_POST['content'];
-                $this->date     = time();
-
-                $this->db->insert('entries', $this);
-        }
-
-        public function update_entry()
-        {
-                $this->title    = $_POST['title'];
-                $this->content  = $_POST['content'];
-                $this->date     = time();
-
-                $this->db->update('entries', $this, array('id' => $_POST['id']));
+        public function del($username) {
+                $this->db->where('username', $username);
+                $this->db->delete('user');
         }
 
 }

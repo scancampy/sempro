@@ -37,19 +37,10 @@ class Lecturer extends CI_Controller {
 
 			foreach($topiks as $i => $topik) {
 				if($topik != '') {
-					$lastid = $this->Topik_model->add($topik, $idlab, $kuota[$i],'', $npk); 
+					$is_active = $this->input->post('radioaktif'.($i+1));
+					$lastid = $this->Topik_model->add($topik, $idlab, $kuota[$i],'', $npk, $is_active); 
 
 					if($lastid) {
-
-						// periode check
-						if($this->input->post('periodecheck'.($i+1))) {
-							$periode = $this->input->post('periodecheck'.($i+1));
-
-							foreach($periode as $p) {
-								$this->Topik_model->add_avail_periode($lastid, $p);
-							}
-						}
-
 						// requirement course check					
 						if($courseid1[$i] != '') {
 							$this->Topik_model->add_req_course($courseid1[$i], $minimummark1[$i], $lastid);
@@ -121,7 +112,25 @@ class Lecturer extends CI_Controller {
 		$data['course'] =$this->Course_model->get();
 		$data['periode_edit'] = $this->Periode_model->get('',0, ' id >= (SELECT id FROM `periode` WHERE is_active = 1)', 'id','desc');
 		$data['periode'] = $this->Periode_model->get('',0, ' id = (SELECT id FROM `periode` WHERE is_active = 1)', 'id','desc');
-		$dosenpembuat = $this->input->get('pilihdosenpembuat');
+		
+		if(is_null($this->input->get('pilihdosenpembuat'))) {
+			if($data['is_kalab']) {
+				$dosenpembuat = 'all';
+			} else {
+				$dosenpembuat = $data['info'][0]->npk;
+			}
+		} else {
+			$dosenpembuat = $this->input->get('pilihdosenpembuat');
+	
+		}
+
+		$aktif = 'all';
+		if(!is_null($this->input->get('radioaktif'))) {
+			$aktif = $this->input->get('radioaktif');
+		} 
+		
+
+
 		$filterlab = $this->input->get('filterlab');
 		$semestersedia = $this->input->get('pilihsemestersedia');
 
@@ -130,7 +139,8 @@ class Lecturer extends CI_Controller {
 			$dosenpembuat = $data['info'][0]->npk;
 		}
 
-		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $dosenpembuat, $semestersedia);
+
+		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $dosenpembuat, $aktif);
 		$data['kuota'] = array();
 		foreach($data['topik'] as $value) {
 			$data['kuota'][] = $this->Topik_model->get_kuota($value->id);
@@ -279,7 +289,12 @@ class Lecturer extends CI_Controller {
 
     			$("#course_id1_validasi").val(prasyarat1 + min1str);
 
-    			$("#angkatanvalidasi").val(periodebuka);
+    			if(periodebuka) {
+    				$("#angkatanvalidasi").val("Aktif");
+    			} else {
+    				$("#angkatanvalidasi").val("Tidak Aktif");
+    			}
+    			
 
 
     			var min2str = "";
@@ -345,11 +360,43 @@ class Lecturer extends CI_Controller {
 		// USER INFO
 		$data['info'] = $this->session->userdata('user')->info;
 		$data['topik'] = $this->Topik_model->get('', '', 0, $data['info'][0]->npk);
+
+		// cek kalab
+		$data['is_wd'] = false;
+		$data['is_kalab'] = false;
+		foreach($roles as $value) {
+			if($value->roles =='wd') {
+				$data['is_wd'] = true;
+			}
+			if($value->roles =='kalab') {
+				$data['is_kalab'] = true;
+			}
+		}
 	
 		// GET STUDENT TOPIC
-		$pilihtopik = $this->input->get('pilihtopik');
-		$data['student_topic'] = $this->Student_topik_model->get('', '', 0, 0, $pilihtopik);
+		$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '');
 		
+		if($this->input->get('topiksaya')) {
+			//die();
+			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, 'topik.lecturer_npk = "'.$data['info'][0]->npk.'"');
+		}
+
+		if($this->input->get('bimbingansaya')) {
+			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, ' (student_topik.lecturer1_npk = "'.$data['info'][0]->npk.'" OR student_topik.lecturer2_npk = "'.$data['info'][0]->npk.'")');
+		}
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
 
 		$this->load->view('v_header', $data);
 		$this->load->view('lecturer/v_proposal', $data);

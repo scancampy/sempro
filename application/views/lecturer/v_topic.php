@@ -25,7 +25,7 @@
         <div class="row">     
           <div class="col-12">
             <form class="form-horizontal" method="get" action="<?php echo current_url(); ?>">
-              <div class="card card-primary collapsed-card">
+              <div class="card card-primary ">
                 <div class="card-header"> 
                   <h3 class="card-title">Filter Data</h3>
 
@@ -56,7 +56,7 @@
                     </div>
                   </div>
                  <div class="form-group row">
-                    <label for="pilihdosenpembuat" class="col-sm-3 col-form-label">Dosen Pembuat</label>
+                    <label for="pilihdosenpembuat" class="col-sm-3 col-form-label">Dosen Pembuat </label>
                     <div class="col-sm-9">
                       <select class="form-control" name="pilihdosenpembuat">
                         <option value="all" <?php if($this->input->get('pilihdosenpembuat') == 'all') { echo 'selected'; } ?>>Semua dosen</option>
@@ -76,15 +76,21 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="pilihsemestersedia" class="col-sm-3 col-form-label">Topik Tersedia di Semester</label>
+                    <label for="pilihsemestersedia" class="col-sm-3 col-form-label">Status Topik</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="pilihsemestersedia">
-                        <option value="all">Semua semester</option>
-                        <?php if(count($periode) >0) { ?>
-                          <option <?php if($this->input->get('pilihsemestersedia') == $periode[0]->id) { echo 'selected'; } ?> value="<?php echo $periode[0]->id; ?>"><?php echo $periode[0]->nama; ?> (semester aktif)</option>
-                        <?php } ?>
-                      </select>
-                    </div>
+                        <div class="form-check">
+                          <input class="form-check-input" <?php if($this->input->get('radioaktif') == 'all') { echo 'checked'; }  ?> <?php if(is_null($this->input->get('radioaktif'))) { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radioaktif" value="all">
+                          <label for="radioaktif"  class="form-check-label">Semua Status</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" <?php if($this->input->get('radioaktif') == "1") { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radioaktif" value="1">
+                          <label for="radioaktif"  class="form-check-label">Aktif</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" <?php  if($this->input->get('radioaktif') == "0") { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radiotidakaktif" value="0">
+                          <label for="radiotidakaktif" class="form-check-label">Tidak Aktif</label>
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -110,6 +116,22 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                <?php  
+                $notif = 0;
+                if(isset($topik)) {
+                  foreach($topik as $idx => $row) { 
+                    if($is_kalab && $row->id_lab == $info[0]->lab_id && $row->kalab_verified_date == null) { $notif++; }
+                  }
+                } ?>
+
+                <?php if($notif > 0) { ?>
+                  <div class="callout callout-info">
+                  <p>Terdapat <strong><?php echo $notif; ?></strong> topik yang membutuhkan validasi anda</p>
+                </div>
+                <?php }?>
+
+                
+
                 <table id="example2" class="table table-bordered table-hover" style="width:100%">
                   <thead>
                   <tr>
@@ -118,6 +140,7 @@
                     <th>Lab</th>   
                     <th>Validasi Kalab</th>                 
                     <th>Pembuat</th>
+                    <th>Status</th>
                     <th width="15%">Aksi</th>
                   </tr>
                   </thead>
@@ -127,22 +150,19 @@
 
                       foreach($topik as $idx => $row) { 
                       ?>
-                  <tr>
+                  <tr <?php if($is_kalab && $row->id_lab == $info[0]->lab_id && $row->kalab_verified_date == null) { ?>
+                     class="bg-warning color-palette"<?php } ?>>
                     <td><?php echo $row->nama; ?></td>
                     <td><?php echo $kuota[$idx].'/'.$row->kuota; ?></td>
                     <td><?php echo $row->namalab; ?></td>
-                    <td><?php if($row->kalab_verified_date == null ) { echo '<small class="badge badge-secondary">N/A</small>'; } else { echo '<small>'.$row->namakalab; echo '<br/>'.strftime("%d %B %Y", strtotime($row->kalab_verified_date)).'</small>'; } ?></td>
+                    <td><?php if($row->kalab_verified_date == null ) { echo '<small class="badge badge-secondary">Belum Divalidasi</small>'; } else { echo '<small class="badge badge-success">Sudah Divalidasi</small><br/><small>'.$row->namakalab; echo '<br/>'.strftime("%d %B %Y", strtotime($row->kalab_verified_date)).'</small>'; } ?></td>
                     <td><?php echo $row->namalecturer; ?></td>
+                    <td><?php if($row->is_active) { echo '<span class="badge badge-success">Aktif</span>'; } else { echo '<span class="badge-secondary badge">Tidak Aktif</span>'; } ?></td>
                     <td >
                       <?php if($is_kalab && $row->id_lab == $info[0]->lab_id && $row->kalab_verified_date == null) { ?>
                         <button data-target="#modal-validasi" targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetkuota="<?php echo $row->kuota; ?>" targetidlab="<?php echo $row->id_lab; ?>"  d
                                 data-toggle="modal"
-                                periodebuka="<?php if(count($periode_topik[$k]) >0 ) { 
-                                  foreach($periode_topik[$k] as $idx => $pt) {
-                                    if($idx != 0) { echo ', '; }
-                                    echo $pt->nama; 
-                                  }
-                                 } ?>"
+                                periodebuka="<?php echo $row->is_active; ?>"
 
                                 <?php  if(isset($prasyarat[$k][0])) {   ?>
                                   targetprasyarat1="<?php echo $prasyarat[$k][0]->nama; ?>"
@@ -153,7 +173,7 @@
                                   targetprasyarat2="<?php echo $prasyarat[$k][1]->nama; ?>"
                                   targetmin2="<?php echo $prasyarat[$k][1]->minimum_mark; ?>"
                                 <?php } else { ?>targetprasyarat2="" targetmin2=""<?php } ?>
-                                  class="btn btn-x btn-warning validatebtn">Validasi</button>
+                                  class="btn btn-xs btn-primary validatebtn">Validasi</button>
                               <?php } ?>
 
                       <?php if($info[0]->npk == $row->lecturer_npk && $row->kalab_verified_date == null) {  ?>
@@ -218,7 +238,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="angkatan" class="col-sm-4 col-form-label">Dibuka untuk semester</label>
+                <label for="angkatan" class="col-sm-4 col-form-label">Status Topik</label>
                 <div class="col-sm-8">
                   <span id="currentperiode"></span> <a class="btn btn-outline-primary btn-sm" id="ubahperiode">Ubah</a>
                   <input type="hidden" name="hidubahperiode" id="hidubahperiode" value="false"/>
@@ -317,7 +337,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="angkatanvalidasi" class="col-sm-4 col-form-label">Dibuka untuk semester</label>
+                <label for="angkatanvalidasi" class="col-sm-4 col-form-label">Status Topik</label>
                 <div class="col-sm-8">
                   <input type="text" readonly class="form-control-plaintext" id="angkatanvalidasi" value="Gasal">
                 </div>

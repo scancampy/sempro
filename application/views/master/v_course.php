@@ -38,10 +38,13 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
                     <th>Kode Mata Kuliah</th>
+                    <th>Kode Lama 1</th>
+                    <th>Kode Lama 2</th>
+                    <th>Kode Lama 3</th>
                     <th>Nama</th>
                     <th>Aksi</th>
                   </tr>
@@ -52,8 +55,11 @@
                       ?>
                   <tr>
                     <td><?php echo $row->kode_mk; ?></td>
+                    <td><?php echo $row->old_kode_mk1; ?></td>
+                    <td><?php echo $row->old_kode_mk2; ?></td>
+                    <td><?php echo $row->old_kode_mk3; ?></td>
                     <td><?php echo $row->nama; ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>"  targetkode="<?php echo $row->kode_mk; ?>"  targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/course/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td ><button targetid="<?php echo $row->id; ?>"  targetkode="<?php echo $row->kode_mk; ?>" targetkode1="<?php echo $row->old_kode_mk1; ?>" targetkode2="<?php echo $row->old_kode_mk2; ?>" targetkode3="<?php echo $row->old_kode_mk3; ?>"  targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/course/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>
@@ -80,7 +86,8 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>Upload file CSV yang berisi data mata kuliah dengan dua judul kolom yakni <strong>Kode dan Nama</strong></p>
+            <p>Upload file CSV yang berisi data mata kuliah dengan dua judul kolom yakni <strong>KodeBaru, KodeLama1, KodeLama2, KodeLama3, dan Nama
+</strong></p>
             <div class="form-group">
               <label for="exampleInputFile">File input</label>
               <div class="input-group">
@@ -118,6 +125,26 @@
               <div class="col-sm-8">
                 <input type="text" name="kode_mk_edit" readonly class="form-control" id="kode_mk_edit" >
                 <input type="hidden" name="hid_mk_id" id="hid_mk_id" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="kode_mk_lama1_edit" class="col-sm-4 col-form-label">Kode MK Lama 1</label>
+              <div class="col-sm-8">
+                <input type="text" name="kode_mk_lama1_edit" class="form-control" id="kode_mk_lama1_edit" >                
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="kode_mk_lama2_edit" class="col-sm-4 col-form-label">Kode MK Lama 2</label>
+              <div class="col-sm-8">
+                <input type="text" name="kode_mk_lama2_edit" class="form-control" id="kode_mk_lama2_edit" >                
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="kode_mk_lama3_edit" class="col-sm-4 col-form-label">Kode MK Lama 3</label>
+              <div class="col-sm-8">
+                <input type="text" name="kode_mk_lama3_edit" class="form-control" id="kode_mk_lama3_edit" >                
               </div>
             </div>
            <div class="form-group row">

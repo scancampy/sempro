@@ -25,34 +25,58 @@
         <div class="row">
           <div class="col-12">
             <form class="form-horizontal" method="get" action="<?php echo current_url(); ?>">
-              <div class="card card-primary collapsed-card">
+              <div class="card card-primary ">
                 <div class="card-header"> 
                   <h3 class="card-title">Filter Data</h3>
 
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                      <i class="fas fa-plus"></i>
+                      <i class="fas fa-minus"></i>
                     </button>
                   </div>
                 </div>
                 <div class="card-body ">
-                  <div class="form-group row">
-                    <label for="pilihtopik" class="col-sm-4 col-form-label">Tampilkan Proposal Dengan Topik</label>
-                    <div class="col-sm-8">
-                      <select class="form-control" name="pilihtopik">
-                        <option value="all">Semua Topik</option>
-                        <?php if(count($topik) >0) { 
-                            foreach($topik as $value) { ?>
-                          <option value="<?php echo $value->id; ?>"><?php echo $value->nama; ?></option>
-                        <?php } 
-                      } ?>
-                      </select>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="form-group ">
+                        <label for="pilihtopik" class="col-sm-4 col-form-label">Tampilkan</label>
+                        <div class="col-sm-6">
+                          <div class="form-check">
+                            <input class="form-check-input" <?php if($this->input->get('topiksaya')) { echo 'checked'; } ?> id="topiksaya" name="topiksaya" value="true" type="checkbox">
+                            <label class="form-check-label" for="topiksaya">Topik Saya</label>
+                          </div>
+
+                          <div class="form-check">
+                            <input class="form-check-input" <?php if($this->input->get('bimbingansaya')) { echo 'checked'; } ?> id="bimbingansaya" name="bimbingansaya" value="valid" type="checkbox">
+                            <label class="form-check-label" for="bimbingansaya">Bimbingan Saya</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group ">
+                        <label for="pilihtopik" class="col-sm-4 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" id="selectstatus" name="selectstatus">
+                              <option value="all" <?php if($this->input->get('selectstatus') == 'all') { echo 'selected'; } ?>>Semua Status</option>
+                              <option value="validasikalab" <?php if($this->input->get('selectstatus') == 'validasikalab') { echo 'selected'; } ?>>Menunggu Validasi Kalab</option>
+                              <option value="validasiwd" <?php if($this->input->get('selectstatus') == 'validasiwd') { echo 'selected'; } ?>>Menunggu Validasi WD</option>
+                              <option value="dosbingkalab" <?php if($this->input->get('selectstatus') == 'dosbingkalab') { echo 'selected'; } ?>>Menunggu Kalab Pilih Dosbing</option>
+                              <option value="validasijuduldosbing" <?php if($this->input->get('selectstatus') == 'validasijuduldosbing') { echo 'selected'; } ?>>Menunggu Validasi Judul oleh Dosbing</option> 
+                              <option value="validasidosbingwd" <?php if($this->input->get('selectstatus') == 'validasidosbingwd') { echo 'selected'; } ?>>Menunggu Validasi Final WD</option>
+                              <option value="stwaiting" <?php if($this->input->get('selectstatus') == 'stwaiting') { echo 'selected'; } ?>>Menunggu Pembuatan ST</option>
+                              <option value="stterbuat" <?php if($this->input->get('selectstatus') == 'stterbuat') { echo 'selected'; } ?>>ST Telah Terbit</option>
+                              <option value="reject" <?php if($this->input->get('selectstatus') == 'reject') { echo 'selected'; } ?>>Proposal Ditolak</option>
+                            </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                    <button type="submit" name="btncari" value="btncari" class="btn btn-primary">Cari</button>
+                   <a href="<?php echo base_url('lecturer/proposal'); ?>"  class="btn btn-info">Reset</a>
                   </div>
               </div>
             </form>
@@ -71,7 +95,25 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
-                <table id="example2" class="table table-bordered table-hover">
+                <?php  
+                $notif = 0;
+                if(isset($student_topic)) {
+                  foreach($student_topic as $idx => $row) { 
+                    if($is_wd && $row->wd_npk_verified == null && $row->kalab_verified_date != null) { $notif++; }
+
+                    if($is_kalab && $row->lecturer1_npk == null && $row->wd_npk_verified != null) { $notif++; }
+                  }
+
+
+                } ?>
+
+                <?php if($notif > 0) { ?>
+                  <div class="callout callout-info">
+                  <p>Terdapat <strong><?php echo $notif; ?></strong> proposal yang membutuhkan validasi anda</p>
+                </div>
+                <?php }?>
+
+                <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
                     <th>Topik</th>
@@ -85,7 +127,35 @@
                   </thead>
                   <tbody>
                     <?php if(isset($student_topic)) { 
-                      foreach($student_topic as $row) { 
+                      foreach($student_topic as $row) {
+
+
+                        $datashown = false;
+                        if($this->input->get('selectstatus') != 'all' && !is_null($this->input->get('selectstatus'))) {                          
+                          if($this->input->get('selectstatus') == 'validasikalab' && $row->kalab_verified_date == null && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'validasiwd' &&  $row->kalab_verified_date != null && $row->wd_verified_date == null  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'dosbingkalab' && $row->wd_verified_date != null && $row->lecturer1_npk == null  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'validasidosbingwd' &&  $row->lecturer1_npk != null && $row->is_verified == 0  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'validasijuduldosbing' &&  $row->is_verified == 1 && $row->lecturer1_validate_date == null  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'stwaiting' &&  $row->lecturer1_validate_date != null  && $row->is_st_created == 0  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'stterbuat'  && $row->is_st_created == 1  && $row->is_rejected == 0) {
+                            $datashown = true;
+                          } else if($this->input->get('selectstatus') == 'reject'  && $row->is_rejected == 1) {
+                            $datashown = true;
+                          }
+                        } else {
+                          $datashown = true;
+                        } 
+
+                        if(!$datashown) {
+                          continue;
+                        }
                       ?>
                   <tr>
                    
@@ -96,19 +166,24 @@
                     <td><?php echo $row->studentname.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
                     <td >
                        <?php
-
                         if($row->is_rejected == 1) {
                           echo '<span class="badge badge-danger">Proposal Ditolak</span>';
                         } else if($row->kalab_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->wd_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi WD</span>';
-                        } else if($row->is_rejected == null) {
-                          echo '<span class="badge badge-error">Proposal Ditolak</span>';
                         } else if($row->lecturer1_npk == null) {
                           echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
-                        }  else if($row->is_verified == 0) {
+                        }  else if($row->judul == '') {
+                          echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
+                        } else if($row->judul != '' && $row->lecturer1_validate_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Judul Dosbing</span>';
+                        } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
+                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
+                          echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
+                        } else if($row->is_st_created == 1) {
+                          echo '<span class="badge badge-success">ST Sudah Terbit</span>';
                         }
                       ?>
                       <?php /*

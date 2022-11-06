@@ -31,7 +31,7 @@
 
       <form action="<?php echo current_url(); ?>" method="post">
         <div class="input-group mb-3">
-          <input type="text" name="userid"  autocomplete="username" class="form-control" placeholder="NRP / NPK">
+          <input type="text" name="userid" autofocus  autocomplete="username" class="form-control" placeholder="NRP / NPK">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
