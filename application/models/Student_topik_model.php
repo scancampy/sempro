@@ -67,6 +67,31 @@ class Student_topik_model extends CI_Model {
                 return $q->result();
         }
 
+        // ambil data proposal tahap akhir
+        public function get_proposal_verified_st($nrp) {
+                  $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
+                $this->db->join('student', 'student.nrp = student_topik.student_nrp', 'left');
+                $this->db->join('lab', 'lab.id = topik.id_lab', 'left');
+                $this->db->join('lecturer as l1', 'l1.npk = student_topik.guardian_npk_verified', 'left');
+                $this->db->join('lecturer as l2', 'l2.npk = student_topik.kalab_npk_verified', 'left');
+                $this->db->join('lecturer as l3', 'l3.npk = student_topik.wd_npk_verified', 'left');
+                $this->db->join('lecturer as l4', 'l4.npk = student_topik.wd_npk_rejected', 'left');
+                $this->db->join('lecturer as l5', 'l5.npk = student_topik.wd_final_npk_rejected', 'left');
+                $this->db->join('lecturer as dosbing1', 'dosbing1.npk = student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer as dosbing2', 'dosbing2.npk = student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer as pembuat', 'pembuat.npk = topik.lecturer_npk', 'left');
+                $this->db->join('staff', 'staff.username = student_topik.st_username_created', 'left');
+
+                 $this->db->select('student_topik.*, student.nama as "studentname", topik.nama, lab.nama as "namalab", l1.nama as "guardianname", l2.nama as "kalabnama", l3.nama as "wdnama", l4.nama as "wdnamareject", l5.nama as "wdfinalnamareject", dosbing1.nama as "dosbing1nama", dosbing2.nama as "dosbing2nama", pembuat.nama as "pembuat", staff.nama as "adminstnama"');
+
+                $q = $this->db->get_where('student_topik', array('student_topik.student_nrp' => $nrp, 'student_topik.is_deleted' => 0, 'student_topik.is_verified' => 1, 'student_topik.is_st_created' => 1));
+                if($q->num_rows() > 0) {
+                        return $q->row();   
+                } else  {
+                        return false;
+                }            
+        }
+
         public function get($nrp='',$id='', $is_deleted = 0, $is_rejected ='', $topik_id = '', $kalab_npk_verified = null, $where = '') {
                 if($nrp != '') {
                         $this->db->where('student_nrp', $nrp);

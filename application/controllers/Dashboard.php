@@ -22,9 +22,9 @@ class Dashboard extends CI_Controller {
 		foreach($roles as $role) {
             if($role->roles == 'student') { 
             	$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
-            	$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
+            //	$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
             	//print_r($skripsi[0]->nilai);
-            	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
+            //	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
             	$data['eligible'] = $this->Student_model->cek_eligible($data['info'][0]->nrp);
             	$data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
 

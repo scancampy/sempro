@@ -235,12 +235,51 @@ class Student_model extends CI_Model {
         public function get_transcript($kode_mk_arr, $nrp) {
                 $data = array();
                 foreach($kode_mk_arr as $value) {
-                        $q =$this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $value->kode_mk));
+                        $this->db->where('kode_mk = "'.$value->kode_mk.'" OR old_kode_mk1 = "'.$value->kode_mk.'" OR old_kode_mk2 = "'.$value->kode_mk.'" OR old_kode_mk3 = "'.$value->kode_mk.'" ');
+                        $a = $this->db->get('course');
+                        $hasil = $a->row();
+                        $cek = false;
 
-                        if($q->num_rows() >0) {
-                                $data[] = $q->row();
-                        } else {
+
+                        // cari mknya di student_transcript
+                        if($hasil->kode_mk != '') {
+                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->kode_mk));
+                                if($l->num_rows() > 0) {
+                                        $cek = true;
+                                        $data[] = $l->row();                                        
+                                } 
+                        }
+
+                        // cari mknya di student_transcript
+                        if($hasil->old_kode_mk1 != '') {
+                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk1));
+                                if($l->num_rows() > 0) {
+                                        $cek = true;
+                                        $data[] = $l->row();                                        
+                                } 
+                        }
+
+                        // cari mknya di student_transcript
+                        if($hasil->old_kode_mk2 != '') {
+                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk2));
+                                if($l->num_rows() > 0) {
+                                        $cek = true;
+                                        $data[] = $l->row();                                        
+                                } 
+                        }
+
+                        // cari mknya di student_transcript
+                        if($hasil->old_kode_mk3 != '') {
+                                $l = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'kode_mk' => $hasil->old_kode_mk3));
+                                if($l->num_rows() > 0) {
+                                        $cek = true;
+                                        $data[] = $l->row();                                        
+                                } 
+                        }
+                        
+                        if($cek == false) {
                                 $data[] = null;
+                        
                         }
                 }
 

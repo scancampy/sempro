@@ -921,6 +921,174 @@ class Master extends CI_Controller {
 		$this->load->view('v_footer', $data);
 	}
 
+	public function periodesidang($delaction = null, $delperiode = null) {
+		$data = array();
+		
+		// LOAD PERIODE
+		$res = $this->Periode_model->get_periode_sidang();
+		$data['periode'] = $res;
+		
+		// TAMBAH PERIODE
+		if($this->input->post('btntambah')) {
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end')));
+			
+			if(strtotime($this->input->post('date_start')) > strtotime($this->input->post('date_end'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periodesidang');
+			}
+
+			$is_active = 0;
+			if($this->input->post('is_active')) {
+				$is_active = 1;
+			}
+			$this->Periode_model->add_periode_sidang($date_start,$date_end, $is_active);	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/periodesidang');
+		}
+
+		// EDIT PERIODE
+		if($this->input->post('btnubah')) {
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start_edit')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end_edit')));
+
+			if(strtotime($this->input->post('date_start_edit')) > strtotime($this->input->post('date_end_edit'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periodesidang');
+			}
+			
+			$is_active = 0;
+			if($this->input->post('is_active_edit')) {
+				$is_active = 1;
+			}
+			$this->Periode_model->update_data_periode_sidang($this->input->post('hidedit'),$date_start, $date_end, $is_active);
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/periodesidang');
+		}
+
+		// DEL PERIODE
+		if($delperiode != null) {
+			if($this->Periode_model->del_periode_sidang($delperiode)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/periodesidang');
+			}
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": false,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data periode sidang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data periode sidang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah periode sidang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+    		';
+    	}
+
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var targetstart = $(this).attr("targetstart");
+    			var targetend = $(this).attr("targetend");
+    			var isactive = $(this).attr("targetactive");
+    			$("#hidedit").val(id);
+    			$("#date_start_edit_id").val(targetstart);
+    			$("#date_end_edit_id").val(targetend);
+
+    			if(isactive == 1) {
+    				$("#is_active_edit").prop( "checked", true ); 
+    			} else {
+    				$("#is_active_edit").prop( "checked", false ); 
+    			}    
+
+
+			    $("#date_start_edit").datepicker("destroy").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_edit").datepicker("destroy").datetimepicker({
+			        format: "L"
+			    });			 
+    		});
+    	';
+
+    	// INIT DATE PICKER
+    	$data['js'] .= '
+			    	//Date picker
+			    $("#date_start").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end").datetimepicker({
+			        format: "L"
+			    });
+
+			    $("#date_start_edit").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_edit").datetimepicker({
+			        format: "L"
+			    });
+			';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_periode_sidang', $data);
+		$this->load->view('v_footer', $data);
+	}
+
 	public function roles($delaction = null, $delroles = null) {
 		$data = array();
 		

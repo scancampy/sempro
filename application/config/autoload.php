@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('User_model', 'Staff_model', 'Student_model', 'Lecturer_model', 'Lab_model', 'Roles_model', 'Topik_model', 'Eligibility_model', 'Guardian_model', 'Periode_model', 'Course_model', 'Student_topik_model');
+$autoload['model'] = array('User_model', 'Staff_model', 'Student_model', 'Lecturer_model', 'Lab_model', 'Roles_model', 'Topik_model', 'Eligibility_model', 'Guardian_model', 'Periode_model', 'Course_model', 'Student_topik_model', 'Sempro_model');

@@ -125,6 +125,13 @@
                   <p>Periode/Semester</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/periodesidang'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'periodesidang') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Periode Sidang</p>
+                </a>
+              </li>
              
               <li class="nav-item">
                 <a href="<?php echo base_url('master/student'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'student') { echo  'active'; } ?>">
@@ -205,12 +212,30 @@
               </p>
             </a>
           </li>
+
+           <li class="nav-item">
+                <a href="<?php echo base_url('sempro'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>
+                    Ujian Proposal
+                  </p>
+                </a>
+              </li>
              <?php } else if($role->roles == 'student') { ?>
                <li class="nav-item">
                 <a href="<?php echo base_url('proposal/student'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'proposal') { echo  'active'; } ?>">
                   <i class="nav-icon fas fa-book"></i>
                   <p>
                     Proposal
+                  </p>
+                </a>
+              </li>
+
+               <li class="nav-item">
+                <a href="<?php echo base_url('sempro'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>
+                    Ujian Proposal
                   </p>
                 </a>
               </li>
