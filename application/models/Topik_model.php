@@ -260,6 +260,16 @@ class Topik_model extends CI_Model {
                 return $q->num_rows();
         }
 
+        public function get_npk($id){
+                $q = $this->db->get_where('topik', array('id' =>$id));
+
+                if($q->num_rows() > 0) {
+                        return $q->row();
+                } else {
+                        return false;
+                }
+        }
+
 }
 
 ?>

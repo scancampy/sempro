@@ -11,6 +11,7 @@ class Sempro_model extends CI_Model {
 
                 // TODO: check jika statusnya cancelled
                 $q = $this->db->get_where('sempro', array('sempro.nrp' => $nrp, 'sempro.is_failed' =>0, 'sempro.is_deleted' => 0));
+                //echo $this->db->last_query(); die();
                 if($q->num_rows() > 0) {
                         return $q->result();        
                 } else {
@@ -54,8 +55,10 @@ class Sempro_model extends CI_Model {
                 // TODO: check jika statusnya cancelled
                 $q = $this->db->get('sempro');
                 if($q->num_rows() > 0) {
+
                         return $q->result();        
                 } else {
+                      
                         return false;
                 }
         }
@@ -91,6 +94,58 @@ class Sempro_model extends CI_Model {
         public function get_sidang_time() {
                $q =  $this->db->get('sidang_time');
                return $q->result();
+        }
+
+        public function insert_plot($sempro_id, $npk_penguji1, $npk_penguji2, $tglsidang, $jamsidangid, $npkkalab) {
+                // TODO: cek dulu apakah semua penguji dan pembimbing available pada jam tersebut
+                // cek kesediaan penguji1
+                $q = $this->db->get_where('sempro', array('penguji1' => $npk_penguji1, 'sidang_date' => $tglsidang, 'sidang_time' => $jamsidangid));
+                if($q->num_rows > 0) { return 'Jadwal sempro penguji 1 bentrok'; }
+
+                // cek kesediaan penguji2
+                $q = $this->db->get_where('sempro', array('penguji2' => $npk_penguji2, 'sidang_date' => $tglsidang, 'sidang_time' => $jamsidangid));
+                if($q->num_rows > 0) { return 'Jadwal sempro penguji 2 bentrok'; }
+
+
+
+                // cek kesediaan pembimbing1
+                // TODO: ini belum selesai
+                $this->db->join('sempro', 'sempro.student_topik_id = student_topik.id');
+                $this->db->select('student_topik.*');
+                $q = $this->db->get_where('student_topik', array('sempro.id' => $sempro_id));
+                if($q->num_rows() >0) {
+                        $hq = $q->row();
+                        $pembimbing1 = $hq->lecturer1_npk;
+                        $pembimbing2 = $hq->lecturer2_npk;
+
+                        // cek kesediaan pembimbing 1
+                        $q = $this->db->get_where('sempro', array('pembimbing1' => $pembimbing1, 'sidang_date' => $tglsidang, 'sidang_time' => $jamsidangid));
+                        if($q->num_rows > 0) { return 'Jadwal sempro pembimbing 1 bentrok'; }
+
+                         // cek kesediaan pembimbing 2
+                        $q = $this->db->get_where('sempro', array('pembimbing2' => $pembimbing2, 'sidang_date' => $tglsidang, 'sidang_time' => $jamsidangid));
+                        if($q->num_rows > 0) { return 'Jadwal sempro pembimbing 2 bentrok'; }
+                } else {
+                        return 'Data sempro tidak valid';
+                }
+
+                // update jadwal dengan plot
+                $data = array(
+                        'sidang_time'           => $jamsidangid,
+                        'sidang_date'           => $tglsidang,
+                        'penguji1'              => $npk_penguji1,
+                        'penguji2'              => $npk_penguji2,
+                        'pembimbing1'           => $pembimbing1,
+                        'pembimbing2'           => $pembimbing2,
+                        'kalab_verified_date'   => date('Y-m-d H:i:s'),
+                        'kalab_npk_verified'    => $npkkalab
+                );
+
+                $this->db->where('id', $sempro_id);
+                $this->db->update('sempro',$data);
+
+                return true;
+
         }
 }
 

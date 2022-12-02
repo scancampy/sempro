@@ -129,7 +129,14 @@
               <li class="nav-item">
                 <a href="<?php echo base_url('master/periodesidang'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'periodesidang') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Periode Sidang</p>
+                  <p>Periode Ujian Sempro</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/room'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'room') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ruang</p>
                 </a>
               </li>
              

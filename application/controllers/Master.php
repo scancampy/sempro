@@ -1089,6 +1089,113 @@ class Master extends CI_Controller {
 		$this->load->view('v_footer', $data);
 	}
 
+	public function room($delaction = null, $delroom = null) {
+		$data = array();
+		
+		// LOAD ROOM
+		$res = $this->Room_model->get();
+		$data['room'] = $res;
+		
+		// TAMBAH ROOM
+		if($this->input->post('btntambah')) {			
+			$this->Room_model->insert($this->input->post('label'));	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/room');
+		}
+
+		// EDIT ROOM
+		if($this->input->post('btnubah')) {
+			$this->Room_model->update($this->input->post('hidedit'), $this->input->post('labeledit'));	
+			$this->session->set_flashdata('notif', 'success_edit');		
+			redirect('master/room');
+		}
+
+		// DEL RUANG
+		if($delaction != null) {
+			if($this->Room_model->del($delroom)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/room');
+			}
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": false,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus ruang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data ruang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah ruang"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+    		';
+    	}
+
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var targetlabel = $(this).attr("targetlabel");
+    			$("#hidedit").val(id);
+    			$("#labeledit").val(targetlabel);
+    		});
+    	';
+
+    
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_room', $data);
+		$this->load->view('v_footer', $data);
+	}
+
 	public function roles($delaction = null, $delroles = null) {
 		$data = array();
 		

@@ -5,13 +5,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Periode Sidang</h1>
+            <h1 class="m-0">Periode Ujian Sempro</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
               <li class="breadcrumb-item">Master</li>
-              <li class="breadcrumb-item active">Periode Sidang</li>
+              <li class="breadcrumb-item active">Periode Ujian Sempro</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -28,10 +28,10 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col-9">
-                    <h3 class="card-title">Data Periode Sidang</h3>
+                    <h3 class="card-title">Data Ujian Sempro</h3>
                   </div>
                   <div class="col-3">
-                    <button type="button"  class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-add">Tambah Periode Sidang</button>
+                    <button type="button"  class="btn btn-block btn-primary btn-sm" data-toggle="modal" data-target="#modal-add">Tambah Ujian Sempro</button>
                   </div>
                 </div>
                 
@@ -129,7 +129,7 @@
         <div class="modal-content">
           <form method="post" action="<?php echo base_url('master/periodesidang'); ?>" enctype="multipart/form-data" method="post">
           <div class="modal-header">
-            <h4 class="modal-title">Edit Periode Sidang</h4>
+            <h4 class="modal-title">Edit Periode Ujian Sempro</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

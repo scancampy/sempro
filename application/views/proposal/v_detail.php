@@ -285,6 +285,78 @@
                           </div>
                         </div>
                         <!-- END timeline item -->
+
+                         <!-- timeline item -->
+                        <div>
+                         <?php if(!is_null($detail[0]->lecturer1_npk_verified)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else if($detail[0]->is_rejected == 1 && !is_null($detail[0]->lecturer1_npk_rejected)) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                            Dosbing - <?php if($detail[0]->is_rejected && !is_null($detail[0]->lecturer1_npk_rejected)) { ?>Proposal Ditolak<?php } else { ?>Validasi<?php } ?><br/>
+
+
+                            <?php if(!is_null($detail[0]->lecturer1_npk_verified)) { ?>
+                                <br/><small><i class="fas fa-clock"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->lecturer1_npk_verified_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i>
+                                <?php echo $detail[0]->l1nama; ?>
+                              </small>
+                              <?php } ?>
+
+                              <?php if($detail[0]->is_rejected && !is_null($detail[0]->lecturer1_npk_rejected)) { ?>
+                                <br/><small><i class="fas fa-times"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->lecturer1_rejected_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i>
+                                <?php echo $detail[0]->l1rnama; ?>
+                              </small><br/><br/>
+                              <div class="callout callout-danger">
+                                <small><strong>Alasan</strong></small><br/>
+                                <small><?php echo $detail[0]->lecturer1_reason_reject; ?></small>
+                              </div>
+
+                              <?php } ?>
+
+
+                              <?php if(is_null($detail[0]->lecturer1_npk_verified_date) && $detail[0]->is_rejected == 0 && isset($lecturer1)) { ?>
+                                <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>">
+                                      <div class="form-group">
+                                        <label for="ceksyaratwd" class="col-sm-4 col-form-label">Hasil Validasi</label>
+                                        <div class="col-12">
+                                          <div class="form-group">
+                                            <div class="form-check">
+                                              <input class="form-check-input" value="diterima" <?php if($detail[0]->is_rejected ==0) { echo 'checked'; } ?> type="radio" name="radiovalidasidosbing" id="radioditerimadosbing">
+                                              <label class="form-check-label" for="radioditerimadosbing">Diterima</label>
+                                            </div>
+                                            <div class="form-check">
+                                              <input class="form-check-input" <?php if($detail[0]->is_rejected ==1) { echo 'checked'; } ?> value="ditolak" type="radio" name="radiovalidasidosbing" id="radioditolakdosbing" >
+                                              <label class="form-check-label"  for="radioditolakdosbing">Ditolak</label>
+                                            </div>
+                                          </div>
+
+                                          <div class="form-group" <?php if($detail[0]->is_rejected == 0) { ?>style="display: none;"<?php } ?> id="container_alasan_dosbing">
+                                            <label>Alasan</label>
+                                            <textarea class="form-control" rows="3" name="alasan_ditolak_dosbing" id="alasan_ditolak_dosbing" placeholder="Tuliskan alasan ditolak"><?php echo $detail[0]->lecturer1_reason_reject; ?></textarea>
+                                          </div>                                        
+                                        </div>
+                                      </div>
+                                      
+
+                                      <div class="form-group ">
+                                        <div class="col-sm-12 text-right">
+                                          <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmit" id="btndosbingsubmit">Submit</button>
+                                        </div>
+                                      </div>
+                                    </form>
+                              <?php } ?>
+                              
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END timeline item -->
                           
                          <!-- timeline item -->
                         <div>
@@ -335,7 +407,7 @@
                         <div>
                           <?php if(!is_null($detail[0]->wd_npk_verified)) { ?>
                           <i class="fas fa-check bg-green"></i>
-                        <?php } else if($detail[0]->is_rejected == 1) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                        <?php } else if($detail[0]->is_rejected == 1 && !is_null($detail[0]->wd_npk_rejected)) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
                           <div class="timeline-item">
                             
                             <div class="timeline-body">
@@ -477,18 +549,34 @@
                             <div class="timeline-item">
                             
                               <div class="timeline-body">
-                                Mahasiswa - Mengisi Judul Proposal
+                                Mahasiswa - Mengisi Judul Proposal & Kerangka Konseptual
 
                                 <?php 
                               if(isset($is_student)) {
                                   if($is_student && !is_null($detail[0]->lecturer1_npk)) { ?>
-                                    <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>">
+                                    <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>" enctype="multipart/form-data">
                                       <div class="form-group ">
                                         <label for="juduledit" class="col-sm-2 col-form-label">Judul</label>
                                         <div class="col-sm-12">
                                           <input type="text" class="form-control" id="juduledit" name="juduledit" value="<?php echo $detail[0]->judul; ?>" />
                                         </div>
                                       </div>
+
+                                      <div class="form-group ">
+                                        <label for="juduledit" class="col-sm-12 col-form-label">File Kerangka Konseptual</label>
+                                        <div class="col-sm-12">
+                                          <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
+                                        </div>
+                                      </div>
+
+                                      <?php if(!is_null($detail[0]->kk_filename)) { ?>
+                                        <div class="form-group ">
+                                        <label for="juduledit" class="col-sm-12 col-form-label">Download File Kerangka Konseptual</label>
+                                        <div class="col-sm-12">
+                                          <a href="<?php echo base_url('uploads/kk/'.$detail[0]->kk_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
+                                        </div>
+                                      </div>
+                                      <?php } ?>
                                       <div class="form-group ">
                                         <div class="col-sm-12 text-right">
                                           <button type="submit" class="btn btn-primary" value="Submit" name="btnsimpanjudul"  id="btnsimpanjudul">Simpan</button>
@@ -503,32 +591,78 @@
                         </div>
 
                         <div>
-                        <?php if(!is_null($detail[0]->judul) && !is_null($detail[0]->lecturer1_validate_date)) { ?>
+
+                         <?php if(!is_null($detail[0]->judul) && !is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                           <i class="fas fa-check bg-green"></i>
-                        <?php }  else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                        <?php } else if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                        
 
                             <div class="timeline-item">
                             
                               <div class="timeline-body">
-                                Dosbing 1 - Memvalidasi Judul
-                                 <?php if(!is_null($detail[0]->lecturer1_validate_date)) { ?>
+                                Kalab - <?php if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { echo "Menolak ";  } else { echo "Memvalidasi "; } ?>  Judul
+
+                               <?php if(!isset($is_kalab)) { ?>
+                                 <?php if(!is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                                 <br/><small><i class="fas fa-clock"></i>
-                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->lecturer1_validate_date)); ?>
+                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->kalab_npk_verified_judul_date)); ?>
                               </small><br/>
                               <small><i class="fas fa-user"></i>
-                                <?php echo $detail[0]->dosbing1nama; ?>
+                                <?php echo $detail[0]->l6nama; ?>
                               </small>
+                              <?php } else if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
+                                <br/><small><i class="fas fa-times"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->kalab_rejected_judul_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i>
+                                <?php echo $detail[0]->l7nama; ?>
+                              </small><br/><br/>
+                              <div class="callout callout-danger">
+                                <small><strong>Alasan</strong></small><br/>
+                                <small><?php echo $detail[0]->kalab_reason_reject_judul; ?></small>
+                              </div>
                               <?php } ?>
+                            <?php } ?>
                                <?php
-                              if(isset($is_dosbing)) {
+                              if(isset($is_kalab)) {
+
                                 
-                                  if($is_dosbing && !is_null($detail[0]->judul) && is_null($detail[0]->lecturer1_validate_date)) { ?>
+                                  if($is_kalab && !is_null($detail[0]->judul) && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                                     <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>">
                                       <div class="form-group">
                                         <div class="col-12">
-                                          <p class="text-sm">Judul
-                                            <b class="d-block"><?php echo $detail[0]->judul; ?></b>
+                                          <p class="text-sm"><b>Judul</b>
+                                            <span class="d-block"><?php echo $detail[0]->judul; ?></span>
                                           </p>
+                                        </div>
+                                        <?php if(!is_null($detail[0]->kk_filename)) { ?>
+                                        <div class="form-group ">
+                                          <label for="juduledit" class="col-sm-12 col-form-label">Download File Kerangka Konseptual</label>
+                                          <div class="col-sm-12">
+                                            <a href="<?php echo base_url('uploads/kk/'.$detail[0]->kk_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
+                                          </div>
+                                        </div>
+                                        <?php } ?>
+
+                                        <div class="form-group">
+                                          <label for="ceksyaratwd" class="col-sm-4 col-form-label">Hasil Validasi</label>
+                                          <div class="col-12">
+                                            <div class="form-group">
+                                              <div class="form-check">
+                                                <input class="form-check-input" value="diterima" <?php if($detail[0]->is_rejected ==0) { echo 'checked'; } ?> type="radio" name="radiovalidasijudulkalab" id="radioditerimajudulkalab">
+                                                <label class="form-check-label" for="radioditerimajudulkalab">Diterima</label>
+                                              </div>
+                                              <div class="form-check">
+                                                <input class="form-check-input" <?php if($detail[0]->is_rejected ==1) { echo 'checked'; } ?> value="ditolak" type="radio" name="radiovalidasijudulkalab" id="radioditolakjudulkalab" >
+                                                <label class="form-check-label"  for="radioditolakjudulkalab">Ditolak</label>
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group" <?php if($detail[0]->is_rejected == 0) { ?>style="display: none;"<?php } ?> id="container_alasan_kalab">
+                                              <label>Alasan</label>
+                                              <textarea class="form-control" rows="3" name="kalab_alasan_ditolak_judul" id="kalab_alasan_ditolak_judul" placeholder="Tuliskan alasan ditolak"><?php echo $detail[0]->kalab_reason_reject_judul; ?></textarea>
+                                            </div>                                        
+                                          </div>
                                         </div>
                                         <div class="col-12">
                                           <div class="form-check">
@@ -541,7 +675,7 @@
 
                                       <div class="form-group ">
                                         <div class="col-sm-12 text-right">
-                                          <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingvalidasijudul" disabled id="btndosbingvalidasijudul">Validasi</button>
+                                          <button type="submit" class="btn btn-primary" value="Submit" name="btnkalabvalidasijudul" disabled id="btnkalabvalidasijudul">Validasi</button>
                                         </div>
                                       </div>
                                     </form>
@@ -586,6 +720,34 @@
                               <?php  
                                 if(isset($wd)) {
                                   if($wd && !is_null($detail[0]->lecturer1_npk)) { ?>
+                                    <div class="row">
+                    <div class="col-12">
+                      <p class="text-sm"><b>Judul</b>
+                        <span class="d-block"><?php echo $detail[0]->judul; ?></span>
+                      </p>
+                    </div>
+                    <div class="col-12">
+                      <p class="text-sm"><b>Kerangka Kerja Konseptual</b>
+                        <span class="d-block"><a href="<?php echo base_url('uploads/kk/'.$detail[0]->kk_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></span>
+                      </p>
+                    </div>
+                    <div class="col-12">
+                      <p class="text-sm"><b>Tanggal Pengajuan</b>
+                        <span class="d-block"><?php echo strftime("%d %B %Y %H:%M:%S", strtotime($detail[0]->created_date)); ?></span>
+                      </p>
+                    </div>
+                    <div class="col-5">
+                      <p class="text-sm"><b>Topik</b>
+                        <span class="d-block"><?php echo $detail[0]->nama; ?></span>
+                      </p>
+                    </div>
+                    <div class="col-5">
+                      <p class="text-sm"><b>Kuota</b>
+                        <span class="d-block"><?php echo $kuota.'/'.$topik[0]->kuota; ?></span>
+                      </p>
+                    </div>
+                    
+                  </div>
                                   <div class="row">
                                     <div class="col-md-6">
                                       <!-- Box Comment -->
@@ -635,6 +797,7 @@
                                     <div class="col-12">
                                     <?php if($detail[0]->is_verified == 0) { ?>
                                       <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>">
+
                                         <div class="form-group">
                                           <label for="ceksyaratwd" class="col-sm-4 col-form-label">Hasil Validasi</label>
                                           <div class="col-12">

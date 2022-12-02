@@ -75,6 +75,8 @@
                        <?php
                         if($row->is_rejected == 1) {
                           echo '<span class="badge badge-danger">Proposal Ditolak</span>';
+                        } else if($row->lecturer1_npk_verified_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Dosbing</span>';
                         } else if($row->kalab_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->wd_verified_date == null) {
@@ -83,44 +85,26 @@
                           echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
                         }  else if($row->judul == '') {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
-                        } else if($row->judul != '' && $row->lecturer1_validate_date == null) {
-                          echo '<span class="badge badge-success">Menunggu Validasi Judul Dosbing</span>';
+                        } else if($row->judul != '' && $row->kalab_npk_verified_judul_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
                         }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
                           echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
-                        } else if($row->is_st_created == 1) {
+                       } else if($row->is_st_created == 1) {
                           echo '<span class="badge badge-success">ST Sudah Terbit</span>';
                         }
                       ?>
 
-                      <?php /*
-
-                      <ul>
-                        <li class="text-secondary"><small class="text-success"><i class="nav-icon fas fa-check"></i> Proposal masuk proses pengajuan</small></li>
-                        <li class="text-secondary">
-                          <?php if(!is_null($row->guardian_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>
-                           Dosen Wali mengecek syarat</small></li>
-                        <li class="text-secondary"> <?php if(!is_null($row->kalab_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab mengecek syarat dan validasi</small></li>
-                        <li class="text-secondary"><?php if(!is_null($row->wd_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>WD mengecek syarat dan persetujuan</small></li>
-                        <li class="text-secondary"><?php if($row->judul != '') { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Mahasiswa mengisi judul</small></li>
-                        <li class="text-secondary"><?php if(!is_null($row->lecturer_created)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab menentukan Dosbing</small></li>
-                      </ul> */ ?>
                     </td>
                     <td>
                       <a href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-primary btn-flat btn-sm">Detail</a>
 
                       <a data-target="#modal-tracking" data-toggle="modal" href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-outline-primary btn-flat btn-sm">Tracking</a>
+
+                      <?php if($row->is_st_created == 1) {
+                          echo '<a href="'.base_url('uploads/st/'.$row->st_filename).'" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>';
+                        } ?>
                     </td>
                   </tr>
 
@@ -155,42 +139,54 @@
         <div class="bs-stepper linear">
                   <div class="bs-stepper-header" role="tablist">
                     <!-- your steps here -->
+                    <div class="step  <?php if($row->lecturer1_npk_verified_date != null) { echo 'active'; } ?> text-center" data-target="#logins-part" >
+                      
+                        <?php if(!is_null($row->lecturer1_npk_rejected)) { echo '<span class="bs-stepper-circle bg-danger"><span class="fa fa-times"></span></span>'; } else { echo '<span class="bs-stepper-circle ">1</span>'; } ?>
+                        <br/>
+                        <span class="bs-stepper-label"><small>
+                          <?php 
+                          if(!is_null($row->lecturer1_npk_rejected)) { 
+                            echo 'Ditolak Dosbing';
+                          } else if($row->lecturer1_npk_verified_date == null) { echo 'Menunggu Validasi Dosbing'; } else { echo 'Validasi Dosbing'; } ?></small></span>
+                      
+                    </div>
+                    <div class="line"></div>
                     <div class="step  <?php if($row->kalab_verified_date != null) { echo 'active'; } ?> text-center" data-target="#logins-part" >
                       
-                        <span class="bs-stepper-circle">1</span>
+                        <span class="bs-stepper-circle">2</span>
                         <br/>
-                        <span class="bs-stepper-label"><small><?php if($row->kalab_verified_date == null) { echo 'Menunggu '; } ?> Validasi Kalab<?php ?></small></span>
+                        <span class="bs-stepper-label"><small><?php if($row->kalab_verified_date == null && $row->lecturer1_npk_verified_date != null) { echo 'Menunggu '; } ?> Validasi Kalab<?php ?></small></span>
                       
                     </div>
                     <div class="line"></div>
                     <div class="step  <?php if($row->wd_verified_date != null) { echo 'active'; } ?> text-center" data-target="#information-part">
                      
-                        <span class="bs-stepper-circle <?php if(!is_null($row->wd_npk_rejected)) { echo 'bg-red'; } ?>"><?php if(!is_null($row->wd_npk_rejected)) { echo '<i class="fas fa-times bg-red"></i>'; } else { echo '2'; } ?></span><br/>
-                        <span class="bs-stepper-label"><small>Validasi WD</small></span>
+                        <span class="bs-stepper-circle <?php if(!is_null($row->wd_npk_rejected)) { echo 'bg-red'; } ?>"><?php if(!is_null($row->wd_npk_rejected)) { echo '<i class="fas fa-times bg-red"></i>'; } else { echo '3'; } ?></span><br/>
+                        <span class="bs-stepper-label"><small><?php if($row->wd_verified_date == null && $row->kalab_verified_date != null) { echo 'Menunggu '; } ?> Validasi WD<?php ?></small></span>
                     </div>
                     <div class="line"></div>
                     <div class="step text-center <?php if($row->lecturer1_npk != null) { echo 'active'; } ?>" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">3</span><br/>
+                        <span class="bs-stepper-circle">4</span><br/>
                         <span class="bs-stepper-label"><small>Kalab Pilih Dosbing</small></span>
                     </div>
                     <div class="line"></div>
                     <div class="step text-center <?php if($row->judul != NULL ) { echo 'active'; } ?>" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">4</span><br/>
+                        <span class="bs-stepper-circle">5</span><br/>
                         <span class="bs-stepper-label"><small>Mahasiswa Input Judul</small></span>
                     </div>
                     <div class="line"></div>
-                    <div class="step text-center <?php if($row->judul != NULL && $row->lecturer1_validate_title != NULL) { echo 'active'; } ?>" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">5</span><br/>
-                        <span class="bs-stepper-label"><small>Dosbing Validasi Judul</small></span>
+                    <div class="step text-center <?php if($row->judul != NULL && $row->kalab_npk_verified_judul != NULL) { echo 'active'; } ?>" data-target="#information-part">                     
+                        <span class="bs-stepper-circle">6</span><br/>
+                        <span class="bs-stepper-label"><small>Kalab Validasi Judul</small></span>
                     </div>
                     <div class="line"></div>
                     <div class="step text-center <?php if($row->is_verified ==1) { echo 'active'; } ?>" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">6</span><br/>
+                        <span class="bs-stepper-circle">7</span><br/>
                         <span class="bs-stepper-label"><small>Validasi WD</small></span>
                     </div>
                      <div class="line"></div>
                     <div class="step text-center <?php if($row->is_st_created ==1) { echo 'active'; } ?>" data-target="#information-part">                     
-                        <span class="bs-stepper-circle">7</span><br/>
+                        <span class="bs-stepper-circle">8</span><br/>
                         <span class="bs-stepper-label"><small>Surat Tugas</small></span>
                     </div>
                   </div>

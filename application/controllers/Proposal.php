@@ -31,6 +31,8 @@ class Proposal extends CI_Controller {
             } 
         }
 
+    $data['detail'] = $this->Student_topik_model->get('', $id);
+
     if($this->input->post('btnsimpanjudul')) {
     	 $info = $this->session->userdata('user');
     	 if($info->user_type == 'student') {
@@ -38,7 +40,26 @@ class Proposal extends CI_Controller {
     	 			$this->session->set_flashdata('notif', 'failed_judul');
 						redirect('proposal/detail/'.$id);
     	 		}
-    	 		$this->Student_topik_model->update_judul($id, $this->input->post('juduledit'));
+
+    	 		$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/kk';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'kk_'.$id.date('Ymdhis').'.pdf';
+
+          $this->upload->initialize($config);
+
+          $this->load->library('upload', $config);
+
+          if ( ! $this->upload->do_upload('filekk'))
+          {
+          	$this->session->set_flashdata('notif', 'error_validated');
+          	$this->session->set_flashdata('msg', $this->upload->display_errors());
+          	redirect('proposal/detail/'.$id);
+          }
+		            
+					$this->Student_topik_model->update_judul($id, $this->input->post('juduledit'), $config['file_name']);
     	 		$this->session->set_flashdata('notif', 'success_judul');
 					redirect('proposal/detail/'.$id);
     	 }
@@ -81,6 +102,30 @@ class Proposal extends CI_Controller {
        }
     }
 
+    if($this->input->post('btndosbingsubmit')) {
+    	 $info = $this->session->userdata('user');
+    	if($info->user_type == 'lecturer') {
+        $cekdosbing= $this->Topik_model->get_npk($data['detail'][0]->topik_id);
+
+        if($cekdosbing) {
+        	if($cekdosbing->lecturer_npk == $info->info[0]->npk) {
+        		$radiovalidasiwd = $this->input->post('radiovalidasidosbing');
+		       	$reason = $this->input->post('alasan_ditolak_dosbing');
+
+		       	if($radiovalidasiwd == "ditolak") {
+		       		$this->Student_topik_model->dosbing_is_reject($info->info[0]->npk,$id, $reason);
+		       		$this->session->set_flashdata('notif', 'success_dosbing_reject');
+							redirect('proposal/detail/'.$id);
+		       	} else {
+		       		$this->Student_topik_model->dosbing_is_verified($info->info[0]->npk,$id);
+		       		$this->session->set_flashdata('notif', 'success_lecturer1');
+							redirect('proposal/detail/'.$id);
+		       	}
+        	}
+        }
+      } 	
+     }
+
     if($this->input->post('btnwdsubmit')) {
     	 $info = $this->session->userdata('user');
     	 $wd = $this->Roles_model->is_role_wd($info->info[0]->npk);
@@ -116,16 +161,28 @@ class Proposal extends CI_Controller {
       }
     }
 
-    if($this->input->post('btndosbingvalidasijudul')) {
+    if($this->input->post('btnkalabvalidasijudul')) {
     	$info = $this->session->userdata('user');
       if($info->user_type == 'lecturer') {
-      	$this->Student_topik_model->dosbing_validate_juduL($info->info[0]->npk, $id);
-      	$this->session->set_flashdata('notif', 'success_dosbing_validasi_judul');
-					redirect('proposal/detail/'.$id);
+      	$data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
+        if($data['kalab']) {
+        	$radiovalidasikalab = $this->input->post('radiovalidasijudulkalab');
+	       	$reason = $this->input->post('kalab_alasan_ditolak_judul');
+
+	       	if($radiovalidasikalab == "ditolak") {
+	       		$this->Student_topik_model->kalab_is_reject_judul($info->info[0]->npk,$id, $reason);
+	       		$this->session->set_flashdata('notif', 'success_kalab_reject_judul');
+						redirect('proposal/detail/'.$id);
+	       	} else {
+	       		$this->Student_topik_model->kalab_is_verified_judul($info->info[0]->npk,$id);
+	       		$this->session->set_flashdata('notif', 'success_kalab_verified_judul');
+						redirect('proposal/detail/'.$id);
+	       	}
+        }
       }      
     }
 
-		$data['detail'] = $this->Student_topik_model->get('', $id);
+		
 		if(count($data['detail']) ==0 ) {
 			redirect('');
 		}
@@ -142,12 +199,34 @@ class Proposal extends CI_Controller {
 		$data['eligible'] = $this->Student_model->cek_eligible($data['detail'][0]->student_nrp);
         $data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
 
-        if(is_null($data['detail'][0]->guardian_npk_verified)) {
-          //cek apakah dirinya adalah guardian dari mahasiswa ini?
+        if(is_null($data['detail'][0]->lecturer1_npk_verified_date)) {
+          //cek apakah dirinya adalah dosbing dari mahasiswa ini?
           $info = $this->session->userdata('user');
           if($info->user_type == 'lecturer') {
-            $data['guardian'] = $this->Guardian_model->get($data['detail'][0]->student_nrp,'','',$info->info[0]->npk);
 
+            $cekdosbing= $this->Topik_model->get_npk($data['detail'][0]->topik_id);
+
+            if($cekdosbing) {
+            //	print_r($info);
+            //	echo $cekdosbing->lecturer_npk;
+           // 	die();
+            	if($cekdosbing->lecturer_npk == $info->info[0]->npk) {
+            		$data['lecturer1'] = true;
+            	}
+            }
+
+          }
+        }
+
+        if(is_null($data['detail'][0]->kalab_npk_verified_judul_date)) {
+
+          $info = $this->session->userdata('user');
+          if($info->user_type == 'lecturer') {
+            $data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
+            if($data['kalab']) {
+            	$data['is_kalab'] = true;
+            	 $data['dosbing'] = $this->Lecturer_model->get_with_beban();
+            }
           }
         }
 
@@ -258,6 +337,25 @@ class Proposal extends CI_Controller {
 			$("#radioditerima").on("click", function() {
 				$("#container_alasan").hide();
 			});
+
+			$("#radioditolakdosbing").on("click", function() {
+				$("#container_alasan_dosbing").show();
+				$("#alasan_ditolak_dosbing").focus();
+			});
+
+			$("#radioditerimadosbing").on("click", function() {
+				$("#container_alasan_dosbing").hide();
+			});
+
+			$("#radioditolakjudulkalab").on("click", function() {
+				$("#container_alasan_kalab").show();
+				$("#kalab_alasan_ditolak_judul").focus();
+			});
+
+			$("#radioditerimajudulkalab").on("click", function() {
+				$("#container_alasan_kalab").hide();
+			});
+
 		';
 
 		// CHECKBOX HANDLE
@@ -273,10 +371,10 @@ class Proposal extends CI_Controller {
 
 			$("#cekjudul").on("click", function() {
 				if($("#cekjudul").is(":checked")) {
-						$("#btndosbingvalidasijudul").prop("disabled", false); 
+						$("#btnkalabvalidasijudul").prop("disabled", false); 
 				} else {
 					
-						$("#btndosbingvalidasijudul").prop("disabled", true); 
+						$("#btnkalabvalidasijudul").prop("disabled", true); 
 				}
 			});
 
@@ -326,7 +424,43 @@ class Proposal extends CI_Controller {
   		';
   	}
 
+  	if($this->session->flashdata('notif') == 'success_kalab_verified_judul') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menyetujui proposal mahasiswa"
+		      });
+  		';
+  	}
+
   	if($this->session->flashdata('notif') == 'success_wd_reject') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menolak proposal mahasiswa"
+		      });
+  		';
+  	}
+
+  	 if($this->session->flashdata('notif') == 'success_dosbing') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menyetujui proposal mahasiswa"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'success_dosbing_reject') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses menolak proposal mahasiswa"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'success_kalab_reject_judul') {
   		$data['js'] .= '
   			Toast.fire({
 		        icon: "success",
@@ -386,6 +520,24 @@ class Proposal extends CI_Controller {
   			Toast.fire({
 		        icon: "success",
 		        title: "Sukses menyimpan dosbing 1 dan dosbing 2"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'success_lecturer1') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "Sukses memvalidasi proposal"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'error_validated') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "error",
+		        title: "'.$this->session->flashdata('msg').'"
 		      });
   		';
   	}

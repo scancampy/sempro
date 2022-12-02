@@ -22,6 +22,7 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
+
           
              <div class="col-12">
             <div class="card">
@@ -58,17 +59,25 @@
                     <h5>Daftar Sidang Proposal</h5>
                     <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('sempro/daftar'); ?>">Daftar</a> untuk daftar sidang proposal.</p>
                   </div>
-               <?php }  
-                } ?>
+               <?php } else { ?>
+                <div class="callout callout-info">
+                    <h5>Periode Sidang Aktif</h5>
+                    <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>
+                  </div><?php }  
+                } else { ?>
+                  <div class="callout callout-info">
+                    <h5>Periode Sidang Aktif</h5>
+                    <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>
+                  </div>
+                <?php } ?>
 
+                
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
                     <th>Judul</th>
                     <th>NRP</th>
-                    <th>Mahasiswa</th>
-                    <th>Dosbing 1</th>
-                    <th>Dosbing 2</th>
+                   
                     <th>Tanggal Daftar</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -79,11 +88,30 @@
                       foreach($sempro as $row) { 
                       ?>
                   <tr>                   
-                    <td><?php echo $row->judul; ?></td>
+                    <td>
+                      <div class="col-12">
+                        <p class="text-sm"><b>Judul</b>
+                          <span class="d-block"><?php echo $row->judul; ?></span>
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <p class="text-sm"><b>Mahasiswa</b>
+                          <span class="d-block"><?php echo $row->nama; ?></span>
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <p class="text-sm"><b>Dosbing 1</b>
+                          <span class="d-block"><?php echo $row->dosbing1; ?></span>
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <p class="text-sm"><b>Dosbing 2</b>
+                          <span class="d-block"><?php echo $row->dosbing2; ?></span>
+                        </p>
+                      </div>
+                    </td>
                     <td><?php echo $row->nrp; ?></td>
-                    <td><?php echo $row->nama; ?></td>
-                    <td><?php echo $row->dosbing1; ?></td>
-                    <td><?php echo $row->dosbing2; ?></td>
+                    
                     <td><?php echo strftime("%d %B %Y", strtotime($row->registered_date)); ?></td>
                     <td >
                        <?php

@@ -59,10 +59,11 @@
                         <div class="col-sm-10">
                            <select class="form-control" id="selectstatus" name="selectstatus">
                               <option value="all" <?php if($this->input->get('selectstatus') == 'all') { echo 'selected'; } ?>>Semua Status</option>
+                              <option value="validasilecturer1" <?php if($this->input->get('selectstatus') == 'validasilecturer1') { echo 'selected'; } ?>>Menunggu Validasi Dosbing</option>
                               <option value="validasikalab" <?php if($this->input->get('selectstatus') == 'validasikalab') { echo 'selected'; } ?>>Menunggu Validasi Kalab</option>
                               <option value="validasiwd" <?php if($this->input->get('selectstatus') == 'validasiwd') { echo 'selected'; } ?>>Menunggu Validasi WD</option>
                               <option value="dosbingkalab" <?php if($this->input->get('selectstatus') == 'dosbingkalab') { echo 'selected'; } ?>>Menunggu Kalab Pilih Dosbing</option>
-                              <option value="validasijuduldosbing" <?php if($this->input->get('selectstatus') == 'validasijuduldosbing') { echo 'selected'; } ?>>Menunggu Validasi Judul oleh Dosbing</option> 
+                              <option value="validasijudulkalab" <?php if($this->input->get('selectstatus') == 'validasijudulkalab') { echo 'selected'; } ?>>Menunggu Validasi Judul oleh Kalab</option> 
                               <option value="validasidosbingwd" <?php if($this->input->get('selectstatus') == 'validasidosbingwd') { echo 'selected'; } ?>>Menunggu Validasi Final WD</option>
                               <option value="stwaiting" <?php if($this->input->get('selectstatus') == 'stwaiting') { echo 'selected'; } ?>>Menunggu Pembuatan ST</option>
                               <option value="stterbuat" <?php if($this->input->get('selectstatus') == 'stterbuat') { echo 'selected'; } ?>>ST Telah Terbit</option>
@@ -164,10 +165,12 @@
                     <td><?php echo $row->pembuat; ?></td>
                     <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
                     <td><?php echo $row->studentname.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
-                    <td >
+                    <td class="text-center" >
                        <?php
                         if($row->is_rejected == 1) {
                           echo '<span class="badge badge-danger">Proposal Ditolak</span>';
+                        } else if($row->lecturer1_npk_verified_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Dosbing</span>';
                         } else if($row->kalab_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->wd_verified_date == null) {
@@ -176,39 +179,19 @@
                           echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
                         }  else if($row->judul == '') {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
-                        } else if($row->judul != '' && $row->lecturer1_validate_date == null) {
-                          echo '<span class="badge badge-success">Menunggu Validasi Judul Dosbing</span>';
+                        } else if($row->judul != '' && $row->kalab_npk_verified_judul_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
                         }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
                           echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
-                        } else if($row->is_st_created == 1) {
-                          echo '<span class="badge badge-success">ST Sudah Terbit</span>';
-                        }
+                        } 
                       ?>
-                      <?php /*
-                      <ul>
-                        <li class="text-secondary"><small class="text-success"><i class="nav-icon fas fa-check"></i> Proposal masuk proses pengajuan</small></li>
-                        <li class="text-secondary">
-                          <?php if(!is_null($row->guardian_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>
-                           Dosen Wali mengecek syarat</small></li>
-                        <li class="text-secondary"> <?php if(!is_null($row->kalab_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab mengecek syarat dan validasi</small></li>
-                        <li class="text-secondary"><?php if(!is_null($row->wd_npk_verified)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>WD mengecek syarat dan persetujuan</small></li>
-                        <li class="text-secondary"><?php if($row->judul != '') { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Mahasiswa mengisi judul</small></li>
-                        <li class="text-secondary"><?php if(!is_null($row->lecturer_created)) { ?>
-                          <small class="text-success"><i class="nav-icon fas fa-check"></i> 
-                          <?php }  else { ?><small><?php } ?>Kalab menentukan Dosbing</small></li>
-                      </ul> */ ?>
+                      
+                      
                     </td>
                     <td>
+                      
                       <a href="<?php echo base_url('proposal/detail/'.$row->id); ?>" class="btn btn-primary">Detail</a>
                     </td>
                   </tr>

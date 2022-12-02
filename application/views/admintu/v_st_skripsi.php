@@ -186,6 +186,13 @@
               </div>
             </div>
 
+            <div class="form-group row">
+              <label for="filest" class="col-sm-4 col-form-label">Upload File ST</label>
+              <div class="col-sm-8">
+                <input type="file"  name="filest" class="form-control" accept="application/pdf" id="filest" >
+              </div>
+            </div>
+
             <div class="form-check">
               <input type="checkbox" name="checkvalidasist" class="form-check-input" id="checkvalidasist">
               <label class="form-check-label" for="checkvalidasist">Surat Tugas (ST) untuk skripsi mahasiswa ini telah dibuat</label>

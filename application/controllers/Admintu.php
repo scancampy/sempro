@@ -32,7 +32,26 @@ class Admintu extends CI_Controller {
 		// HANDLE SUBMIT
 		if($this->input->post('btnvalidasi')) {
 			$id = $this->input->post('hidden_id');
-			$this->Student_topik_model->validate_st($id, $info[0]->username);
+
+			$this->load->library('upload');
+
+			$config['upload_path']          = './uploads/st';
+            $config['allowed_types']        = 'pdf';
+            $config['max_size']             = 100000;
+            $config['file_name']			= 'st_'.$id.date('Ymdhis').'.pdf';
+
+            $this->upload->initialize($config);
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('filest'))
+            {
+            	$this->session->set_flashdata('notif', 'error_validated');
+            	$this->session->set_flashdata('msg', $this->upload->display_errors());
+            	redirect('admintu/stskripsi');
+            }
+            
+			$this->Student_topik_model->validate_st($id, $info[0]->username, $config['file_name']);
 
 			$this->session->set_flashdata('notif', 'success_validated');
 			redirect('admintu/stskripsi');
@@ -99,6 +118,15 @@ class Admintu extends CI_Controller {
     			Toast.fire({
 			        icon: "success",
 			        title: "Sukses memvalidasi ST Skripsi"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error_validated') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
 			      });
     		';
     	}

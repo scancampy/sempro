@@ -251,6 +251,10 @@
                           </div>
                         </div>
                         <!-- END timeline item -->
+
+
+
+
                           
                          <!-- timeline item -->
                         <div>
@@ -268,6 +272,54 @@
                               <small><i class="fas fa-user"></i>
                                 <?php echo $detail->kalabnama; ?>
                               </small>
+                              <div class="row" style="margin-top: 20px;">
+                                <div class="col-4">
+                                  <p class="text-sm">Jadwal Sidang
+                                    <b class="d-block"><?php echo strftime('%d %B %Y', strtotime($detail->sidang_date)); ?></b>
+                                  </p>
+                                </div>
+                                <div class="col-4">
+                                  <p class="text-sm">Jam Sidang
+                                    <b class="d-block"><?php 
+                                      foreach($sidang_time as $st) {
+                                        if($st->id == $detail->sidang_time) { echo $st->label; break; }
+                                      }  ?></b>
+                                  </p>
+                                </div>
+
+                                <div class="col-6">
+                                  <p class="text-sm">Pembimbing 1
+                                    <b class="d-block"><?php echo $detail->dosbing1; ?></b>
+                                  </p>
+                                </div>
+
+                                <div class="col-6">
+                                  <p class="text-sm">Pembimbing 2
+                                    <b class="d-block"><?php echo $detail->dosbing2; ?></b>
+                                  </p>
+                                </div>
+
+                                <div class="col-6">
+                                  <p class="text-sm">Penguji 1
+                                    <b class="d-block"><?php echo $detail->namapenguji1; ?></b>
+                                  </p>
+                                </div>
+
+                                <div class="col-6">
+                                  <p class="text-sm">Penguji 2
+                                    <b class="d-block"><?php echo $detail->namapenguji2; ?></b>
+                                  </p>
+                                </div>
+
+                                <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" >
+                                  <div class="col-12 text-right">
+                                      <div class="form-group ">
+                                          <button type="submit" onclick="return confirm('Yakin batalkan plot ini?');" class="btn btn-outline-danger" id="btnbatalplot" name="btnbatalplot" value="batal">Batalkan Plot</button>
+                                      </div>
+                                    </div>
+                                </form>
+                              </div>
+
                               <?php } ?>
                               <?php
                               if(isset($kalab)) {
@@ -275,7 +327,10 @@
                                     <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>">
                                       <div class="row">
                                         <div class="col-12">
-                                            <h4>Periode Sidang</h4>
+                                            <h4>Periode Sidang <?php if(isset($periode_aktif)) { 
+                                        echo '('.strftime("%d %B", strtotime($periode_aktif->date_start));
+                                        echo '-'.strftime("%d %B %Y", strtotime($periode_aktif->date_end)).')'; 
+                                            } ?></h4>
                                              
                                           <?php if(!isset($periode_aktif)) { ?>
                                               <p>Saat ini belum ada periode sidang yang aktif</p>
@@ -284,45 +339,17 @@
                                           
                                       </div>
                                       <?php if(isset($periode_aktif)) { ?>
-                                      <div class="row">
-                                          <div class="col-4">
-                                            <p class="text-sm">Tanggal Mulai 
-                                              <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($periode_aktif->date_start)); ?></b>
-                                            </p>
-                                          </div>
-                                          <div class="col-4">
-                                            <p class="text-sm">Tanggal Berakhir 
-                                              <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?></b>
-                                            </p>
-                                          </div>
-                                          <hr/>
-                                          
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4">
-                                              <div class="form-group">
-                                                 <label>Tanggal Sidang</label>
-                                                  <div class="input-group date" id="sidang_date" data-target-input="nearest">
-                                                      <input type="text" name="sidang_date" id="sidang_date_id" required class="form-control datetimepicker-input" data-target="#sidang_date"/>
-                                                      <div class="input-group-append" data-target="#sidang_date" data-toggle="datetimepicker">
-                                                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                      </div>
-                                                 </div>
-                                              </div>
-                                            </div>
-                                            <div class="col-4">
-                                              <div class="form-group">
-                                                <label>Jam Sidang</label>
-                                                <select class="form-control select2bs4" name="sidang_time">
-                                                  <?php foreach($sidang_time as $st) { ?>
-                                                    <option value="<?php echo $st->id; ?>"><?php echo $st->label; ?></option>
 
-                                                  <?php } ?>
-                                                </select>
-
-                                              </div>
-                                            </div>
-                                        </div>
+                                        <?php 
+                                                $curdate = strtotime($periode_aktif->date_start);
+                                                $dayidx = 1; 
+                                                while($curdate <= strtotime($periode_aktif->date_end)) {
+                                                 
+                                                  $curdate = strtotime($periode_aktif->date_start.' +'.$dayidx.' day');
+                                                  $dayidx++;
+                                                }
+                                              ?>        
+                                        
                                         <div class="row">
                                           <div class="col-12">
                                              <div class="form-group">
@@ -364,7 +391,7 @@
                                           </div>
                                           <div class="col-12 text-right">
                                             <div class="form-group ">
-                                                <button type="submit" class="btn btn-primary" value="Submit" name="btnkalabsubmit"  id="btnkalabsubmit">Validasi</button>
+                                                <a  class="btn btn-primary" id="btnkalabsubmit">Plot Tanggal &amp; Jam</a>
                                               
                                             </div>
                                           </div>
@@ -378,8 +405,26 @@
                              
                             </div>
                           </div>
+
+
                         </div>
                         <!-- END timeline item -->
+
+
+                         <!-- timeline item -->
+                        <div>
+                           <?php if(!is_null($detail->ruang_id)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                              Admin - Plot Ruangan<br/>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END timeline item -->
+
                         
                     </div>
                   </div>
@@ -399,7 +444,7 @@
   <div class="modal fade" id="modal-pilih">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
-          <form method="post" action="<?php echo base_url('proposal/student'); ?>" enctype="multipart/form-data" method="post">
+          <form method="post" action="<?php echo base_url('sempro/detail/'.$data['detail']->id); ?>" enctype="multipart/form-data" method="post">
           <div class="modal-header">
             <h4 class="modal-title">Pilih Topik</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
