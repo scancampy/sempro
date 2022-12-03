@@ -3,11 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2022 at 05:27 AM
+-- Generation Time: Dec 03, 2022 at 01:35 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -21,9 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `sempro`
 --
-DROP DATABASE IF EXISTS `sempro`;
-CREATE DATABASE IF NOT EXISTS `sempro` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `sempro`;
 
 -- --------------------------------------------------------
 
@@ -31,10 +27,13 @@ USE `sempro`;
 -- Table structure for table `course`
 --
 
-DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
   `id` int(11) NOT NULL,
   `kode_mk` varchar(30) NOT NULL,
+  `old_kode_mk1` varchar(30) NOT NULL,
+  `old_kode_mk2` varchar(30) NOT NULL,
+  `old_kode_mk3` varchar(30) NOT NULL,
+  `old_kode_mk4` varchar(30) NOT NULL,
   `nama` varchar(300) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -43,66 +42,144 @@ CREATE TABLE `course` (
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`id`, `kode_mk`, `nama`, `is_deleted`) VALUES
-(1, '11011002', 'PERHITUNGAN KEFARMASIAN', 0),
-(2, '11011003', 'BAHASA INGGRIS', 0),
-(3, '11011101', 'BIOMOLEKUL DAN BIOLOGI SEL', 0),
-(4, '11011102', 'BOTANI FARMASI', 0),
-(5, '11011201', 'KIMIA UMUM', 0),
-(6, '11011202', 'KIMIA ORGANIK I', 0),
-(7, '11011401', 'ANATOMI & FISIOLOGI MANUSIA', 0),
-(8, '11011001', 'PROFESI FARMASI', 0),
-(9, '11012301', 'DESAIN SEDIAAN FARMASI', 0),
-(10, '11012402', 'FARMAKOLOGI DASAR', 0),
-(11, '11012204', 'KIMIA ANALISIS KUALITATIF', 0),
-(12, '11012203', 'KIMIA ORGANIK II', 0),
-(13, '11012104', 'FARMAKOGNOSI', 0),
-(14, '11012103', 'BIOKIMIA DAN BIOLOGI MOLEKULER', 0),
-(15, '11012004', 'INFORMATIKA KEFARMASIAN', 0),
-(16, '11013005', 'BAHASA INDONESIA', 0),
-(17, '11013105', 'FITOTERAPI', 0),
-(18, '11013106', 'TEKNOLOGI FITOFARMASI', 0),
-(19, '11013205', 'KIMIA ANALISIS KUANTITATIF', 0),
-(20, '11013302', 'KIMIA FISIKA FARMASI', 0),
-(21, '11013403', 'KONSEP LAYANAN KEFARMASIAN', 0),
-(22, '11013404', 'PENGOBATAN BERBASIS BUKTI', 0),
-(23, '11013405', 'IMUNOLOGI DAN HEMATOLOGI', 0),
-(24, '115588', 'TEKNOLOGI SEDIAAN STERIL', 0),
-(25, '115587', 'TEKNOLOGI SEDIAAN SEMISOLIDA-LIKUIDA', 0),
-(26, '115586', 'BIOFARMASI-FARMAKOKINETIKA I', 0),
-(27, '115468', 'INFORMASI OBAT I', 0),
-(28, '115347', 'FITOKIMIA', 1),
-(29, '115226', 'ANALISIS FISIKO-KIMIA I', 0),
-(30, '115469', 'FARMASI KOMUNITAS I', 0),
-(31, '116589', 'FORMULASI & TEKNOLOGI SEDIAAN SOLIDA', 0),
-(32, '116590', 'BIOFARMASI-FARMAKOKINETIKA II', 0),
-(33, '116471', 'FARMASI KOMUNITAS II', 0),
-(34, '116470', 'FARMASI KLINIS I', 0),
-(35, '116229', 'ANALISIS OBAT', 0),
-(36, '116228', 'ANALISIS FISIKO-KIMIA II', 0),
-(37, '116227', 'KIMIA MEDISINAL I', 0),
-(38, '117230', 'KIMIA MEDISINAL II', 0),
-(39, '117591', 'FARMASI INDUSTRI I', 0),
-(40, '118108', 'KEWIRAUSAHAAN', 0),
-(41, '118000', 'SKRIPSI', 0),
-(42, '18476', 'FARMAKO-EKONOMI', 0),
-(43, '118594', 'FARMASI INDUSTRI II', 0),
-(44, '117593', 'SISTEM PENGHANTARAN OBAT', 0),
-(45, '117592', 'KOSMETOLOGI', 0),
-(46, '117535', 'SISTEM PENGHANTARAN KOSMETIKA', 0),
-(47, '117475', 'INFORMASI OBAT II', 0),
-(48, '117474', 'FARMASI KLINIS II', 0),
-(49, '117473', 'PENGOBATAN BERBASIS BUKTI', 0),
-(50, '117349', 'OBAT ASLI INDONESIA', 0),
-(51, '117234', 'PENGEM&PENJAMINAN MUTU PRODUK KOSMETIK', 0),
-(52, '117233', 'KIMIA LINGKUNGAN', 0),
-(53, '117232', 'KIMIA FORENSIK', 0),
-(54, '117231', 'ANALISIS FISIKO-KIMIA III', 0),
-(55, '116593', 'KOSMETIKA MEDIK', 0),
-(56, '116592', 'TEKNOLOGI KOSMETIKA', 0),
-(57, '116472', 'ANALISIS KLINIS', 0),
-(58, '116348', 'TEKNOLOGI OBAT HERBAL II', 0),
-(59, '115347', 'FITOKIMIA', 0);
+INSERT INTO `course` (`id`, `kode_mk`, `old_kode_mk1`, `old_kode_mk2`, `old_kode_mk3`, `old_kode_mk4`, `nama`, `is_deleted`) VALUES
+(1, '11011002', '111101', '111102', '111104', '', 'Perhitungan Kefarmasian', 0),
+(2, '11011003', '111103', '', '', '', 'Bahasa Inggris', 0),
+(3, '11011101', '111341', '', '', '', 'Biomolekul dan Biologi Sel', 0),
+(4, '11011102', '111342', '', '', '', 'Botani Farmasi', 0),
+(5, '11011201', '111221', '', '', '', 'Kimia Umum', 0),
+(6, '11011202', '112222', '', '', '', 'Kimia Organik I', 0),
+(7, '11011401', '111342', '', '', '', 'Anatomi dan Fisiologi Manusia', 0),
+(8, '11011001', '112105', '112106', '114585', '', 'Profesi Farmasi', 0),
+(9, '11012301', '112581', '', '', '', 'Desain Sediaan Farmasi', 0),
+(10, '11012402', '112463', '', '', '', 'Farmakologi Dasar', 0),
+(11, '11012204', '113224', '', '', '', 'Kimia Analisis Kualitatif', 0),
+(12, '11012203', '113223', '', '', '', 'Kimia Organik II', 0),
+(13, '11012104', '112343', '', '', '', 'Farmakognosi', 0),
+(14, '11012103', '112462', '', '', '', 'Biokimia dan Biologi Molekuler', 0),
+(15, '11012004', '115468', '', '', '', 'Informatika Kefarmasian', 0),
+(16, '11013005', '', '', '', '', 'BAHASA INDONESIA', 0),
+(17, '11013105', '113344', '', '', '', 'Fitoterapi', 0),
+(18, '11013106', '114346', '', '', '', 'Teknologi Fitofarmasi', 0),
+(19, '11013205', '114225', '', '', '', 'Kimia Analisis Kuantitatif', 0),
+(20, '11013302', '114583', '113582', '', '', 'Pharmaceutical Physicochemistry', 0),
+(21, '11013403', '116470', '', '', '', 'Konsep Pelayanan Kefarmasian', 0),
+(22, '11013404', '117473', '', '', '', 'Pengobatan Berbasis Bukti', 0),
+(23, '11013405', '113364', '', '', '', 'Imunologi dan Hematologi', 0),
+(24, '115588', '', '', '', '', 'Teknologi Sediaan Steril', 0),
+(25, '115587', '', '', '', '', 'Teknologi Sed Semisolida-Likuida', 0),
+(26, '115586', '', '', '', '', 'Biofarmasi-Farmakokinetika I ', 0),
+(27, '115468', '', '', '', '', 'Informasi Obat I', 0),
+(28, '115347', '', '', '', '', 'Fitokimia', 1),
+(29, '115226', '', '', '', '', 'Analisis Fisiko-Kimia I', 0),
+(30, '115469', '', '', '', '', 'Farmasi Komunitas I', 0),
+(31, '116589', '', '', '', '', 'Formulasi & Teknologi Sediaan Solida', 0),
+(32, '116590', '', '', '', '', 'Biofarmasi-Farmakokinetika II', 0),
+(33, '116471', '', '', '', '', 'Farmasi Komunitas II', 0),
+(34, '116470', '', '', '', '', 'Farmasi Klinis I', 0),
+(35, '116229', '', '', '', '', 'Analisis Obat, Makanan & Kosmetika', 0),
+(36, '116228', '', '', '', '', 'Analisis Fisiko-Kimia II', 0),
+(37, '116227', '', '', '', '', 'Kimia Medisinal I', 0),
+(38, '117230', '', '', '', '', 'Kimia Medisinal II', 0),
+(39, '117591', '', '', '', '', 'Farmasi Industri I', 0),
+(40, '118108', '', '', '', '', 'Kewirausahaan', 0),
+(41, '118000', '', '', '', '', 'Skripsi ', 0),
+(42, '18476', '', '', '', '', 'FARMAKO-EKONOMI', 0),
+(43, '118594', '', '', '', '', 'Farmasi Industri II', 0),
+(44, '117593', '', '', '', '', 'Sistem Penghantaran Obat', 0),
+(45, '117592', '', '', '', '', 'Kosmetologi', 0),
+(46, '117535', '', '', '', '', 'Sistem Penghantaran Kosmetika', 0),
+(47, '117475', '', '', '', '', 'Informasi Obat II', 0),
+(48, '117474', '', '', '', '', 'Farmasi Klinis II', 0),
+(49, '117473', '', '', '', '', 'Pengobatan Berbasis Bukti', 0),
+(50, '117349', '', '', '', '', 'Obat Asli Indonesia', 0),
+(51, '117234', '', '', '', '', 'Pengemb & Penjaminan Mutu Produk Kosmetik', 0),
+(52, '117233', '', '', '', '', 'Kimia Lingkungan', 0),
+(53, '117232', '', '', '', '', 'Kimia Forensik', 0),
+(54, '117231', '', '', '', '', 'Analisis Fisiko-kimia III', 0),
+(55, '116593', '', '', '', '', 'Kosmetika Medik', 0),
+(56, '116592', '', '', '', '', 'Teknologi Kosmetika', 0),
+(57, '116472', '', '', '', '', 'Analisis Klinis', 0),
+(58, '116348', '', '', '', '', 'Teknologi Obat Herbal II', 0),
+(59, '115347', '', '', '', '', 'Fitokimia', 0),
+(60, '111101', '', '', '', '', 'Matematika', 0),
+(61, '111102', '', '', '', '', 'Fisika ', 0),
+(62, '111103', '', '', '', '', 'Bahasa Inggris', 0),
+(63, '111104', '', '', '', '', 'Pengantar Ilmu Farmasi', 0),
+(64, '111221', '', '', '', '', 'Kimia Umum', 0),
+(65, '111341', '', '', '', '', 'Biologi Sel', 0),
+(66, '111342', '', '', '', '', 'Botani Farmasi ', 0),
+(67, '111461', '', '', '', '', 'Anatomi-Fisiologi Manusia', 0),
+(68, '00111A', '', '', '', '', 'Pendidikan Agama Islam 2', 0),
+(69, '00112A', '', '', '', '', 'Pendidikan Agama Katolik', 0),
+(70, '00113A', '', '', '', '', 'Pendidikan Agama Protestan', 0),
+(71, '00114A', '', '', '', '', 'Pendidikan Agama Hindu', 0),
+(72, '00115A', '', '', '', '', 'Pendidikan Agama Budha', 0),
+(73, '00116A', '', '', '', '', 'Pendidikan Agama Khong Hu Cu', 0),
+(74, '112105', '', '', '', '', 'Kepemimpinan', 0),
+(75, '112106', '', '', '', '', 'Filsafat Ilmu & Etika', 0),
+(76, '112222', '', '', '', '', 'Kimia Organik I', 0),
+(77, '112343', '', '', '', '', 'Farmakognosi I', 0),
+(78, '112462', '', '', '', '', 'Biokimia', 0),
+(79, '112463', '', '', '', '', 'Farmakologi-Toksikologi I', 0),
+(80, '112581', '', '', '', '', 'Formulasi Dasar', 0),
+(81, '00141A', '', '', '', '', 'Pendidikan Pancasila & Kewarganegaraan', 0),
+(82, '113223', '', '', '', '', 'Kimia Organik II', 0),
+(83, '113224', '', '', '', '', 'Kimia Analisis Kualitatif', 0),
+(84, '113344', '', '', '', '', 'Farmakognosi II', 0),
+(85, '113345', '', '', '', '', 'Bioteknologi Farmasi', 0),
+(86, '113464', '', '', '', '', 'Imunologi', 0),
+(87, '113465', '', '', '', '', 'Farmakologi-Toksikologi II', 0),
+(88, '113582', '', '', '', '', 'Farmasi Fisika I', 0),
+(89, '114107', '', '', '', '', 'Metodologi Penelitian & Statistika', 0),
+(90, '114225', '', '', '', '', 'Kimia Analisis Kuantitatif', 0),
+(91, '114346', '', '', '', '', 'Teknologi Obat Herbal I', 0),
+(92, '114466', '', '', '', '', 'Mikrobiologi Farmasi', 0),
+(93, '114467', '', '', '', '', 'Farmasi Sosial', 0),
+(94, '114583', '', '', '', '', 'Farmasi Fisika II', 0),
+(95, '114584', '', '', '', '', 'Manajemen Farmasi', 0),
+(96, '114585', '', '', '', '', 'Undang-undang & Etika Kefarmasian ', 0),
+(97, '118476', '', '', '', '', 'Farmako-ekonomi', 0),
+(98, '11014006', '0011xA', '', '', '', 'Agama dan Etika', 0),
+(99, '11014206', '115226', '', '', '', 'Analisis Instrumental', 0),
+(100, '11014207', '116228', '', '', '', 'Elusidasi Struktur', 0),
+(101, '11014303', '116589', '', '', '', 'Manufaktur Sediaan Solida', 0),
+(102, '11014304', '115586', '', '', '', 'Biofarmasi', 0),
+(103, '11014406', '114466', '', '', '', 'Mikrobiologi Farmasi', 0),
+(104, '11014407', '116472', '117474', '117475', '113465', 'Integrated Course for Medication in Gastrointestinal System and HepaticDisorders', 0),
+(105, '11014408', '116472', '117474', '117475', '113465', 'Integrated Course for Medication in Central Nervous System (CNS)Disorders', 0),
+(106, '11015007', '00141A', '', '', '', 'Pancasila dan Kewarganegaraan', 0),
+(107, '11015208', '116227', '', '', '', 'Kimia Medisinal', 0),
+(108, '11015305', '115588', '', '', '', 'Manufaktur Sediaan Steril', 0),
+(109, '11015306', '115587', '', '', '', 'Manufaktur Sediaan Likuid Semisolid', 0),
+(110, '11015307', '116590', '', '', '', 'Farmakokinetika', 0),
+(111, '11015409', '114467', '', '', '', 'Kesehatan Masyarakat dan Sistem Kesehatan', 0),
+(112, '11015410', '115469', '', '', '', 'Menanggapi gejala penyakit', 0),
+(113, '11015411', '116472', '117474', '117475', '113465', 'Integrated Course for Medication in Infection and Respiratory Disorders', 0),
+(114, '11016008', '114107', '', '', '', 'Metodologi Penelitan dan Biostatistika', 0),
+(115, '11016107', '115347', '', '', '', 'Fitokimia', 0),
+(116, '11016108', '113345', '', '', '', 'Bioteknologi Farmasi', 0),
+(117, '11016209', '116229', '', '', '', 'Analisis Obat dan Makanan', 0),
+(118, '11016210', '117230', '', '', '', 'Penemuan dan Pengembangan Obat', 0),
+(119, '11016308', '117592', '', '', '', 'Kosmetologi', 0),
+(120, '11016309', '117591', '', '', '', 'Farmasi Industri', 0),
+(121, '11016310', '117593', '', '', '', 'Teknologi Penghantaran Obat', 0),
+(122, '11016311', '114584', '', '', '', 'IC Pharmaceutical Logistic and Managements', 0),
+(123, '11016412', '116472', '117474', '117475', '113465', 'Integrated Course for Medication in Cardiovascular and Endocrine Disorders', 0),
+(124, '11017009', '118108', '', '', '', 'Kewirausahaan dan Inovasi', 0),
+(125, '11017109', '117349', '', '', '', 'Nutrasetikal', 0),
+(126, '11017110', '117349', '', '', '', 'Aromaterapi', 0),
+(127, '11017211', '116348', '', '', '', 'IC Pharmaceutical Production and Process', 0),
+(128, '11017212', '118594', '', '', '', 'IC Pharmaceutical Quality Control and Quality Assurance', 0),
+(129, '11017213', '117234', '', '', '', 'Pengembangan dan Penjaminan Mutu Produk Kosmetika', 0),
+(130, '11017214', '117231', '', '', '', 'Validasi Metode Analisis', 0),
+(131, '11017215', '117233', '', '', '', 'Kimia Lingkungan', 0),
+(132, '11017216', '117232', '', '', '', 'Kimia Forensik', 0),
+(133, '11017312', '116593', '', '', '', 'Kosmetika Medik', 0),
+(134, '11017313', '116592', '117535', '', '', 'Sistem Penghantaran Kosmetik', 0),
+(135, '11017411', '118476', '', '', '', 'Farmakoekonomi dan Farmakoepidemiologi', 0),
+(136, '11017412', '116471', '', '', '', 'Pelayanan Resep', 0),
+(137, '11018000', '118000', '', '', '', 'Skripsi', 0);
 
 -- --------------------------------------------------------
 
@@ -110,7 +187,6 @@ INSERT INTO `course` (`id`, `kode_mk`, `nama`, `is_deleted`) VALUES
 -- Table structure for table `guardian`
 --
 
-DROP TABLE IF EXISTS `guardian`;
 CREATE TABLE `guardian` (
   `nrp` varchar(30) NOT NULL,
   `npk` varchar(30) NOT NULL
@@ -318,7 +394,6 @@ INSERT INTO `guardian` (`nrp`, `npk`) VALUES
 -- Table structure for table `lab`
 --
 
-DROP TABLE IF EXISTS `lab`;
 CREATE TABLE `lab` (
   `id` int(11) NOT NULL,
   `nama` varchar(300) NOT NULL,
@@ -331,7 +406,7 @@ CREATE TABLE `lab` (
 --
 
 INSERT INTO `lab` (`id`, `nama`, `nama_pendek`, `is_deleted`) VALUES
-(1, 'Ilmu Kedokteran', 'IK', 0),
+(1, 'Kimia Farmasi', 'KF', 0),
 (2, 'Farmasetika', 'FAR', 0),
 (3, 'Biologi Farmasi', 'BIO', 0),
 (4, 'Farmasi Klinis Komunitas', 'FKK', 0),
@@ -345,7 +420,6 @@ INSERT INTO `lab` (`id`, `nama`, `nama_pendek`, `is_deleted`) VALUES
 -- Table structure for table `lecturer`
 --
 
-DROP TABLE IF EXISTS `lecturer`;
 CREATE TABLE `lecturer` (
   `npk` varchar(30) NOT NULL,
   `nama` varchar(300) NOT NULL,
@@ -358,52 +432,54 @@ CREATE TABLE `lecturer` (
 
 INSERT INTO `lecturer` (`npk`, `nama`, `lab_id`) VALUES
 ('182018', 'Drs. Ryanto Budiono, M.Si.', 1),
+('187020', 'Dr. Drs. Antonius Adji Prayitno Setiadi, M.S., Apt.', 4),
 ('189005', 'Dr. Farida Suhud, M.Si., Apt.', 1),
-('199014', 'Dr. Dra. Christina Avanti, M.Si., Apt.', 2),
-('199015', 'Dr. Aguslina Kirtishanti, S.Si., M.Kes., Apt', 4),
+('199003', 'Franciscus Cahyo Kristianto, S.Si., M.Farm-Klin., Apt.', 4),
+('199014', 'Dr. Christina Avanti, M.Si., Apt.', 2),
+('199015', 'Dr. Aguslina Kirtishanti, S.Si., M.Kes., Apt.', 4),
 ('200031', 'Dr. Ni Luh Dewi Aryani, S.Si., M.Si., Apt.', 2),
-('200032', 'Alasen Sembiring Milala, S.Si., M.Si., Apt.', 2),
+('200032', 'Alasen Sembiring M., S.Si., M.Si., Apt.', 2),
 ('201010', 'Dr. Dini Kesuma, S.Si., M.Si., Apt.', 1),
-('201037', 'Dr. Rika Yulia, S.Si., Sp.FRS., Apt.', 4),
-('203007', 'Kartini, S.Si., M.Si., Apt., Ph.D.', 3),
+('201037', 'Dr. Rika Yulia, S.Si., Apt., Sp.FRS.', 4),
+('202027', 'Dr. Agnes Nuniek Winantari, S.Si, M.Si., Apt.', 2),
+('203006', 'Kusuma Hendrajaya, S.Si., M.Si., Apt.', 1),
+('203007', 'Kartini, S.Si., M.Si.,P.hD.,Apt.', 3),
 ('204031', 'Dr. Dra. Azminah, M.Si.', 1),
 ('206023', 'Eko Setiawan, S.Farm., M.Sc., Apt.', 4),
 ('207011', 'Dr. Oeke Yunita, S.Si., M.Si., Apt.', 3),
 ('208019', 'Dr. Amelia Lorensia, S.Farm.,M.Farm-Klin.,Apt.', 4),
-('208020', 'Andre', 0),
+('210004', 'Dian Natasya Raharjo, S.Farm.,M.Farm-Klin.,Apt.', 4),
+('210006', 'Dr. Lisa Aditama, S.Si., M.Farm-Klin, Apt.', 4),
 ('211002', 'Dr.rer.nat. Ratih, S.Farm., M.Farm., Apt.', 1),
-('211019', 'Endang Wahyu Fitriani, S.Farm., Apt., M.Farm.', 2),
-('212003', 'Bobby Presley, S.Farm., M.Farm-Klin., Apt.', 4),
+('211017', 'Ike Dhiah Rochmawati, S.Farm., M.Farm.Klin.,Apt.', 4),
+('211019', 'Endang Wahyu Fitriani, S.Farm.,M.Si., Apt.', 2),
+('211020', 'Fauna Herawati, S.Si., M.Farm-Klin., Apt.', 4),
+('211021', 'Sylvi Irawati, S.Farm., M.Farm-Klin.,Apt., Ph.D.', 4),
+('211029', 'Dr. Yosi Irawati Wibowo, S.Si., M.Pharm., Apt.', 4),
+('212003', 'Bobby Presley, S.Farm.,M.Farm-Klin.,Apt., Ph.D.', 4),
 ('212020', 'Aditya Trias Pradana, S.Farm., M.Si., Apt.', 2),
 ('213002', 'Dr. Krisyanti Budipramana, S.Farm., M.Farm., Apt.', 3),
 ('214011', 'Cynthia Marisca Muntu, S.Farm., M.Farm., Apt.', 2),
-('214012', 'Ridho Islamie, S.Farm., M.Si., Apt.', 4),
-('214031', 'Nina Dewi Oktaviyanti, S.Farm., M.Farm., Apt.', 3),
-('214032', 'Alfian Hendra Krisnawan, S.Farm., M.Farm., Apt.', 3),
+('214012', 'Ridho Islamie, S.Farm., M.Si., Apt.', 2),
+('214031', 'Nina Dewi Oktaviyanti, S.Farm.,M.Farm., Apt.', 3),
+('214032', 'Alfian Hendra Krisnawan, S.Farm.,M.Farm., Apt.', 3),
+('215030', 'Dr. Marisca Evalina Gondokesumo, S.H., M.H., S.Farm., M.Farm-Klin., Apt.', 3),
 ('215039', 'Karina Citra Rani, S.Farm., M.Farm., Apt.', 2),
 ('215040', 'Nikmatul Ikhrom Eka Jayani, S.Farm., M.Farm-Klin., Apt.', 3),
-('216012', 'Dr. Magdalena Sri Handajani, M.Si., DFM., Apt.', 1),
-('216013', 'Dr. Drs. Husin Rayesh Mallaleng, M.Kes., Apt.', 3),
-('216039', 'Hanny Cahyadi, S.Farm., M.Farm-Klin., Apt.', 4),
-('216060', 'Reine Risa Risthanti, S.Farm., M.Farm.Klin., Apt.', 1),
-('217001', 'Dr. Finna Setiawan, S.Farm., M.Si.', 3),
-('217006', 'Roisah Nawatila, S.Farm., M.Farm., Apt.', 2),
-('217024', 'Prof. Dra. Indrajati Kohar, Ph.D.', 1),
+('215041', 'Ika Mulyono Putri Wibowo, S.Farm.,M.Farm-Klin.,Apt.', 4),
+('216060', 'Reine Risa Risthanti , S.Farm.,M.Farm-Klin.,Apt.', 1),
+('217001', 'Dr. Finna Setiawan, S.Farm.,M.Si.', 3),
+('217006', 'Roisah Nawatila, S.Farm.,M.Farm.,Apt.', 2),
+('217058', 'Anita Purnamayanti, S.Si.,M.Farm-Klin.,Apt.', 2),
 ('217068', 'Devyani Diah Wulansari, S.Farm., M.Si., Apt.', 4),
-('218008', 'Dr. Dra. Ririn Sumiyani, M.Si., Apt.', 1),
 ('218024', 'Fawandi Fuad Alkindi, S.Farm., M.Farm., Apt.', 1),
 ('218025', 'Astridani Rizky Putranti, S.Farm., M.Farm., Apt.', 2),
+('218026', 'Dr. Cecilia Brata, S.Si., M.Pharm., Apt.', 4),
 ('218027', 'Steven Victoria Halim, S.Farm., M.Farm., Apt.', 4),
 ('218036', 'Tegar Achsendo Yuniarta, S.Farm., M.Si.', 1),
-('219032', 'Dra. Nani Parfati, M.S., Apt.', 2),
-('219038', 'Dra. Lucia Endang Wuryaningsih, M.Si., Apt.', 4),
-('219065', 'I Gede Ari Sumartha, S.Farm., M.Farm., Apt.', 0),
-('219066', 'Vendra Setiawan, S.Farm., M.Farm., Apt.', 1),
-('221011', 'Silvia, S.Farm., M.Farm-Klin., Apt.', 0),
-('221012', 'Susilo Ari Wardani, S.Si., M.Kes., Apt.', 0),
-('221016', 'Halim Priyahau Jaya, S.Farm., M.Farm-Klin., Apt.', 0),
-('221042', 'Citra Hayu Adi Makayasa, S.Farm., M.Farm., Apt.', 2),
-('221048', 'Drs. Harry Santosa, M.Si., Apt.', 1);
+('219065', 'I Gede Ari Sumartha, S.Farm., M.Farm., Apt.', 1),
+('219066', 'Vendra Setiawan, S.Farm.,M.Farm.,Apt.', 1),
+('221042', 'Citra Hayu Adi Makayasa, S.Farm., M.Farm., Apt.', 1);
 
 -- --------------------------------------------------------
 
@@ -411,7 +487,6 @@ INSERT INTO `lecturer` (`npk`, `nama`, `lab_id`) VALUES
 -- Table structure for table `periode`
 --
 
-DROP TABLE IF EXISTS `periode`;
 CREATE TABLE `periode` (
   `id` int(11) NOT NULL,
   `nama` text NOT NULL,
@@ -432,10 +507,33 @@ INSERT INTO `periode` (`id`, `nama`, `is_active`, `is_deleted`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `periode_sidang`
+--
+
+CREATE TABLE `periode_sidang` (
+  `id` int(11) NOT NULL,
+  `date_start` date NOT NULL,
+  `date_end` date NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `periode_sidang`
+--
+
+INSERT INTO `periode_sidang` (`id`, `date_start`, `date_end`, `is_active`, `is_deleted`) VALUES
+(1, '2022-11-13', '2022-11-27', 0, 1),
+(2, '2022-11-20', '2022-12-08', 0, 0),
+(3, '2023-01-01', '2023-01-15', 0, 0),
+(4, '2022-11-14', '2022-11-28', 1, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `proposal`
 --
 
-DROP TABLE IF EXISTS `proposal`;
 CREATE TABLE `proposal` (
   `id` int(11) NOT NULL,
   `topik_id` int(11) NOT NULL,
@@ -446,30 +544,117 @@ CREATE TABLE `proposal` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `room`
+--
+
+CREATE TABLE `room` (
+  `id` int(11) NOT NULL,
+  `label` varchar(100) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `room`
+--
+
+INSERT INTO `room` (`id`, `label`, `is_deleted`) VALUES
+(1, 'FF1.3', 0),
+(2, 'FF2.3', 0),
+(3, 'FE4.3', 0),
+(4, 'FE3.1', 0),
+(5, 'coba hapus', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sempro`
+--
+
+CREATE TABLE `sempro` (
+  `id` bigint(20) NOT NULL,
+  `student_topik_id` bigint(20) DEFAULT NULL,
+  `periode_sidang_id` int(11) DEFAULT NULL,
+  `registered_date` datetime DEFAULT NULL,
+  `nrp` varchar(30) DEFAULT NULL,
+  `sks_kum` int(11) DEFAULT NULL,
+  `ipk_kum` double DEFAULT NULL,
+  `kalab_verified_date` datetime DEFAULT NULL,
+  `kalab_npk_verified` varchar(30) DEFAULT NULL,
+  `sidang_date` date DEFAULT NULL,
+  `sidang_time` int(11) DEFAULT NULL,
+  `penguji1` varchar(30) NOT NULL,
+  `penguji2` varchar(30) NOT NULL,
+  `pembimbing1` varchar(32) DEFAULT NULL,
+  `pembimbing2` varchar(32) DEFAULT NULL,
+  `ruang_id` int(11) DEFAULT NULL,
+  `admin_plotting_date` datetime DEFAULT NULL,
+  `admin_plotting_username` varchar(30) DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `sks_ks` int(11) DEFAULT NULL,
+  `is_failed` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sempro`
+--
+
+INSERT INTO `sempro` (`id`, `student_topik_id`, `periode_sidang_id`, `registered_date`, `nrp`, `sks_kum`, `ipk_kum`, `kalab_verified_date`, `kalab_npk_verified`, `sidang_date`, `sidang_time`, `penguji1`, `penguji2`, `pembimbing1`, `pembimbing2`, `ruang_id`, `admin_plotting_date`, `admin_plotting_username`, `is_deleted`, `sks_ks`, `is_failed`) VALUES
+(1, 1, 4, '2022-11-30 09:44:57', '110118199', 144, 3.5, '2022-11-30 09:49:34', '201037', '2022-11-16', 4, '217058', '204031', '199003', '218025', NULL, NULL, NULL, 0, 24, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `setting_eligibility`
 --
 
-DROP TABLE IF EXISTS `setting_eligibility`;
 CREATE TABLE `setting_eligibility` (
   `id` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
+  `keterangan` text NOT NULL,
   `nama_alias` varchar(30) NOT NULL,
-  `nilai` varchar(30) NOT NULL
+  `nilai` varchar(30) NOT NULL,
+  `displayed_to_student` tinyint(1) NOT NULL,
+  `display_value_in_postfix` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `setting_eligibility`
 --
 
-INSERT INTO `setting_eligibility` (`id`, `nama`, `nama_alias`, `nilai`) VALUES
-(1, 'IPK Minimal (batas bawah)', 'ipk_min_bawah', '2.00'),
-(2, 'IPK Minimal (batas atas)', 'ipk_min_atas', '2.5'),
-(3, 'IPK Minimal jika ada 1 nilai E untuk ikut Tugas Akhir', 'ipk_min_nilai_e', '2.75'),
-(4, 'Kode MK Metpen & Statistika (pisahkan dengan koma jika lebih dari satu)', 'kode_mk', '114107'),
-(5, 'Nilai Metpen minimal', 'nilai_metpen_min', 'C'),
-(6, 'Total nilai D maksimum (dalam %)', 'total_d_max', '20'),
-(7, 'Jumlah nilai E maksimum (batas bawah)', 'jumlah_nilai_e_max_bawah', '2'),
-(8, 'Jumlah nilai E maksimum (batas atas)', 'jumlah_nilai_e_max_atas', '3');
+INSERT INTO `setting_eligibility` (`id`, `nama`, `keterangan`, `nama_alias`, `nilai`, `displayed_to_student`, `display_value_in_postfix`) VALUES
+(1, 'Skripsi tercantum dalam Kartu Studi', 'inputkan kode mk skripsi', 'skripsi', '11018000,118000', 1, 0),
+(2, 'Total SKS tanpa nilai E >=  ', 'inputkan jumlah sks minimal tanpa nilai E', 'total_sks_tanpa_e_min', '120', 1, 1),
+(3, 'Total SKS nilai D <=  ', 'Inputkan jumlah sks maksimal untuk mk nilai D', 'total_sks_nilai_d_max', '18', 1, 1),
+(4, 'Nilai MK Metodologi Penelitian dan Bistatistika minimal memperoleh ', 'Inputkan nisbi nilai metpen minimal', 'nilai_metpen_min', 'C', 1, 1),
+(5, 'Kode MK Metodologi Penelitian dan Bistatistika', 'Inputkan kode mk metpen statistik', 'kode_metpen', '11016008,114107', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sidang_time`
+--
+
+CREATE TABLE `sidang_time` (
+  `id` int(11) NOT NULL,
+  `label` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sidang_time`
+--
+
+INSERT INTO `sidang_time` (`id`, `label`) VALUES
+(1, '07.00'),
+(2, '08.00'),
+(3, '09.00'),
+(4, '10.00'),
+(5, '11.00'),
+(6, '12.00'),
+(7, '13.00'),
+(8, '14.00'),
+(9, '15.00'),
+(10, '16.00'),
+(11, '17.00');
 
 -- --------------------------------------------------------
 
@@ -477,7 +662,6 @@ INSERT INTO `setting_eligibility` (`id`, `nama`, `nama_alias`, `nilai`) VALUES
 -- Table structure for table `staff`
 --
 
-DROP TABLE IF EXISTS `staff`;
 CREATE TABLE `staff` (
   `id` int(11) NOT NULL,
   `username` varchar(30) NOT NULL,
@@ -489,7 +673,8 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id`, `username`, `nama`) VALUES
-(1, 'ajeng', 'Ajeng');
+(1, 'ajeng', 'Ajeng'),
+(2, 'admintu', 'Admin TU 2');
 
 -- --------------------------------------------------------
 
@@ -497,7 +682,6 @@ INSERT INTO `staff` (`id`, `username`, `nama`) VALUES
 -- Table structure for table `student`
 --
 
-DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `nrp` varchar(30) NOT NULL,
   `username` varchar(30) NOT NULL,
@@ -591,7 +775,7 @@ INSERT INTO `student` (`nrp`, `username`, `nama`, `status`, `ips`, `ipk`, `ipkm`
 ('110118196', '', 'MUHAMMAD DIAN WARDANA PUTRA', 'Aktif', 2.913, 2.921, 2.921, 0, NULL, '2022-07-12 04:27:08'),
 ('110118197', '', 'SILVIA DEWI S. PUTRI', 'Aktif', 1.7, 2.438, 2.516, 0, NULL, '2022-07-12 04:27:13'),
 ('110118198', '', 'ANDRIANOR', 'Aktif', 3.5, 3.333, 3.333, 0, NULL, '2022-07-12 04:26:58'),
-('110118199', '', 'AKHMAD KASIM', 'Aktif', 2.386, 2.322, 2.41, 0, NULL, '2022-07-12 04:26:57'),
+('110118199', '', 'AKHMAD KASIM', 'Aktif', 2.386, 2.322, 2.41, 1, NULL, '2022-09-22 00:53:53'),
 ('110118202', '', 'EMA RACHMI MITHA ASTARI', 'Aktif', 3.205, 2.682, 2.721, 0, NULL, '2022-07-12 04:27:02'),
 ('110118204', '', 'I GUSTI NYOMAN ASTI MELYANTI', 'Aktif', 3.136, 2.439, 2.439, 0, NULL, '2022-07-12 04:27:05'),
 ('110118212', '', 'JOANNE NATALIE LEIWAKABESSY', 'Aktif', 2.75, 2.268, 2.268, 0, NULL, '2022-07-12 04:27:06'),
@@ -687,7 +871,7 @@ INSERT INTO `student` (`nrp`, `username`, `nama`, `status`, `ips`, `ipk`, `ipkm`
 ('110118410', '', 'HERLINA', 'Aktif', 2.5, 2.621, 2.621, 0, NULL, '2022-07-12 04:27:04'),
 ('110118415', '', 'HANDY HANGGODA UNTORO', 'Aktif', 3.727, 3.058, 3.058, 0, NULL, '2022-07-12 04:27:04'),
 ('110118418', '', 'SALSABILA VANIA CLARISSA', 'Aktif', 2.841, 2.699, 2.699, 0, NULL, '2022-07-12 04:27:12'),
-('110118419', '', 'NABILAH ALIFIYANI SHOFI', 'Aktif', 2.667, 2.858, 2.858, 0, NULL, '2022-07-12 04:27:08'),
+('110118419', '', 'NABILAH ALIFIYANI SHOFI', 'Aktif', 2.667, 2.858, 2.858, 1, NULL, '2022-10-21 02:51:22'),
 ('110118423', '', 'NINDI DWI CAHYANTI', 'Aktif', 2.857, 3.014, 3.014, 0, NULL, '2022-07-12 04:27:09'),
 ('110118424', '', 'ALIVIA SALSABIELA', 'Aktif', 2.406, 2.83, 2.83, 0, NULL, '2022-07-12 04:26:58'),
 ('110118425', '', 'NABILLA ADHANIA NENTO', 'Aktif', 3.341, 2.811, 2.811, 0, NULL, '2022-07-12 04:27:08'),
@@ -705,16 +889,450 @@ INSERT INTO `student` (`nrp`, `username`, `nama`, `status`, `ips`, `ipk`, `ipkm`
 ('110118447', '', 'MEVIN NURELITA', 'Aktif', 2.479, 2.458, 2.458, 0, NULL, '2022-07-12 04:27:07'),
 ('110118448', '', 'LAFIA LAILATUL FADIK', 'Aktif', 2.714, 2.458, 2.5, 0, NULL, '2022-07-12 04:27:07'),
 ('110118454', '', 'FIRDAYATUL JUWARIYA', 'Aktif', 2.886, 2.552, 2.552, 0, NULL, '2022-07-12 04:27:04'),
-('110119001', '', 'SEVERINA EFFENDI', 'Aktif', 4, 3.959, 3.959, 0, '', '2022-07-05 14:21:11'),
-('110119003', '', 'I DEWA GEDE PUTRA SANJAYA', 'Aktif', 3.295, 2.848, 2.848, 0, '', '2022-07-05 15:28:03'),
-('110119004', '', 'AUDREY WINAGA PUTERI', 'Aktif', 3.396, 3.587, 3.587, 0, '', '2022-07-05 14:21:11'),
-('110119005', '', 'VERONIKA GERALDINE ANGELA', 'Aktif', 3.479, 3.724, 3.724, 0, '', '2022-07-05 14:21:11'),
-('110119008', '', 'JESSICA CLAUDIA HERRI PUTRI', 'Aktif', 3.229, 3.405, 3.405, 0, '', '2022-07-05 14:21:11'),
-('110119010', '', 'TAN, MARSELLA PUTRI AMELIA', 'Aktif', 3.792, 3.752, 3.752, 0, '', '2022-07-05 14:21:11'),
-('110119011', '', 'ANABELLA DESTRIE IRAWAN', 'Aktif', 3.667, 3.72, 3.72, 0, '', '2022-07-05 14:21:11'),
-('110119013', '', 'SANTIKO MEDHAKUMARA LAURENT', 'Aktif', 3.833, 3.9, 3.9, 0, '', '2022-07-05 15:28:03'),
-('110119014', '', 'JESSLYN TRIXIE CHANDRA', 'Aktif', 3.75, 3.682, 3.682, 0, '', '2022-07-05 14:21:11'),
-('110119015', '', 'FEBE FEBRILINA FERNANDA', 'Aktif', 3.604, 3.55, 3.55, 0, '', '2022-07-05 14:21:11');
+('110119001', '', 'SEVERINA EFFENDI', 'Aktif', 4, 3.966, 3.966, 0, '', '2022-09-25 00:15:04'),
+('110119003', '', 'I DEWA GEDE PUTRA SANJAYA', 'Aktif', 1.935, 2.684, 2.793, 0, '', '2022-09-25 00:15:04'),
+('110119004', '', 'AUDREY WINAGA PUTERI', 'Aktif', 2.625, 3.414, 3.466, 0, '', '2022-09-25 00:15:04'),
+('110119005', '', 'VERONIKA GERALDINE ANGELA', 'Aktif', 3.357, 3.664, 3.664, 0, '', '2022-09-25 00:15:04'),
+('110119008', '', 'JESSICA CLAUDIA HERRI PUTRI', 'Aktif', 2.609, 3.267, 3.267, 0, '', '2022-09-25 00:15:04'),
+('110119010', '', 'TAN, MARSELLA PUTRI AMELIA', 'Aktif', 3.826, 3.765, 3.765, 0, '', '2022-09-25 00:15:04'),
+('110119011', '', 'ANABELLA DESTRIE IRAWAN', 'Aktif', 3.667, 3.711, 3.711, 0, '', '2022-09-25 00:15:04'),
+('110119013', '', 'SANTIKO MEDHAKUMARA LAURENT', 'Aktif', 4, 3.916, 3.916, 0, '', '2022-09-25 00:15:04'),
+('110119014', '', 'JESSLYN TRIXIE CHANDRA', 'Aktif', 3.429, 3.641, 3.641, 0, '', '2022-09-25 00:15:04'),
+('110119015', '', 'FEBE FEBRILINA FERNANDA', 'Aktif', 3.543, 3.549, 3.549, 0, '', '2022-09-25 00:15:04'),
+('110119016', '', 'ERIKA ANGGRAENI', 'Aktif', 3.476, 3.534, 3.534, 0, NULL, '2022-09-25 00:15:04'),
+('110119017', '', 'AUDI GRACIA KOESWANDY', 'Aktif', 2.717, 3.338, 3.338, 0, NULL, '2022-09-25 00:15:04'),
+('110119019', '', 'FELIX ALEXANDER', 'Aktif', 3.571, 3.626, 3.626, 0, NULL, '2022-09-25 00:15:04'),
+('110119020', '', 'VIOLITA WIDJAJA', 'Aktif', 2.81, 3.336, 3.336, 0, NULL, '2022-09-25 00:15:04'),
+('110119022', '', 'GABRIELLA IRENE KHORIANTO', 'Aktif', 3.13, 3.267, 3.267, 0, NULL, '2022-09-25 00:15:04'),
+('110119023', '', 'SHERINA SUHARTO JO', 'Aktif', 3.524, 3.695, 3.695, 0, NULL, '2022-09-25 00:15:04'),
+('110119024', '', 'CYNDY GRACELLYA HANS', 'Aktif', 3.543, 3.778, 3.778, 0, NULL, '2022-09-25 00:15:04'),
+('110119025', '', 'EVELYN ANGELINA', 'Aktif', 2.786, 3.297, 3.297, 0, NULL, '2022-09-25 00:15:05'),
+('110119026', '', 'PUTRI VALENSIA DHARMAWAN', 'Aktif', 3.5, 3.74, 3.74, 0, NULL, '2022-09-25 00:15:05'),
+('110119027', '', 'SHIEREN HIZKIA', 'Aktif', 2.813, 3.172, 3.172, 0, NULL, '2022-09-25 00:15:05'),
+('110119028', '', 'FELIX MARTINUS SETYONO', 'Aktif', 3.952, 3.916, 3.916, 0, NULL, '2022-09-25 00:15:05'),
+('110119031', '', 'FLORIN SANTIKA DEWI', 'Aktif', 3.125, 3.47, 3.47, 0, NULL, '2022-09-25 00:15:05'),
+('110119032', '', 'VICTORIA DASSMER', 'Aktif', 3.476, 3.679, 3.679, 0, NULL, '2022-09-25 00:15:05'),
+('110119034', '', 'FIRDAUSI JAYA ANGGASTA', 'Aktif', 3.609, 3.621, 3.621, 0, NULL, '2022-09-25 00:15:05'),
+('110119037', '', 'RON MANUEL SONHOTA', 'Aktif', 2.348, 2.941, 2.941, 0, NULL, '2022-09-25 00:15:05'),
+('110119038', '', 'AORTA AGIS WARDANI', 'Aktif', 0.909, 2.326, 2.473, 0, NULL, '2022-09-25 00:15:05'),
+('110119040', '', 'KEZIA FEBRIANA', 'Aktif', 3.31, 3.592, 3.592, 0, NULL, '2022-09-25 00:15:05'),
+('110119041', '', 'SHERYL EVINA WAHJUDI', 'Aktif', 3.152, 3.363, 3.363, 0, NULL, '2022-09-25 00:15:05'),
+('110119042', '', 'CYNTHIA NATALIE TJENDRA', 'Aktif', 3.283, 3.617, 3.617, 0, NULL, '2022-09-25 00:15:05'),
+('110119044', '', 'ANNYSA DWI NURAINI', 'Aktif', 1.3, 2.235, 2.38, 0, NULL, '2022-09-25 00:15:05'),
+('110119045', '', 'SHANDRA BELLA RIYANTO', 'Aktif', 3.571, 3.756, 3.756, 0, NULL, '2022-09-25 00:15:05'),
+('110119046', '', 'TRIANA EFFIRADANI GUNAWAN', 'Aktif', 1.205, 2.387, 2.491, 0, NULL, '2022-09-25 00:15:06'),
+('110119047', '', 'ELISSE WIJAYA', 'Aktif', 2.31, 3.289, 3.289, 0, NULL, '2022-09-25 00:15:06'),
+('110119049', '', 'LIANI APRIATUS SALAMAH', 'Aktif', 1.575, 2.076, 2.207, 0, NULL, '2022-09-25 00:15:06'),
+('110119050', '', 'ANGELA NOFVIANTI NUR CAHYO WATI', 'Aktif', 1.905, 2.651, 2.76, 0, NULL, '2022-09-25 00:15:06'),
+('110119051', '', 'ZAHWA DHIBA', 'Aktif', 2.048, 2.706, 2.75, 0, NULL, '2022-09-25 00:15:06'),
+('110119052', '', 'STEVANNY CATHARINA GOTAMA', 'Aktif', 3.024, 3.527, 3.527, 0, NULL, '2022-09-25 00:15:06'),
+('110119053', '', 'JESSICA NATALIA KUSUMA', 'Aktif', 2.283, 3.192, 3.192, 0, NULL, '2022-09-25 00:15:06'),
+('110119054', '', 'NURVINA YULIA', 'Aktif', 2.63, 2.977, 2.977, 0, NULL, '2022-09-25 00:15:06'),
+('110119056', '', 'FARID AGENG PANGESTU', 'Aktif', 1.875, 2.577, 2.642, 0, NULL, '2022-09-25 00:15:06'),
+('110119057', '', 'MELIANA SETIAWAN', 'Aktif', 2.69, 3.25, 3.25, 0, NULL, '2022-09-25 00:15:06'),
+('110119059', '', 'FRISCA FELICIA WIDODO', 'Aktif', 2.652, 3.042, 3.042, 0, NULL, '2022-09-25 00:15:06'),
+('110119060', '', 'ERICKO RICHIE RUDY TULUS', 'Aktif', 2.31, 2.985, 2.985, 0, NULL, '2022-09-25 00:15:06'),
+('110119061', '', 'IVANA NOVITA', 'Aktif', 3.69, 3.809, 3.809, 0, NULL, '2022-09-25 00:15:06'),
+('110119062', '', 'ALICIA CHANDRA PUTRI', 'Aktif', 3.19, 3.586, 3.586, 0, NULL, '2022-09-25 00:15:06'),
+('110119063', '', 'VIORENT CLAUVEA YONATHAN', 'Aktif', 3.333, 3.594, 3.594, 0, NULL, '2022-09-25 00:15:07'),
+('110119064', '', 'VIORELL CLAUDEA YONATHAN', 'Aktif', 3.31, 3.598, 3.598, 0, NULL, '2022-09-25 00:15:07'),
+('110119065', '', 'AMELIA WIRANATA DAYAN', 'Aktif', 3.957, 3.935, 3.935, 0, NULL, '2022-09-25 00:15:07'),
+('110119066', '', 'JONATHAN FELIX CAHYADI', 'Aktif', 3.286, 3.725, 3.725, 0, NULL, '2022-09-25 00:15:07'),
+('110119067', '', 'VIOLINE EKAPUTRI SUWARDY', 'Aktif', 3.143, 3.538, 3.538, 0, NULL, '2022-09-25 00:15:07'),
+('110119068', '', 'JESSICA PUTRI EFENDI', 'Aktif', 1.739, 2.942, 2.988, 0, NULL, '2022-09-25 00:15:07'),
+('110119069', '', 'XANDRAMELA LIMALA ALICYA JUNAIDI LEE', 'Aktif', 3.022, 3.332, 3.332, 0, NULL, '2022-09-25 00:15:07'),
+('110119070', '', 'QOTRUNNADA BENING NUR HANIFAH', 'Aktif', 2.595, 2.521, 2.611, 0, NULL, '2022-09-25 00:15:07'),
+('110119072', '', 'NI WAYAN VALDA DIANITHA UTAMI', 'Aktif', 2.25, 2.713, 2.713, 0, NULL, '2022-09-25 00:15:07'),
+('110119074', '', 'PRISCILIA REGITA SUNUR', 'Aktif', 2.521, 2.935, 2.981, 0, NULL, '2022-09-25 00:15:07'),
+('110119075', '', 'FELICIA KOWE', 'Aktif', 3.826, 3.925, 3.925, 0, NULL, '2022-09-25 00:15:07'),
+('110119078', '', 'RICHO YORDAN BUN', 'Aktif', 2.619, 3.183, 3.183, 0, NULL, '2022-09-25 00:15:07'),
+('110119081', '', 'GRATCIA EMILIA ESAPURI', 'Aktif', 2.174, 2.862, 2.906, 0, NULL, '2022-09-25 00:15:07'),
+('110119082', '', 'ERYKA NORMAWATI', 'Aktif', 2.262, 2.921, 3.041, 0, NULL, '2022-09-25 00:15:08'),
+('110119083', '', 'CATHERINE CHEN', 'Aktif', 3.881, 3.863, 3.863, 0, NULL, '2022-09-25 00:15:08'),
+('110119084', '', 'ACHMAD SAIPUL', 'Aktif', 0.55, 1.823, 2.124, 0, NULL, '2022-09-25 00:15:08'),
+('110119085', '', 'JAYSON', 'Aktif', 1.762, 2.953, 3.073, 0, NULL, '2022-09-25 00:15:08'),
+('110119086', '', 'VIONA GUNAWAN', 'Aktif', 1.826, 2.821, 2.887, 0, NULL, '2022-09-25 00:15:08'),
+('110119088', '', 'AUFA KARIMA', 'Aktif', 2.261, 2.875, 2.875, 0, NULL, '2022-09-25 00:15:08'),
+('110119089', '', 'NANCY VELLISIA', 'Aktif', 2.196, 3.027, 3.074, 0, NULL, '2022-09-25 00:15:08'),
+('110119090', '', 'CHLARISSA NATALIE', 'Aktif', 2.619, 3.016, 3.016, 0, NULL, '2022-09-25 00:15:08'),
+('110119092', '', 'ALFI MIFTAHUL ROHMAH', 'Aktif', 1.523, 2.34, 2.401, 0, NULL, '2022-09-25 00:15:08'),
+('110119097', '', 'INGGIT KUSUMA WARDANI', 'Aktif', 2.478, 3.05, 3.05, 0, NULL, '2022-09-25 00:15:08'),
+('110119098', '', 'HANSEN NGALIMAN', 'Aktif', 3.957, 3.902, 3.902, 0, NULL, '2022-09-25 00:15:08'),
+('110119099', '', 'NIKITA FEBRIANI', 'Aktif', 1.69, 2.54, 2.602, 0, NULL, '2022-09-25 00:15:08'),
+('110119101', '', 'CINDY JUNIAR', 'Aktif', 3.31, 3.286, 3.286, 0, NULL, '2022-09-25 00:15:08'),
+('110119103', '', 'DIANA CANDRA NOVITASARI', 'Aktif', 1.143, 2.629, 2.736, 0, NULL, '2022-09-25 00:15:09'),
+('110119104', '', 'LU\'LUIL MUNIROH', 'Aktif', 3.095, 3.477, 3.477, 0, NULL, '2022-09-25 00:15:09'),
+('110119105', '', 'AGHNA KESYA MALLIKA AZZAHRA', 'Aktif', 1.786, 2.582, 2.644, 0, NULL, '2022-09-25 00:15:09'),
+('110119106', '', 'NAOMI SHELMA MONICA JOEL', 'Aktif', 1.455, 2.456, 2.546, 0, NULL, '2022-09-25 00:15:09'),
+('110119108', '', 'VINCENT CHANDRA KUSUMA', 'Aktif', 2.381, 3.289, 3.341, 0, NULL, '2022-09-25 00:15:09'),
+('110119109', '', 'SEPTIA MONICA WULANDARI', 'Aktif', 2.978, 3.344, 3.344, 0, NULL, '2022-09-25 00:15:09'),
+('110119110', '', 'TAN, ANGELA PUSPITA DEWI', 'Aktif', 3.391, 3.547, 3.547, 0, NULL, '2022-09-25 00:15:09'),
+('110119111', '', 'IKE DELAVERA NASTITI', 'Aktif', 1.643, 2.537, 2.644, 0, NULL, '2022-09-25 00:15:09'),
+('110119113', '', 'NATASHA KEZIA WIJAYA', 'Aktif', 2.435, 3.043, 3.043, 0, NULL, '2022-09-25 00:15:09'),
+('110119114', '', 'NOOR HERLIYANA YANTI', 'Aktif', 1.587, 2.727, 2.837, 0, NULL, '2022-09-25 00:15:09'),
+('110119115', '', 'INAYAH DWI CAHYA', 'Aktif', 3.087, 3.348, 3.348, 0, NULL, '2022-09-25 00:15:09'),
+('110119116', '', 'NI NYOMAN LAILA NORDEWI YANI', 'Aktif', 1.705, 2.748, 2.815, 0, NULL, '2022-09-25 00:15:09'),
+('110119119', '', 'ALBERT CENGNATA', 'Aktif', 2.952, 3.405, 3.405, 0, NULL, '2022-09-25 00:15:09'),
+('110119121', '', 'KHOLYDA SALIM BAGIS', 'Aktif', 2.583, 2.736, 2.736, 0, NULL, '2022-09-25 00:15:09'),
+('110119122', '', 'CHERYL MATULATAN', 'Aktif', 2.952, 3.435, 3.435, 0, NULL, '2022-09-25 00:15:09'),
+('110119123', '', 'MICHAEL HANS CHRISTIAN', 'Aktif', 1.429, 2.786, 2.944, 0, NULL, '2022-09-25 00:15:10'),
+('110119127', '', 'I KADEK ADI GUNA MAHENDRA', 'Aktif', 1.31, 2.597, 2.746, 0, NULL, '2022-09-25 00:15:10'),
+('110119131', '', 'CATHRYN MONROE ANDRIANTO', 'Aktif', 3.429, 3.634, 3.634, 0, NULL, '2022-09-25 00:15:10'),
+('110119132', '', 'EUNIKE YOSEMARY', 'Aktif', 2.913, 3.115, 3.164, 0, NULL, '2022-09-25 00:15:10'),
+('110119134', '', 'NAHDYA SASTIKA', 'Aktif', 2.935, 3.148, 3.148, 0, NULL, '2022-09-25 00:15:10'),
+('110119136', '', 'WIDYA NURHIDAYAH', 'Aktif', 1.025, 1.93, 2.094, 0, NULL, '2022-09-25 00:15:10'),
+('110119137', '', 'IKA RIZQY AMALIA', 'Aktif', 2.357, 2.853, 2.853, 0, NULL, '2022-09-25 00:15:10'),
+('110119139', '', 'KARINA BUDIANTO', 'Aktif', 1.636, 2.483, 2.594, 0, NULL, '2022-09-25 00:15:10'),
+('110119140', '', 'PRIMA ROJAA YAAFI', 'Aktif', 2.273, 2.832, 2.832, 0, NULL, '2022-09-25 00:15:10'),
+('110119143', '', 'BALQISH LAILIYA ZAHIRA AZZAHRAH', 'Aktif', 2.048, 2.567, 2.609, 0, NULL, '2022-09-25 00:15:10'),
+('110119144', '', 'IMRO\'ATUS SHOLIHAH', 'Aktif', 2.075, 2.265, 2.325, 0, NULL, '2022-09-25 00:15:10'),
+('110119146', '', 'ANGELINA HARIYONO', 'Aktif', 2.476, 3.027, 3.027, 0, NULL, '2022-09-25 00:15:10'),
+('110119147', '', 'PUTU AYU SINTYA PRADNYA DEWI', 'Aktif', 1.7, 2.248, 2.305, 0, NULL, '2022-09-25 00:15:10'),
+('110119148', '', 'ENDAH SEKAR SAFITRI', 'Aktif', 1.225, 2.178, 2.307, 0, NULL, '2022-09-25 00:15:10'),
+('110119149', '', 'TAZKIYATUL ASMAI', 'Aktif', 2.119, 2.75, 2.794, 0, NULL, '2022-09-25 00:15:11'),
+('110119152', '', 'SERLI WAHYUNINGSIH', 'Aktif', 1.591, 2.355, 2.397, 0, NULL, '2022-09-25 00:15:11'),
+('110119154', '', 'DAMARIO FORTUNATO ISNAN', 'Aktif', 2.63, 2.985, 2.985, 0, NULL, '2022-09-25 00:15:11'),
+('110119155', '', 'NI PUTU NADIA NATALI DEWI', 'Aktif', 3.688, 3.508, 3.508, 0, NULL, '2022-09-25 00:15:11'),
+('110119156', '', 'ANGGUN EDITYA', 'Aktif', 2.667, 2.992, 2.992, 0, NULL, '2022-09-25 00:15:11'),
+('110119158', '', 'UNIQ SETYANINGSARI', 'Aktif', 2.37, 2.772, 2.839, 0, NULL, '2022-09-25 00:15:11'),
+('110119160', '', 'SHELLA SILVIA PUTRI', 'Aktif', 2.357, 2.679, 2.679, 0, NULL, '2022-09-25 00:15:11'),
+('110119161', '', 'OCTAVIRA ANYUANI', 'Aktif', 2.238, 2.718, 2.785, 0, NULL, '2022-09-25 00:15:11'),
+('110119163', '', 'NIMAS DYAH AJENG AULIA RAHMADHANI', 'Aktif', 2.205, 2.658, 2.728, 0, NULL, '2022-09-25 00:15:11'),
+('110119166', '', 'ZEINETTA MIDYA HAYATI', 'Aktif', 2.739, 3.35, 3.35, 0, NULL, '2022-09-25 00:15:11'),
+('110119168', '', 'AMALIA ELEANY', 'Aktif', 2.143, 2.647, 2.717, 0, NULL, '2022-09-25 00:15:11'),
+('110119169', '', 'PUTRI AISYAH RACHMATIANI', 'Aktif', 1.4, 2.189, 2.32, 0, NULL, '2022-09-25 00:15:11'),
+('110119170', '', 'EKA FITRI NATALIA', 'Aktif', 1.909, 2.47, 2.513, 0, NULL, '2022-09-25 00:15:11'),
+('110119171', '', 'KEVIN ALFREDO WAHYUDI', 'Aktif', 1.643, 2.748, 2.813, 0, NULL, '2022-09-25 00:15:11'),
+('110119172', '', 'KRISYA GIA CINTA MIMBA', 'Aktif', 2, 2.476, 2.525, 0, NULL, '2022-09-25 00:15:11'),
+('110119174', '', 'LISA MAY DAMAYANTI', 'Aktif', 2.205, 2.697, 2.744, 0, NULL, '2022-09-25 00:15:12'),
+('110119175', '', 'SUGENG HARYOKO', 'Aktif', 2.325, 2.414, 2.414, 0, NULL, '2022-09-25 00:15:12'),
+('110119177', '', 'CATHERINA HUTAHAEAN', 'Aktif', 2.739, 3.188, 3.188, 0, NULL, '2022-09-25 00:15:12'),
+('110119178', '', 'MUHAMMAD REZA APRILILO AKBAR', 'Aktif', 1.705, 2.874, 2.92, 0, NULL, '2022-09-25 00:15:12'),
+('110119180', '', 'SYAYANDA YUKE SALSALITA', 'Aktif', 2.5, 2.837, 2.907, 0, NULL, '2022-09-25 00:15:12'),
+('110119181', '', 'SITI MUTMAINAH', 'Aktif', 0, 2.442, 2.495, 0, NULL, '2022-09-25 00:15:12'),
+('110119182', '', 'NURIYAH SULISTIAWATI', 'Aktif', 1.881, 2.69, 2.69, 0, NULL, '2022-09-25 00:15:12'),
+('110119183', '', 'NOVITA SARI', 'Aktif', 1.674, 2.675, 2.785, 0, NULL, '2022-09-25 00:15:12'),
+('110119186', '', 'IDA BAGUS OKA WISNU ANDHIKA', 'Aktif', 1.775, 2.565, 2.718, 0, NULL, '2022-09-25 00:15:12'),
+('110119187', '', 'YUSRON ASSIDQY AW', 'Aktif', 2.024, 2.789, 2.902, 0, NULL, '2022-09-25 00:15:12'),
+('110119188', '', 'NURUL HIDAYATI ISNAENI', 'Aktif', 2.227, 2.509, 2.552, 0, NULL, '2022-09-25 00:15:12'),
+('110119189', '', 'AHMAD KEVIN NI\'MALMAULA', 'Aktif', 1.2, 1.963, 2.258, 0, NULL, '2022-09-25 00:15:12'),
+('110119191', '', 'MICHAEL FAUSTINUS ADHITYA CHRISLY', 'Aktif', 1.5, 2.6, 2.708, 0, NULL, '2022-09-25 00:15:12'),
+('110119193', '', 'LUH RISMA WARTINI', 'Aktif', 1.524, 2.711, 2.868, 0, NULL, '2022-09-25 00:15:12'),
+('110119194', '', 'MELIA INDAH SABRINA', 'Aktif', 1.833, 2.524, 2.565, 0, NULL, '2022-09-25 00:15:13'),
+('110119195', '', 'RICKY GONZALI MAGO', 'Aktif', 2.848, 3.281, 3.281, 0, NULL, '2022-09-25 00:15:13'),
+('110119196', '', 'WAHYU YUSROY NABILAH', 'Aktif', 1.643, 2.722, 2.835, 0, NULL, '2022-09-25 00:15:13'),
+('110119197', '', 'YOSY ATHAYA YORASAKI', 'Aktif', 2.119, 2.84, 2.885, 0, NULL, '2022-09-25 00:15:13'),
+('110119198', '', 'ANNINDA WIDYA NILASARI', 'Aktif', 2.396, 2.719, 2.829, 0, NULL, '2022-09-25 00:15:13'),
+('110119200', '', 'FRANSISCO CANDRA GONSALEZ', 'Aktif', 2.457, 3.199, 3.199, 0, NULL, '2022-09-25 00:15:13'),
+('110119201', '', 'SAKDIYAH', 'Aktif', 2.238, 2.91, 2.956, 0, NULL, '2022-09-25 00:15:13'),
+('110119202', '', 'WIKA WIRIANTI', 'Aktif', 2.524, 3.168, 3.168, 0, NULL, '2022-09-25 00:15:13'),
+('110119205', '', 'NI KOMANG DIAN PURNAMITA SARI', 'Aktif', 2.674, 3.004, 3.004, 0, NULL, '2022-09-25 00:15:13'),
+('110119206', '', 'LUH PUTU PRA ADINDRA SAVINE EUREKA KARTIKA', 'Aktif', 2.929, 3.355, 3.355, 0, NULL, '2022-09-25 00:15:13'),
+('110119207', '', 'MAYRTA AYU WANTIKA', 'Aktif', 2.571, 2.889, 2.889, 0, NULL, '2022-09-25 00:15:13'),
+('110119210', '', 'GABRIEL MARETHA BUDHI WIYONO', 'Aktif', 3.69, 3.75, 3.75, 0, NULL, '2022-09-25 00:15:13'),
+('110119212', '', 'VANESA WIRAMAS', 'Aktif', 3.717, 3.771, 3.771, 0, NULL, '2022-09-25 00:15:13'),
+('110119213', '', 'QORY SEPTIA EKSANTI', 'Aktif', 2.587, 3.212, 3.212, 0, NULL, '2022-09-25 00:15:13'),
+('110119214', '', 'SYAFITRI', 'Aktif', 2.239, 2.876, 2.921, 0, NULL, '2022-09-25 00:15:14'),
+('110119215', '', 'OCTAVIANNE MARIA MALONDA', 'Aktif', 3.104, 3.443, 3.443, 0, NULL, '2022-09-25 00:15:14'),
+('110119216', '', 'NUR FITRIYAH', 'Aktif', 2.957, 3.415, 3.415, 0, NULL, '2022-09-25 00:15:14'),
+('110119217', '', 'SALSABIILLA OKTARIZA PUTRI', 'Aktif', 2.184, 2.459, 2.564, 0, NULL, '2022-09-25 00:15:14'),
+('110119218', '', 'JINAN NISRINA', 'Aktif', 1.69, 2.617, 2.774, 0, NULL, '2022-09-25 00:15:14'),
+('110119220', '', 'I NYOMAN DODI SAPUTRA', 'Aktif', 2.262, 2.675, 2.675, 0, NULL, '2022-09-25 00:15:14'),
+('110119221', '', 'MADE DESMANTA GIAN PUTRA', 'Aktif', 1.975, 2.642, 2.754, 0, NULL, '2022-09-25 00:15:14'),
+('110119222', '', 'I GUSTI DIMAS PRAYUDHA', 'Aktif', 1.738, 2.591, 2.654, 0, NULL, '2022-09-25 00:15:14'),
+('110119223', '', 'KOMANG MENTARI MUTIARA DEWI', 'Aktif', 1.87, 2.835, 2.948, 0, NULL, '2022-09-25 00:15:14'),
+('110119224', '', 'PUTU APRILYA GITAPUTRI', 'Aktif', 1.717, 2.808, 2.918, 0, NULL, '2022-09-25 00:15:14'),
+('110119225', '', 'KADEK DINDA YUNITADEWI', 'Aktif', 2.5, 3.015, 3.015, 0, NULL, '2022-09-25 00:15:14'),
+('110119226', '', 'ZAHRA WINE FEBRIANDINI', 'Aktif', 2.595, 2.918, 2.918, 0, NULL, '2022-09-25 00:15:14'),
+('110119227', '', 'NI PUTU ARDHIANI KENCANA PUTRI', 'Aktif', 2.804, 3.262, 3.262, 0, NULL, '2022-09-25 00:15:14'),
+('110119228', '', 'YUSRIL BARRU SUKMA', 'Aktif', 0.932, 2.419, 2.67, 0, NULL, '2022-09-25 00:15:14'),
+('110119229', '', 'TJO ANITA SURYA JAYA', 'Aktif', 3.286, 3.607, 3.607, 0, NULL, '2022-09-25 00:15:14'),
+('110119230', '', 'BERTHAE NATALIA', 'Aktif', 1.455, 2.676, 2.676, 0, NULL, '2022-09-25 00:15:15'),
+('110119234', '', 'IMELDA', 'Aktif', 1.31, 2.301, 2.446, 0, NULL, '2022-09-25 00:15:15'),
+('110119235', '', 'YULISTIRA TRI AMELIA', 'Aktif', 1.477, 2.508, 2.615, 0, NULL, '2022-09-25 00:15:15'),
+('110119236', '', 'ANGELIA ELGRACIA', 'Aktif', 3, 3.59, 3.59, 0, NULL, '2022-09-25 00:15:15'),
+('110119237', '', 'SILVIANA AINUN PRATIWI', 'Aktif', 2.738, 3.129, 3.129, 0, NULL, '2022-09-25 00:15:15'),
+('110119238', '', 'AUDREY VALENTIA', 'Aktif', 3.381, 3.703, 3.703, 0, NULL, '2022-09-25 00:15:15'),
+('110119239', '', 'HAPPY NUR SHAFA HIDAYAHTULLAH', 'Aktif', 1.738, 2.64, 2.75, 0, NULL, '2022-09-25 00:15:15'),
+('110119240', '', 'AMALIYAH R.Z.', 'Aktif', 3.174, 3.365, 3.365, 0, NULL, '2022-09-25 00:15:15'),
+('110119241', '', 'ISABELLA CHARMELITAMUIS LAMANEPA', 'Aktif', 3.238, 3.629, 3.629, 0, NULL, '2022-09-25 00:15:15'),
+('110119242', '', 'LATHIFATUR RIF\'AH', 'Aktif', 2.238, 2.953, 3, 0, NULL, '2022-09-25 00:15:15'),
+('110119243', '', 'LISTIANI ANGGRAENI PALANG TUKAN', 'Aktif', 2.804, 3.297, 3.297, 0, NULL, '2022-09-25 00:15:15'),
+('110119245', '', 'ROI ANDI SAPUTRO', 'Aktif', 1.225, 2.198, 2.361, 0, NULL, '2022-09-25 00:15:15'),
+('110119246', '', 'ANDIKA WAHYU RAMADHAN', 'Aktif', 1.023, 2.102, 2.234, 0, NULL, '2022-09-25 00:15:15'),
+('110119249', '', 'MAI FITASARI', 'Aktif', 2.091, 2.404, 2.449, 0, NULL, '2022-09-25 00:15:15'),
+('110119250', '', 'OKTARINA EKA PUTRI CAHYANINGSIH', 'Aktif', 2.087, 3.026, 3.026, 0, NULL, '2022-09-25 00:15:16'),
+('110119251', '', 'AVINNY SAUDIA RESTY', 'Aktif', 1.786, 2.496, 2.603, 0, NULL, '2022-09-25 00:15:16'),
+('110119253', '', 'LAILI MUNADA', 'Aktif', 1.325, 2.524, 2.674, 0, NULL, '2022-09-25 00:15:16'),
+('110119254', '', 'VERONICA VALENSIA', 'Aktif', 3.348, 3.383, 3.383, 0, NULL, '2022-09-25 00:15:16'),
+('110119255', '', 'DEWI MASHITHAH', 'Aktif', 1.705, 2.665, 2.777, 0, NULL, '2022-09-25 00:15:16'),
+('110119258', '', 'FAHMI MAULANA', 'Aktif', 1.864, 2.232, 2.294, 0, NULL, '2022-09-25 00:15:16'),
+('110119259', '', 'VANIA HAPSARI', 'Aktif', 1.957, 2.934, 2.98, 0, NULL, '2022-09-25 00:15:16'),
+('110119260', '', 'YOUMELIA ANASTASYA', 'Aktif', 2.563, 3.071, 3.071, 0, NULL, '2022-09-25 00:15:16'),
+('110119262', '', 'SATRIANI PERNANDA BILI', 'Aktif', 2.075, 2.754, 2.754, 0, NULL, '2022-09-25 00:15:16'),
+('110119263', '', 'HARITS ADLINA GUNIARDI', 'Aktif', 1.275, 2.241, 2.476, 0, NULL, '2022-09-25 00:15:16'),
+('110119264', '', 'CAHYANI MA\'RUFI SARNO SUBEKTI', 'Aktif', 2, 2.724, 2.768, 0, NULL, '2022-09-25 00:15:16'),
+('110119265', '', 'DHEA ORINTA APRIYANI', 'Aktif', 2.477, 2.688, 2.752, 0, NULL, '2022-09-25 00:15:16'),
+('110119266', '', 'NAILA SHOLATIAH', 'Aktif', 1.325, 2.148, 2.284, 0, NULL, '2022-09-25 00:15:16'),
+('110119267', '', 'DWIKY ZEIN RICHO PUTRA', 'Aktif', 1.45, 2.288, 2.396, 0, NULL, '2022-09-25 00:15:16'),
+('110119268', '', 'PUTU DEA ANGELITA PUTRI', 'Aktif', 3.457, 3.446, 3.446, 0, NULL, '2022-09-25 00:15:16'),
+('110119269', '', 'TIARA DENTA PERTIWI', 'Aktif', 1.318, 2.512, 2.593, 0, NULL, '2022-09-25 00:15:17'),
+('110119271', '', 'ALFIANA VICA GALUH PRANANDARI', 'Aktif', 3.167, 3.586, 3.586, 0, NULL, '2022-09-25 00:15:17'),
+('110119273', '', 'I NYOMAN GEDE ARI KUSUMA BENDESA', 'Aktif', 1.667, 2.746, 2.86, 0, NULL, '2022-09-25 00:15:17'),
+('110119274', '', 'TRI HANDAYANI', 'Aktif', 2.271, 2.992, 2.992, 0, NULL, '2022-09-25 00:15:17'),
+('110119275', '', 'AMIRAH DYANDRA SYBIL', 'Aktif', 1.659, 2.332, 2.37, 0, NULL, '2022-09-25 00:15:17'),
+('110119276', '', 'ADITYA SAHENDRA CHANDRA', 'Aktif', 2.262, 3.088, 3.088, 0, NULL, '2022-09-25 00:15:17'),
+('110119278', '', 'SHINDY MARGARETH WIJAYA', 'Aktif', 3.348, 3.435, 3.435, 0, NULL, '2022-09-25 00:15:17'),
+('110119279', '', 'MAYLIN KARLINA AYU MASRURAH', 'Aktif', 2.087, 2.823, 2.823, 0, NULL, '2022-09-25 00:15:17'),
+('110119281', '', 'NI PUTU DIAH NOPITA SARI', 'Aktif', 3, 3.336, 3.336, 0, NULL, '2022-09-25 00:15:17'),
+('110119282', '', 'EVA AMILIA', 'Aktif', 1.571, 2.659, 2.769, 0, NULL, '2022-09-25 00:15:17'),
+('110119283', '', 'SAFITA DEA LESTARI', 'Aktif', 2.476, 2.931, 2.931, 0, NULL, '2022-09-25 00:15:17'),
+('110119284', '', 'KOMANG ANGGA KRISNA SUGANDI', 'Aktif', 2.457, 3.078, 3.127, 0, NULL, '2022-09-25 00:15:17'),
+('110119288', '', 'KEMALA SA\'ADAH HARDAYANTI', 'Aktif', 2.214, 2.84, 2.84, 0, NULL, '2022-09-25 00:15:17'),
+('110119289', '', 'EUKARISTIA PERMATA NUSLIA', 'Aktif', 3.048, 3.309, 3.309, 0, NULL, '2022-09-25 00:15:17'),
+('110119290', '', 'DINI TRI OKTAVIRA', 'Aktif', 1.81, 2.583, 2.625, 0, NULL, '2022-09-25 00:15:18'),
+('110119291', '', 'KARTIKA AVE MARIA TENDEAN', 'Aktif', 1.095, 2.189, 2.322, 0, NULL, '2022-09-25 00:15:18'),
+('110119292', '', 'NOVITA ANGGRAINI PUSPITA SARI', 'Aktif', 2.587, 3.288, 3.34, 0, NULL, '2022-09-25 00:15:18'),
+('110119294', '', 'GABRIEL NIKOLA FERISKO WENTHE', 'Aktif', 2.452, 2.877, 2.947, 0, NULL, '2022-09-25 00:15:18'),
+('110119298', '', 'DITHA OCTAVIANY PUTRI', 'Aktif', 1.783, 2.832, 2.877, 0, NULL, '2022-09-25 00:15:18'),
+('110119299', '', 'AKBAR MAULANA', 'Aktif', 1.714, 2.25, 2.397, 0, NULL, '2022-09-25 00:15:18'),
+('110119300', '', 'NI PUTU ANJASWARI LARAS PRAMESTI', 'Aktif', 3, 3.378, 3.378, 0, NULL, '2022-09-25 00:15:18'),
+('110119302', '', 'NI PUTU NILA SULISTIA DEWI', 'Aktif', 2.13, 2.925, 2.925, 0, NULL, '2022-09-25 00:15:18'),
+('110119305', '', 'DEVILLA ANGELICA', 'Aktif', 2.429, 2.935, 2.935, 0, NULL, '2022-09-25 00:15:18'),
+('110119308', '', 'SITI EKA NUR AISAH', 'Aktif', 1.952, 2.671, 2.671, 0, NULL, '2022-09-25 00:15:18'),
+('110119309', '', 'DWI SUCI INDRIANI', 'Aktif', 1.429, 2.272, 2.374, 0, NULL, '2022-09-25 00:15:18'),
+('110119310', '', 'MUHAMAD RIZKI SOFIUDIN', 'Aktif', 2.167, 2.817, 2.934, 0, NULL, '2022-09-25 00:15:18'),
+('110119311', '', 'REIDY MORRISTA', 'Aktif', 1.833, 2.521, 2.632, 0, NULL, '2022-09-25 00:15:18'),
+('110119313', '', 'MAURA ALYSA LAMBANG', 'Aktif', 2.375, 3.145, 3.145, 0, NULL, '2022-09-25 00:15:18'),
+('110119314', '', 'ABRAHAM AJIE HANDARU', 'Aktif', 0.45, 1.505, 1.932, 0, NULL, '2022-09-25 00:15:19'),
+('110119315', '', 'ADIVA HANAKO LAVENDER', 'Aktif', 2.429, 3.137, 3.264, 0, NULL, '2022-09-25 00:15:19'),
+('110119316', '', 'AMALIA THALITA YOLANDA PUTRI', 'Aktif', 1.286, 2.2, 2.41, 0, NULL, '2022-09-25 00:15:19'),
+('110119317', '', 'JAYA RISTI MAULINA', 'Aktif', 2.15, 2.412, 2.474, 0, NULL, '2022-09-25 00:15:19'),
+('110119318', '', 'I GUSTI AYU PUTRI MAHARANI', 'Aktif', 1.143, 1.987, 2.079, 0, NULL, '2022-09-25 00:15:19'),
+('110119319', '', 'OCTAVIO CRIESTY ANGGA', 'Aktif', 1.341, 2.31, 2.449, 0, NULL, '2022-09-25 00:15:19'),
+('110119321', '', 'VINKA MASSUDI SIBIDANG', 'Aktif', 2.435, 2.82, 2.865, 0, NULL, '2022-09-25 00:15:19'),
+('110119322', '', 'MELIANA ONGKODJOJO', 'Aktif', 3.381, 3.477, 3.477, 0, NULL, '2022-09-25 00:15:19'),
+('110119323', '', 'NUR AFIFAH', 'Aktif', 1.238, 2.551, 2.7, 0, NULL, '2022-09-25 00:15:19'),
+('110119325', '', 'CHRISTIANA THEODORA RAMBU RIDJA', 'Aktif', 1.19, 2.461, 2.561, 0, NULL, '2022-09-25 00:15:19'),
+('110119326', '', 'ALBERTUS TANDIPADA', 'Aktif', 0.75, 1.639, 2.107, 0, NULL, '2022-09-25 00:15:19'),
+('110119327', '', 'STEFANNY WIJAYA TANIPUTRA', 'Aktif', 2.739, 3.108, 3.108, 0, NULL, '2022-09-25 00:15:19'),
+('110119328', '', 'MICHAEL DAVID MARCELINO', 'Aktif', 1.225, 2.248, 2.429, 0, NULL, '2022-09-25 00:15:19'),
+('110119329', '', 'NURUL A\'FI RIZQIYAH', 'Aktif', 1.067, 2.053, 2.089, 0, NULL, '2022-09-25 00:15:19'),
+('110119331', '', 'JULIETTA SALWA SABELLA', 'Aktif', 2.174, 2.862, 2.906, 0, NULL, '2022-09-25 00:15:20'),
+('110119332', '', 'CHYNTIA AULIA SAFIRA', 'Aktif', 2.095, 2.762, 2.876, 0, NULL, '2022-09-25 00:15:20'),
+('110119333', '', 'RIBKA SHERINA', 'Aktif', 1.068, 2.321, 2.509, 0, NULL, '2022-09-25 00:15:20'),
+('110119334', '', 'AHMAD HANIF FIKRIYANTO', 'Aktif', 1.595, 2.532, 2.636, 0, NULL, '2022-09-25 00:15:20'),
+('110119337', '', 'PANDE MADE DWI PRANAGARI KAYUN', 'Aktif', 1.318, 2.387, 2.619, 0, NULL, '2022-09-25 00:15:20'),
+('110119338', '', 'BELLA INTAN SAFITRI', 'Aktif', 1.841, 2.772, 2.816, 0, NULL, '2022-09-25 00:15:20'),
+('110119339', '', 'NATALIA NUGROHO SIMANJUNTAK', 'Aktif', 2.786, 3.387, 3.387, 0, NULL, '2022-09-25 00:15:20'),
+('110119340', '', 'BERTI RATNA PALUPI', 'Aktif', 1.775, 2.377, 2.479, 0, NULL, '2022-09-25 00:15:20'),
+('110119341', '', 'SAVINA GITA ANANDARI', 'Aktif', 1.69, 2.545, 2.632, 0, NULL, '2022-09-25 00:15:20'),
+('110119342', '', 'HANDRE WIDODO', 'Aktif', 1.857, 2.563, 2.563, 0, NULL, '2022-09-25 00:15:20'),
+('110119344', '', 'AYU ROHMATUN NIKMAH', 'Aktif', 1.476, 2.289, 2.451, 0, NULL, '2022-09-25 00:15:20'),
+('110119346', '', 'KRISTINA MULYANI', 'Aktif', 2.262, 2.655, 2.655, 0, NULL, '2022-09-25 00:15:20'),
+('110119347', '', 'AGNES VALENCIA', 'Aktif', 0.857, 1.665, 1.9, 0, NULL, '2022-09-25 00:15:20'),
+('110119348', '', 'KARTIKA SINAGA', 'Aktif', 1.75, 2.293, 2.331, 0, NULL, '2022-09-25 00:15:20'),
+('110119349', '', 'CLARA MARGARETA COSTAN', 'Aktif', 2.357, 2.92, 2.92, 0, NULL, '2022-09-25 00:15:20'),
+('110119350', '', 'MONICA NUROL IZZA FARDANA', 'Aktif', 1.938, 2.782, 2.893, 0, NULL, '2022-09-25 00:15:21'),
+('110119351', '', 'ROZANA NUR LAILY FARIDA', 'Aktif', 1.619, 2.74, 2.851, 0, NULL, '2022-09-25 00:15:21'),
+('110119352', '', 'APRILIA DHYNAR PURBORINI', 'Aktif', 1.05, 1.918, 2.01, 0, NULL, '2022-09-25 00:15:21'),
+('110119353', '', 'ANGELINE THERECIANY', 'Aktif', 2.857, 3.352, 3.352, 0, NULL, '2022-09-25 00:15:21'),
+('110119354', '', 'AHMAD SONI ABIMANYU', 'Aktif', 1.286, 2.328, 2.432, 0, NULL, '2022-09-25 00:15:21'),
+('110119355', '', 'QORY AINAVA KRISDA', 'Aktif', 1.159, 2.269, 2.411, 0, NULL, '2022-09-25 00:15:21'),
+('110119356', '', 'RAMBU KUDU ATAJAWA PAREMADJANGGA', 'Aktif', 1.409, 2.425, 2.464, 0, NULL, '2022-09-25 00:15:21'),
+('110119357', '', 'BELLA FIESTA', 'Aktif', 2.452, 2.707, 2.707, 0, NULL, '2022-09-25 00:15:21'),
+('110119358', '', 'DIAN NAILINDAH', 'Aktif', 2.048, 2.738, 2.782, 0, NULL, '2022-09-25 00:15:21'),
+('110119359', '', 'HANA ADHYTIA', 'Aktif', 0.55, 1.822, 1.995, 0, NULL, '2022-09-25 00:15:21'),
+('110119360', '', 'NANIK ANGGRAINI', 'Aktif', 2.238, 2.595, 2.595, 0, NULL, '2022-09-25 00:15:21'),
+('110119361', '', 'AIWIN GIACINTA LO', 'Aktif', 3.37, 3.431, 3.431, 0, NULL, '2022-09-25 00:15:21'),
+('110119362', '', 'NUR NABILA ISTIQOMAH', 'Aktif', 2.19, 2.603, 2.645, 0, NULL, '2022-09-25 00:15:21'),
+('110119363', '', 'DEWI PRIMA YOGA OKTAPRASASTIKA', 'Aktif', 1.619, 2.463, 2.568, 0, NULL, '2022-09-25 00:15:21'),
+('110119364', '', 'PUTU PRISCILA DEVIYANTI', 'Aktif', 3.348, 3.447, 3.447, 0, NULL, '2022-09-25 00:15:22'),
+('110119365', '', 'DELIA VENIDA RAHAYU', 'Aktif', 2.717, 3.031, 3.031, 0, NULL, '2022-09-25 00:15:22'),
+('110119366', '', 'SITI AZHIMA FADILLAH MUSLIMIN', 'Aktif', 1.55, 2.319, 2.423, 0, NULL, '2022-09-25 00:15:22'),
+('110119368', '', 'MAIMUNAH', 'Aktif', 1.381, 2.248, 2.432, 0, NULL, '2022-09-25 00:15:22'),
+('110119372', '', 'MICHELLE CHANDY PRISCILIA SUSANTIO', 'Aktif', 1.125, 1.876, 2.016, 0, NULL, '2022-09-25 00:15:22'),
+('110119373', '', 'LILI PURWATI', 'Aktif', 1.587, 2.316, 2.616, 0, NULL, '2022-09-25 00:15:22'),
+('110119374', '', 'DESAK PUTU WIKANIA ANJANI', 'Aktif', 1.543, 2.66, 2.766, 0, NULL, '2022-09-25 00:15:22'),
+('110119376', '', 'LELY SAGITA', 'Aktif', 1.864, 2.569, 2.609, 0, NULL, '2022-09-25 00:15:22'),
+('110119377', '', 'PRINCE LAUN HAIRTAHEUW', 'Aktif', 2.095, 2.595, 2.707, 0, NULL, '2022-09-25 00:15:22'),
+('110119381', '', 'DZIHNI RIHADATUL\'AISY RAMADANI', 'Aktif', 2.119, 2.801, 2.801, 0, NULL, '2022-09-25 00:15:22'),
+('110119382', '', 'NUR SYIFA', 'Aktif', 1.568, 2.394, 2.583, 0, NULL, '2022-09-25 00:15:22'),
+('110119385', '', 'LAILUL APRELIA DWI SAFITRI', 'Aktif', 2.5, 2.947, 2.947, 0, NULL, '2022-09-25 00:15:22'),
+('110119388', '', 'NAFISATUL JANNAH', 'Aktif', 2.891, 3.177, 3.177, 0, NULL, '2022-09-25 00:15:22'),
+('110119389', '', 'ABDULLAH ZAINUR RAHMAN', 'Aktif', 3.452, 3.626, 3.626, 0, NULL, '2022-09-25 00:15:23'),
+('110119390', '', 'ARIF MAULANA AZIS', 'Aktif', 2.891, 3.215, 3.215, 0, NULL, '2022-09-25 00:15:23'),
+('110119391', '', 'FREA WIDIA AULIA', 'Aktif', 2.381, 2.77, 2.837, 0, NULL, '2022-09-25 00:15:23'),
+('110119392', '', 'FITRIA RAMADHANY', 'Aktif', 2.167, 2.816, 2.885, 0, NULL, '2022-09-25 00:15:23'),
+('110119393', '', 'KHUSNITA AMALIA ROSYADI', 'Aktif', 1.636, 2.524, 2.677, 0, NULL, '2022-09-25 00:15:23'),
+('110119394', '', 'NI PUTU IRMA MAYANI PUTRI KARDANA', 'Aktif', 3.587, 3.719, 3.719, 0, NULL, '2022-09-25 00:15:23'),
+('110119395', '', 'FEBRIA SASHANTI', 'Aktif', 2.609, 3.23, 3.23, 0, NULL, '2022-09-25 00:15:23'),
+('110119397', '', 'ANGELINE SONGGO PAKAANG', 'Aktif', 2.786, 3.012, 3.012, 0, NULL, '2022-09-25 00:15:23'),
+('110119398', '', 'IDA AYU NANDA ISWARI PIDADA', 'Aktif', 2.717, 3.258, 3.258, 0, NULL, '2022-09-25 00:15:23'),
+('110119399', '', 'TANTRI HISTIQA', 'Aktif', 1.804, 2.801, 2.845, 0, NULL, '2022-09-25 00:15:23'),
+('110119400', '', 'BELLA DEFINA', 'Aktif', 3.935, 3.874, 3.874, 0, NULL, '2022-09-25 00:15:23'),
+('110119402', '', 'IUS MILLIANDRI LATUCONSINA', 'Aktif', 1.262, 2.466, 2.575, 0, NULL, '2022-09-25 00:15:23'),
+('110119404', '', 'EMILIANA PUSPA WANICA', 'Aktif', 1.609, 2.762, 2.874, 0, NULL, '2022-09-25 00:15:23'),
+('110119405', '', 'ANISMA FARHANY', 'Aktif', 2.548, 2.922, 2.922, 0, NULL, '2022-09-25 00:15:24'),
+('110119406', '', 'RAVENA SIDA LUTHVIA', 'Aktif', 2.429, 2.895, 2.895, 0, NULL, '2022-09-25 00:15:24'),
+('110119407', '', 'I KOMANG AGUS YOGA UTAMA PUTRA', 'Aktif', 2.452, 2.899, 2.899, 0, NULL, '2022-09-25 00:15:24'),
+('110119408', '', 'THEA MARELDA ALLO RENDENG', 'Aktif', 1.55, 2.311, 2.412, 0, NULL, '2022-09-25 00:15:24'),
+('110119410', '', 'NI LUH PUTU CATHERINA ARYA DEWI', 'Aktif', 3.261, 3.496, 3.496, 0, NULL, '2022-09-25 00:15:24'),
+('110119411', '', 'TESALONIKA AGNES SUSANTO', 'Aktif', 2.833, 2.81, 2.81, 0, NULL, '2022-09-25 00:15:24'),
+('110119415', '', 'ELY HABIBATUZ ZAKIYAH', 'Aktif', 2.022, 2.641, 2.726, 0, NULL, '2022-09-25 00:15:24'),
+('110119416', '', 'ADIFFA AZKA MUTHIAH', 'Aktif', 2.476, 3.082, 3.082, 0, NULL, '2022-09-25 00:15:24'),
+('110119417', '', 'HIDAYATUL UMAMI', 'Aktif', 2.476, 2.905, 2.905, 0, NULL, '2022-09-25 00:15:24'),
+('110119418', '', 'RIKA NOVITA', 'Aktif', 1.476, 2.444, 2.635, 0, NULL, '2022-09-25 00:15:24'),
+('110119421', '', 'EKA AYU TRISNAWATI', 'Aktif', 2.239, 2.694, 2.738, 0, NULL, '2022-09-25 00:15:24'),
+('110119422', '', 'MASHITA SHABRI MARDIATNA', 'Aktif', 3.435, 3.695, 3.695, 0, NULL, '2022-09-25 00:15:24');
+INSERT INTO `student` (`nrp`, `username`, `nama`, `status`, `ips`, `ipk`, `ipkm`, `eligible`, `upload_ks`, `uploaded_date`) VALUES
+('110119423', '', 'BAGUS HERMANSYACH', 'Aktif', 2.95, 2.862, 2.862, 0, NULL, '2022-09-25 00:15:24'),
+('110119424', '', 'QORI ISTI AYU CAHYANI', 'Aktif', 1.636, 2.567, 2.717, 0, NULL, '2022-09-25 00:15:24'),
+('110119425', '', 'WINDA MAULINA WANTI', 'Aktif', 2.522, 2.9, 2.9, 0, NULL, '2022-09-25 00:15:25'),
+('110119426', '', 'DIVA AURELLIA FADILLAH', 'Aktif', 1.395, 2.022, 2.157, 0, NULL, '2022-09-25 00:15:25'),
+('110119427', '', 'HANUM FIRDA TSABITALYA', 'Aktif', 2.022, 2.804, 2.848, 0, NULL, '2022-09-25 00:15:25'),
+('110119428', '', 'KARIMATUL MUNAWAROH', 'Aktif', 2.609, 2.613, 2.613, 0, NULL, '2022-09-25 00:15:25'),
+('110119429', '', 'KEVIN OLIVER', 'Aktif', 2.833, 2.963, 2.963, 0, NULL, '2022-09-25 00:15:25'),
+('110119432', '', 'MOCH. FIRMANSYAH', 'Aktif', 3.457, 3.609, 3.609, 0, NULL, '2022-09-25 00:15:25'),
+('110119433', '', 'NAHITA FEBRINDA AMENITYA', 'Aktif', 1.273, 1.992, 2.304, 0, NULL, '2022-09-25 00:15:25'),
+('110119434', '', 'NI KETUT AYUNIA ISTIARI', 'Aktif', 2.643, 3.172, 3.172, 0, NULL, '2022-09-25 00:15:25'),
+('110119435', '', 'ULFIASARI', 'Aktif', 1.158, 1.763, 1.994, 0, NULL, '2022-09-25 00:15:25'),
+('110119436', '', 'ALDA PRILLANDREA HARIADI PUTRI', 'Aktif', 3, 3.145, 3.145, 0, NULL, '2022-09-25 00:15:25'),
+('110119437', '', 'MARGARETH A.P. SIAGIAN', 'Aktif', 2.053, 2.192, 2.273, 0, NULL, '2022-09-25 00:15:25'),
+('110119438', '', 'GRACIA VERONA PENNA', 'Aktif', 0.818, 2.037, 2.199, 0, NULL, '2022-09-25 00:15:25'),
+('110119439', '', 'JYESTHA VARASVASTI', 'Aktif', 2.357, 2.589, 2.589, 0, NULL, '2022-09-25 00:15:25'),
+('110119440', '', 'ALFIN ALIA ENJELINA', 'Aktif', 1.475, 1.96, 2.152, 0, NULL, '2022-09-25 00:15:25'),
+('110119441', '', 'FERI IRWANSYAH', 'Aktif', 3, 3.133, 3.133, 0, NULL, '2022-09-25 00:15:25'),
+('110119442', '', 'RIZKA WIDYA ANANDA', 'Aktif', 3.217, 3.23, 3.23, 0, NULL, '2022-09-25 00:15:26'),
+('110119444', '', 'YOANNE REBECCA MANOPPO', 'Aktif', 2.174, 2.809, 2.853, 0, NULL, '2022-09-25 00:15:26'),
+('110119446', '', 'ALYA AYU LASMINI', 'Aktif', 1.891, 2.59, 2.631, 0, NULL, '2022-09-25 00:15:26'),
+('110119448', '', 'DINA QURROTU AINI', 'Aktif', 2.065, 2.863, 2.909, 0, NULL, '2022-09-25 00:15:26'),
+('110119449', '', 'RESTUNING ANIFA HIDAYATI', 'Aktif', 1.875, 2.584, 2.626, 0, NULL, '2022-09-25 00:15:26'),
+('110119450', '', 'INGE SEPTIANI SILITONGA', 'Aktif', 3.826, 3.672, 3.672, 0, NULL, '2022-09-25 00:15:26'),
+('110119451', '', 'NANDA AYU SETYAWATI', 'Aktif', 3, 3.184, 3.184, 0, NULL, '2022-09-25 00:15:26'),
+('110119452', '', 'NI PUTU INDAH PRATIWI', 'Aktif', 1.55, 2.103, 2.309, 0, NULL, '2022-09-25 00:15:26'),
+('110119454', '', 'JANE RIZKY RAHMADANA', 'Aktif', 0.875, 1.797, 2.122, 0, NULL, '2022-09-25 00:15:26'),
+('110119455', '', 'ASTRI AYU LATIFAH', 'Aktif', 2.152, 2.467, 2.686, 0, NULL, '2022-09-25 00:15:26'),
+('110119456', '', 'HANZEL SUTEJA', 'Aktif', 2.571, 3.347, 3.347, 0, NULL, '2022-09-25 00:15:26'),
+('110119458', '', 'LIYA IZZATI DIANA AFIFAH', 'Aktif', 2.152, 2.68, 2.68, 0, NULL, '2022-09-25 00:15:26'),
+('110119459', '', 'AISIA NURUL JASMINE', 'Aktif', 1.262, 2.058, 2.154, 0, NULL, '2022-09-25 00:15:27'),
+('110119464', '', 'DEWI MASFIYAH', 'Aktif', 2.761, 3.075, 3.075, 0, NULL, '2022-09-25 00:15:27'),
+('110119465', '', 'VINCENSIA AVIONICA ANGELINA', 'Aktif', 2.217, 2.754, 2.754, 0, NULL, '2022-09-25 00:15:27'),
+('110119466', '', 'VIRDA WAHYU NUZULIAH', 'Aktif', 2.048, 2.736, 2.847, 0, NULL, '2022-09-25 00:15:27'),
+('110119467', '', 'YURIKO LIDIA GRATIA WATUNG', 'Aktif', 1.886, 2.712, 2.866, 0, NULL, '2022-09-25 00:15:27'),
+('110119468', '', 'JENNIFER RUSKIM', 'Aktif', 3.667, 3.71, 3.71, 0, NULL, '2022-09-25 00:15:27'),
+('110119469', '', 'APRILIAN MUFTILANA', 'Aktif', 2.31, 2.797, 2.797, 0, NULL, '2022-09-25 00:15:27'),
+('110119472', '', 'NAWALUN NISAK', 'Aktif', 1.932, 2.5, 2.5, 0, NULL, '2022-09-25 00:15:27'),
+('110119474', '', 'SONIA ROSENDA APRILLIA', 'Aktif', 1.425, 1.958, 2.067, 0, NULL, '2022-09-25 00:15:27'),
+('110119475', '', 'WAHYU VINOVIA DEVI', 'Aktif', 3.174, 3.215, 3.215, 0, NULL, '2022-09-25 00:15:27'),
+('110119478', '', 'IMRANDA NUGRESHILLA KARTIKA PUTRI', 'Aktif', 1.905, 2.742, 2.786, 0, NULL, '2022-09-25 00:15:27'),
+('110119479', '', 'MARIA CRISTIN WANDUR', 'Aktif', 2.31, 2.77, 2.77, 0, NULL, '2022-09-25 00:15:27'),
+('110119480', '', 'HILERY BOLISPI BENTANG', 'Aktif', 1.455, 2.547, 2.742, 0, NULL, '2022-09-25 00:15:27'),
+('110119481', '', 'ERICHA LORENSHA ANGGRAINI', 'Aktif', 1.886, 2.352, 2.552, 0, NULL, '2022-09-25 00:15:28'),
+('110119482', '', 'SHAFANIA INDAH BINTAN SURYANI', 'Aktif', 0.875, 1.961, 2.146, 0, NULL, '2022-09-25 00:15:28'),
+('110119483', '', 'LIDYA OKTAVIANA', 'Aktif', 1.925, 2.37, 2.547, 0, NULL, '2022-09-25 00:15:28'),
+('110119484', '', 'TIARA ALFISA', 'Aktif', 1.409, 2.672, 2.831, 0, NULL, '2022-09-25 00:15:28'),
+('110119485', '', 'R MUHAMMAD ALIF AKBARI', 'Aktif', 1.25, 1.981, 2.217, 0, NULL, '2022-09-25 00:15:28'),
+('110119487', '', 'JOEVANKA BERLIANA PERMATASARI', 'Aktif', 2.476, 3.118, 3.118, 0, NULL, '2022-09-25 00:15:28'),
+('110119488', '', 'NADIA ALWIDA PARAMESTI', 'Aktif', 2.283, 2.96, 2.96, 0, NULL, '2022-09-25 00:15:28'),
+('110119489', '', 'GREACE ANANDA PUTU BUDIANA', 'Aktif', 2.152, 2.95, 2.95, 0, NULL, '2022-09-25 00:15:28'),
+('110119490', '', 'NURSYAHILLAH', 'Aktif', 1.957, 3.053, 3.053, 0, NULL, '2022-09-25 00:15:28'),
+('110119491', '', 'NURINDAH SARVINA EF. RAUF', 'Aktif', 1.783, 2.934, 2.98, 0, NULL, '2022-09-25 00:15:28'),
+('110119492', '', 'BERTHA LADESTA MILLINIA', 'Aktif', 2.783, 3.363, 3.363, 0, NULL, '2022-09-25 00:15:28'),
+('110119494', '', 'FIKI HAFIZ FEBRIARTO', 'Aktif', 1.81, 2.39, 2.5, 0, NULL, '2022-09-25 00:15:28'),
+('110119495', '', 'M. RANDYKA ILHAM FIRMANSAH', 'Aktif', 1.3, 2.074, 2.203, 0, NULL, '2022-09-25 00:15:28'),
+('110119496', '', 'SITI ASIYA', 'Aktif', 2.804, 3.165, 3.165, 0, NULL, '2022-09-25 00:15:29'),
+('110119497', '', 'ANNISA MAHDIA WATI', 'Aktif', 2.136, 2.469, 2.508, 0, NULL, '2022-09-25 00:15:29'),
+('110119498', '', 'ANISA M', 'Aktif', 3.413, 3.273, 3.273, 0, NULL, '2022-09-25 00:15:29'),
+('110119499', '', 'ZAINULLLAH SYAFI\'I', 'Aktif', 1.848, 2.641, 2.748, 0, NULL, '2022-09-25 00:15:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_topik`
+--
+
+CREATE TABLE `student_topik` (
+  `id` bigint(20) NOT NULL,
+  `topik_id` int(11) NOT NULL,
+  `student_nrp` varchar(30) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `judul` text DEFAULT NULL,
+  `judul_created` datetime DEFAULT NULL,
+  `kk_filename` text DEFAULT NULL,
+  `kalab_npk_verified_judul` varchar(32) DEFAULT NULL,
+  `kalab_npk_verified_judul_date` datetime DEFAULT NULL,
+  `kalab_npk_rejected_judul` varchar(32) DEFAULT NULL,
+  `kalab_rejected_judul_date` datetime DEFAULT NULL,
+  `kalab_reason_reject_judul` text DEFAULT NULL,
+  `guardian_npk_verified` varchar(30) DEFAULT NULL,
+  `guardian_verified_date` datetime DEFAULT NULL,
+  `guardian_reason` text DEFAULT NULL,
+  `kalab_verified_date` datetime DEFAULT NULL,
+  `kalab_npk_verified` varchar(30) DEFAULT NULL,
+  `wd_npk_verified` varchar(30) DEFAULT NULL,
+  `wd_verified_date` datetime DEFAULT NULL,
+  `wd_npk_rejected` varchar(30) DEFAULT NULL,
+  `wd_rejected_date` datetime DEFAULT NULL,
+  `wd_reason_reject` text DEFAULT NULL,
+  `wd_npk_final_verified` varchar(20) DEFAULT NULL,
+  `wd_final_npk_rejected` varchar(20) DEFAULT NULL,
+  `wd_final_rejected_date` datetime DEFAULT NULL,
+  `wd_final_verified_date` datetime DEFAULT NULL,
+  `wd_final_reason_reject` text DEFAULT NULL,
+  `lecturer1_npk` varchar(30) DEFAULT NULL,
+  `lecturer2_npk` varchar(30) DEFAULT NULL,
+  `lecturer_created` datetime DEFAULT NULL,
+  `lecturer1_validate_title` varchar(30) DEFAULT NULL,
+  `lecturer1_validate_date` datetime DEFAULT NULL,
+  `is_deleted` int(11) NOT NULL DEFAULT 0,
+  `is_verified` tinyint(1) NOT NULL DEFAULT 0,
+  `is_st_created` tinyint(1) DEFAULT 0,
+  `st_filename` text DEFAULT NULL,
+  `st_created_date` datetime DEFAULT NULL,
+  `is_rejected` tinyint(1) NOT NULL DEFAULT 0,
+  `st_username_created` varchar(30) DEFAULT NULL,
+  `lecturer1_npk_verified` varchar(32) DEFAULT NULL,
+  `lecturer1_npk_rejected` varchar(32) DEFAULT NULL,
+  `lecturer1_npk_verified_date` datetime DEFAULT NULL,
+  `lecturer1_rejected_date` datetime DEFAULT NULL,
+  `lecturer1_reason_reject` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `student_topik`
+--
+
+INSERT INTO `student_topik` (`id`, `topik_id`, `student_nrp`, `created_date`, `judul`, `judul_created`, `kk_filename`, `kalab_npk_verified_judul`, `kalab_npk_verified_judul_date`, `kalab_npk_rejected_judul`, `kalab_rejected_judul_date`, `kalab_reason_reject_judul`, `guardian_npk_verified`, `guardian_verified_date`, `guardian_reason`, `kalab_verified_date`, `kalab_npk_verified`, `wd_npk_verified`, `wd_verified_date`, `wd_npk_rejected`, `wd_rejected_date`, `wd_reason_reject`, `wd_npk_final_verified`, `wd_final_npk_rejected`, `wd_final_rejected_date`, `wd_final_verified_date`, `wd_final_reason_reject`, `lecturer1_npk`, `lecturer2_npk`, `lecturer_created`, `lecturer1_validate_title`, `lecturer1_validate_date`, `is_deleted`, `is_verified`, `is_st_created`, `st_filename`, `st_created_date`, `is_rejected`, `st_username_created`, `lecturer1_npk_verified`, `lecturer1_npk_rejected`, `lecturer1_npk_verified_date`, `lecturer1_rejected_date`, `lecturer1_reason_reject`) VALUES
+(1, 2, '110118199', '2022-11-30 08:25:44', 'Judul X, Y, Z', '2022-11-30 09:25:01', 'kk_120221130092501.pdf', '201037', '2022-11-30 09:40:53', NULL, NULL, NULL, NULL, NULL, NULL, '2022-11-30 08:55:39', '201037', '182018', '2022-11-30 09:23:43', NULL, NULL, NULL, '182018', NULL, NULL, '2022-11-30 09:41:48', NULL, '199003', '218025', '2022-11-30 09:24:19', NULL, NULL, 0, 1, 1, 'st_120221130094247.pdf', '2022-11-30 09:42:47', 0, 'admintu', '199003', NULL, '2022-11-30 08:55:02', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_transcript`
+--
+
+CREATE TABLE `student_transcript` (
+  `student_nrp` varchar(30) NOT NULL,
+  `kode_mk` varchar(10) NOT NULL,
+  `academic_year` varchar(10) NOT NULL,
+  `semester` varchar(10) NOT NULL,
+  `nisbi` varchar(2) NOT NULL,
+  `nisbi_value` double NOT NULL COMMENT 'A = 4\r\nAB =3.5\r\nB = 3\r\nBC = 2.5\r\nC = 2\r\nD = 1\r\nE = 0\r\n',
+  `sks` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `student_transcript`
+--
+
+INSERT INTO `student_transcript` (`student_nrp`, `kode_mk`, `academic_year`, `semester`, `nisbi`, `nisbi_value`, `sks`) VALUES
+('110118198', '11016008', '', '', 'C', 2, 3),
+('110118199', '11011102', '', '', 'AB', 3.5, 3),
+('110118199', '11011201', '', '', 'A', 4, 3),
+('110118199', '11012104', '', '', 'A', 4, 3),
+('110118199', '114585', '', '', 'A', 4, 3),
+('110118199', '116471', '2021', '3', 'A', 4, 3);
 
 -- --------------------------------------------------------
 
@@ -722,32 +1340,27 @@ INSERT INTO `student` (`nrp`, `username`, `nama`, `status`, `ips`, `ipk`, `ipkm`
 -- Table structure for table `topik`
 --
 
-DROP TABLE IF EXISTS `topik`;
 CREATE TABLE `topik` (
   `id` int(11) NOT NULL,
   `nama` varchar(300) NOT NULL,
   `judul` varchar(300) NOT NULL,
   `id_lab` int(11) NOT NULL,
+  `lecturer_npk` varchar(30) NOT NULL,
   `kuota` int(11) NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0
+  `kalab_verified_date` datetime DEFAULT NULL,
+  `kalab_npk_verified` varchar(30) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `topik`
 --
 
-INSERT INTO `topik` (`id`, `nama`, `judul`, `id_lab`, `kuota`, `is_deleted`) VALUES
-(1, 'Satu', '', 4, 1, 1),
-(2, 'Dua', '', 4, 10, 0),
-(3, 'Tes', '', 4, 10, 1),
-(4, 'Memodifikasi Polimer Karbohidrat sebagai Eksipien Pengatur Pelepasan Obat', '', 3, 5, 0),
-(5, 'Produksi Marker Tanaman Obat Unggulan', '', 3, 10, 0),
-(6, 'In Silico Screening Menggunakan High Performance Computing Berbasis Cluster/Grid', '', 3, 10, 0),
-(7, 'Deteksi Dini Risiko Kanker Sekunder Akibat Penggunaan Siklofosfamid pada Pasien Kanker Payudara di Jakarta dengan DNA-Adduct sebagai Biomarker', '', 3, 10, 0),
-(22, 'A', '', 3, 10, 0),
-(23, 'B', '', 3, 15, 0),
-(24, 'D', '', 3, 25, 0),
-(25, 'F', '', 3, 1, 0);
+INSERT INTO `topik` (`id`, `nama`, `judul`, `id_lab`, `lecturer_npk`, `kuota`, `kalab_verified_date`, `kalab_npk_verified`, `is_deleted`, `is_active`) VALUES
+(1, 'Klinis Komunitas I', '', 4, '199003', 10, NULL, '', 0, 0),
+(2, 'Klinis Komunitas II', '', 4, '199003', 15, '2022-10-31 05:21:29', '201037', 0, 1),
+(3, 'Klinis Komunitas III', '', 4, '199003', 10, NULL, '', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -755,7 +1368,6 @@ INSERT INTO `topik` (`id`, `nama`, `judul`, `id_lab`, `kuota`, `is_deleted`) VAL
 -- Table structure for table `topik_course`
 --
 
-DROP TABLE IF EXISTS `topik_course`;
 CREATE TABLE `topik_course` (
   `id_topik` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
@@ -767,9 +1379,35 @@ CREATE TABLE `topik_course` (
 --
 
 INSERT INTO `topik_course` (`id_topik`, `course_id`, `minimum_mark`) VALUES
+(1, 48, 'C'),
+(2, 8, 'C'),
+(2, 33, 'C'),
+(3, 33, 'C'),
+(3, 48, 'C'),
 (22, 5, 'C'),
-(24, 0, 'C'),
-(25, 17, 'BC');
+(24, 15, 'C'),
+(25, 17, 'BC'),
+(26, 4, 'AB'),
+(26, 5, 'AB'),
+(27, 4, 'AB'),
+(27, 8, 'BC'),
+(28, 5, 'AB'),
+(28, 14, 'A'),
+(29, 22, 'AB'),
+(29, 27, 'AB'),
+(30, 10, 'AB'),
+(30, 12, 'A'),
+(31, 8, 'B'),
+(31, 47, 'B'),
+(32, 5, 'AB'),
+(33, 12, 'BC'),
+(33, 13, 'AB'),
+(34, 4, 'A'),
+(34, 12, 'AB'),
+(35, 3, 'B'),
+(35, 5, 'AB'),
+(36, 4, 'C'),
+(36, 13, 'C');
 
 -- --------------------------------------------------------
 
@@ -777,7 +1415,6 @@ INSERT INTO `topik_course` (`id_topik`, `course_id`, `minimum_mark`) VALUES
 -- Table structure for table `topik_periode`
 --
 
-DROP TABLE IF EXISTS `topik_periode`;
 CREATE TABLE `topik_periode` (
   `id_topik` int(11) NOT NULL,
   `id_periode` int(11) NOT NULL
@@ -792,7 +1429,23 @@ INSERT INTO `topik_periode` (`id_topik`, `id_periode`) VALUES
 (22, 4),
 (24, 2),
 (24, 4),
-(25, 4);
+(25, 4),
+(26, 2),
+(27, 2),
+(28, 2),
+(29, 2),
+(30, 2),
+(30, 4),
+(31, 4),
+(32, 2),
+(33, 2),
+(34, 2),
+(35, 2),
+(35, 4),
+(36, 2),
+(36, 4),
+(37, 2),
+(37, 4);
 
 -- --------------------------------------------------------
 
@@ -800,7 +1453,6 @@ INSERT INTO `topik_periode` (`id_topik`, `id_periode`) VALUES
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `username` varchar(30) NOT NULL COMMENT 'npk or nrp',
   `password` varchar(300) NOT NULL,
@@ -884,11 +1536,11 @@ INSERT INTO `user` (`username`, `password`, `user_type`, `last_login`) VALUES
 ('110118189', '$2y$10$S0iQ/3To6o31c1PFbI453.i0AtxYCu487PwoZ6Pejzqy8/usWWHqO', 'student', NULL),
 ('110118190', '$2y$10$C16jTOpypboZWgiLcYCud.OG/5RyUbeqk6MaAtbs/cmJ4ovaa61EG', 'student', NULL),
 ('110118191', '$2y$10$kPYIp7AcRAOu5kJs7ogwt.ozbA4E6jkAoU3CDMu2O0kNIFawR082K', 'student', NULL),
-('110118193', '$2y$10$kCEKaz/WUys1.6V/jfYLD.wFN44/WnY5O0NQstiIEH.XrcVn6yxeq', 'student', NULL),
-('110118196', '$2y$10$Vltvz50UGtqjQ.H11AyfUebyem5fjFrbJ1pNnIMNYWzNyU41Uf3xy', 'student', NULL),
+('110118193', '$2y$10$kCEKaz/WUys1.6V/jfYLD.wFN44/WnY5O0NQstiIEH.XrcVn6yxeq', 'student', '2022-09-10 11:50:58'),
+('110118196', '$2y$10$Vltvz50UGtqjQ.H11AyfUebyem5fjFrbJ1pNnIMNYWzNyU41Uf3xy', 'student', '2022-09-10 09:40:37'),
 ('110118197', '$2y$10$oIVWGOSLrcXBCtUzFvJzV.fUo/H/ZBM5NEBr0pajD2brbHJd3Mrmi', 'student', NULL),
-('110118198', '$2y$10$EwDLt4XnVyiQDSGxh3aj2OmvQIhjGIs7tEuMWfksYHZIkAOpOeyFu', 'student', NULL),
-('110118199', '$2y$10$rn2xTTEMqxZEVYh85ffAEeQQEbdTXOBVzSFXV5gSE.wcF17jdbAC6', 'student', NULL),
+('110118198', '$2y$10$EwDLt4XnVyiQDSGxh3aj2OmvQIhjGIs7tEuMWfksYHZIkAOpOeyFu', 'student', '2022-09-10 10:10:15'),
+('110118199', '$2y$10$rn2xTTEMqxZEVYh85ffAEeQQEbdTXOBVzSFXV5gSE.wcF17jdbAC6', 'student', '2022-11-30 02:44:01'),
 ('110118202', '$2y$10$/eWMh4Ce96IDy1AecfXb.Oyevg2WXQY8P8vRLGitECGqMYv1hlkAa', 'student', NULL),
 ('110118204', '$2y$10$iC6WHosv8G2kGdbBOPRFluyO0Q4wU7nwYYE.zYSI/C3fkc6RNHP12', 'student', NULL),
 ('110118212', '$2y$10$W5edeGfPgnpLM/t/foW7Tu4wcmKwWAFngdCgOxsvkOdRAxHEz3rcS', 'student', NULL),
@@ -984,7 +1636,7 @@ INSERT INTO `user` (`username`, `password`, `user_type`, `last_login`) VALUES
 ('110118410', '$2y$10$jv3pJtTIHc4M46rbmD8YnecW2U5TOKkh1gqImYK4U4mLzZgU3zUU6', 'student', NULL),
 ('110118415', '$2y$10$qxj/VY7v7adutEBeuqrWW..EtCuS8jTt9Kt8eJl0khVMGr8QQCKm2', 'student', NULL),
 ('110118418', '$2y$10$bjeGQfKy5SjmSYe/NqUSju3WZQcGpSz8x3vfdqbOcxUwQWJmAkmoS', 'student', NULL),
-('110118419', '$2y$10$XZeX1HP8dvNcCZ7p6h2xb.IEYuym3k685SlMxLRPRmqzk7TwKElvi', 'student', NULL),
+('110118419', '$2y$10$XZeX1HP8dvNcCZ7p6h2xb.IEYuym3k685SlMxLRPRmqzk7TwKElvi', 'student', '2022-10-20 21:50:49'),
 ('110118423', '$2y$10$ifhyWiUnsnP7Lc3AntsUBeeWgCfCB1i8vKjlLGUW/KQr6U9EVwami', 'student', NULL),
 ('110118424', '$2y$10$Uz9SGGLDTdlz7MPnqELeTOvBX9XXlYgFvXSJ8O6RhzdZDsb78alHa', 'student', NULL),
 ('110118425', '$2y$10$xoTefvtOcyiV/upKmqM6qeHOEeHLR6raLxdczYdnZ.amO.cCyqpba', 'student', NULL),
@@ -1012,54 +1664,415 @@ INSERT INTO `user` (`username`, `password`, `user_type`, `last_login`) VALUES
 ('110119013', '$2y$10$GlpQ/iHieLS6AkvGqLU1/.E/CoRI2NF1W83cUO.a3QSclTirA9FTi', 'student', NULL),
 ('110119014', '$2y$10$xgebQi2AbpfSpUFjGO51cetfXaxvhk41UR/RKhJyFd4j/9HS13wPG', 'student', NULL),
 ('110119015', '$2y$10$k75dJeqy4mPseg.RFElxaeziCin0uWaz.LH4ei/2irq8VXIVBTYce', 'student', NULL),
-('182018', '$2y$10$ZNAAHaEf0fVSL4J.uyfyL./dpvzE.JBBUhGj3TWL61htwBbHpfGZ6', 'lecturer', '2022-07-12 05:37:50'),
-('189005', '$2y$10$8WG7PkhmVb9CaEBs7eiboeUqH4Hf04x7d/k/UePuVtHrgt4kOF0G6', 'lecturer', NULL),
-('199014', '$2y$10$cbJiyXIdz70X9v/Tvxv/d.McuCeD2FDUpSrhnReuHhna1iBkolKQq', 'lecturer', NULL),
-('199015', '$2y$10$ZWNJRTpLgYp7V9.8Aoo1ru5SjilcGafg9rQC0MIdH1MkY3XljVEgi', 'lecturer', NULL),
-('200031', '$2y$10$O7agnX..U8OsCrIcHuzhou/OMNEJRVQEGKd7qPGuEcQKZba3/KGW.', 'lecturer', '2022-07-14 20:44:35'),
-('200032', '$2y$10$Z7yQBk1D6B.arGCA4YQ/9u6iXcPXws2ZZT1YLBqvnQmpyNkvykPrO', 'lecturer', NULL),
-('201010', '$2y$10$6ZGsGaybvyVmcp9LOAZqNuc8K7o5HcLexRz.DlxBmlk1PicVRLTe.', 'lecturer', NULL),
-('201037', '$2y$10$FyFWsXTcpD5CE4bEBnznIutp/piS/0gwtQuan2LBHUtbRX/8KehAy', 'lecturer', '2022-07-12 05:36:58'),
-('203007', '$2y$10$A9AXZz58FJvDpM3cr1pg/OvocvSzUwzsFSl6soj/V6BESRQQ0aXqq', 'lecturer', '2022-07-17 00:12:23'),
-('204031', '$2y$10$73UKEo2g6JuBFiTc/qeFO.LkcRcTbzXGgZC5fdmWiMa4c/EN3npKC', 'lecturer', NULL),
-('206023', '$2y$10$ypo75jFJdGsNXlTttK6zweyFpI8G5jUkYJkT3I2RK3qd4mB65p4.O', 'lecturer', NULL),
-('207011', '$2y$10$bHZy0HDw0pSy7vsbYqNA7uKGuW5H6B6/C01NX2WkecwfiLoIQSQMW', 'lecturer', NULL),
-('208019', '$2y$10$0UlarSGhjBjgGblaIpe03ub2igOMaVQFawLH6Rjt4C2ITYZWZ/k1S', 'lecturer', NULL),
+('110119016', '$2y$10$7r0iNxkHVvlo4yOcQHmtBOqIQnw5e7We3Ungh1WZhdD8DaNKavBt6', 'student', NULL),
+('110119017', '$2y$10$BosHemXsCw2eCGkCgXRPiOF/w4QSqLLdlpi9HcUunmKGBDJYtt3Y6', 'student', NULL),
+('110119019', '$2y$10$IvTR3d30XUMo3FK1bjo3/eGlpz8xJnQlxn5k.srhmNUcf9KCFQK8y', 'student', NULL),
+('110119020', '$2y$10$pZxeL6yCzhTJjJASIfb/feNyq6BOm13MQRSKP0KEUGJZrS3OzaHFe', 'student', NULL),
+('110119022', '$2y$10$x24zGjdqOw7u8dkW8PoYrO7pYYu4LwjdG7gHhGf/NtcsWR6VUWtQu', 'student', NULL),
+('110119023', '$2y$10$tHo4O2/.hwpOyetHK3gI8ud0ebernGsUblF7WAaOkAfvxdaJfnffS', 'student', NULL),
+('110119024', '$2y$10$kYB1j9ov5CiJNjTWWxPDO.a75JDsAjtGroGIa/Dwka5jXGtQ5xLz.', 'student', NULL),
+('110119025', '$2y$10$JQiTMo1fhRDahn9K5jhfPu53j.feoDV8o6eCAKzcHtU8bgnBJbTlS', 'student', NULL),
+('110119026', '$2y$10$kpWQuF3zVy0zBKd78khZNOY7gHavr6EKBq2Jnebll.7nI9IcCCGey', 'student', NULL),
+('110119027', '$2y$10$GQ5YVIOO0Li.H.SKXHb9luv9MZTLZFSAC4GrVLP6WddwoT1lvtwBS', 'student', NULL),
+('110119028', '$2y$10$9lEy.UNBc9WwvCoNYWtfu.Vzvv0Ujx5zvfA5Zg8pQ430g7NVrcQoy', 'student', NULL),
+('110119031', '$2y$10$mVBIpC/v/T03UQ5Aygx4ouarQFtZTxuXfA2NjN3Cvzp3/7X9aAMF.', 'student', NULL),
+('110119032', '$2y$10$0jj40/5qvFSFhQhbLebEYODsWqK54tzLNWd9OYaH5Z5u1iGs6ONsu', 'student', NULL),
+('110119034', '$2y$10$4eSw3qrl.pnuFcsUehjQOOsfnDu1LzftJogvZhWWYkrwGxlh2O0ya', 'student', NULL),
+('110119037', '$2y$10$iSjDnZYtLrgJ2qBLIFXul.wJzD5n8hyK4vxR.29ybdsvrpm8ltJr.', 'student', NULL),
+('110119038', '$2y$10$8OdVpj3xKSCJpOVUpf6BFuuwwzNmlik1bU/cVLBLu0pr6FwLg.XP.', 'student', NULL),
+('110119040', '$2y$10$HSWnmrUxZGqQjxJECaNuNOnmssMPaAsO9VLWhwm.0uGtyQkOljjg6', 'student', NULL),
+('110119041', '$2y$10$SBsYpGdtZiH.NmTQc.xL8ORmNaBZQCj4pF2MqQOwwfNQ7qJeiDV5.', 'student', NULL),
+('110119042', '$2y$10$FF8xRwzHD4i.QL.l/Dk8seC.yOW6OoOPFPTzeMbJIzEnsS4mpwpXG', 'student', NULL),
+('110119044', '$2y$10$Sxsmx/.pB7wZhgUaVgEMHOlUsvMb/e5SRCiEtbbCjxbJMYHBVMxne', 'student', NULL),
+('110119045', '$2y$10$rG6rjOwkt4cpzUGnikG.H.HWyBnj75HiuFdwvgpDWf5gQqjDS3fWm', 'student', NULL),
+('110119046', '$2y$10$tRm2xq9Uaneqz/6PH79SSeCxj7anvSa1.xJfWQM3UBYJITAn2VJgy', 'student', NULL),
+('110119047', '$2y$10$B8L66mudptiYxLPgFCQ8HelAjZdvz8Z5eqZGziTkNgWbhCLZ/Ic6q', 'student', NULL),
+('110119049', '$2y$10$9lmichURHSYphxcthLKnAeJ.sRWR4f7u3tEGV3213knurIE.ZVi3e', 'student', NULL),
+('110119050', '$2y$10$IdhdQ2yn9VJg0d8zFbx2PuZM.IIP4fw4NqLfhIcYq9s5q16MCsseS', 'student', NULL),
+('110119051', '$2y$10$3oRaNEeTef5urR7BZeyB.eqEBSb8QrSKgI/dJmjN11NNGA5YYe9Vq', 'student', NULL),
+('110119052', '$2y$10$vQN1MqlLvDe45wiEyFetxOuTpsPPiyttSn3Gi4y49VO2oHsDjK01G', 'student', NULL),
+('110119053', '$2y$10$WECgjTfgdf/E8EdADhd1KOQY8GYMtTLtD39KTVEcN8UG998LcFDYe', 'student', NULL),
+('110119054', '$2y$10$zYDWk//qSZU9OL7VVxtk.uWEPHHOVSVyjohrwsycomhDTdRAIW1xe', 'student', NULL),
+('110119056', '$2y$10$KYXDBDYJH/qROrbh6.WW5ej5u0r.aux/uWSWMhYPCuzN0v2nrHtry', 'student', NULL),
+('110119057', '$2y$10$f0aN0Tad8Cop8TGAfjxb1u0OtKNRrrQBBc2cOSWJBfL7187MpSfzO', 'student', NULL),
+('110119059', '$2y$10$KmdagZSowJ0EK.DrSR87TOzQvhdjFHxs7Cf0SISmlPXnsv/lDMZpG', 'student', NULL),
+('110119060', '$2y$10$VCwfvTVuiRkLofZ6bwqx.eBzBkdi3DQfeZCGwp0E7.JkH7V6Vlq8a', 'student', NULL),
+('110119061', '$2y$10$gZM/9fjuMZvIYISFmjylP.iiow0k781haKtSm93XvjA/2iQWgzgPO', 'student', NULL),
+('110119062', '$2y$10$xYGEkQg.KYI5LkLuAM3qMOql8arNOBtfY9Cj3PDCYq2Nhh42hcDHG', 'student', NULL),
+('110119063', '$2y$10$qVHD065eb5nOwqHWDCGEYuP0X4Fov6iOurJzV54SnVHr2tlm03I3.', 'student', NULL),
+('110119064', '$2y$10$M82DtsdHOc0HnYio2lQJIegG.IQLGhsReYYvMxc5X9M7SFjdm5d1a', 'student', NULL),
+('110119065', '$2y$10$QiUrT7Ay2U8YgjfwdVZ4NOiODlg8YlcEzDmgQPdGXWT95R16JcXbu', 'student', NULL),
+('110119066', '$2y$10$9urqYfd5VL.rKuEJT1LFveEEFGOKxC0fw9Jy3t./N7YJm4wapIdw.', 'student', NULL),
+('110119067', '$2y$10$7uRryytwgMCx9Ku4NSYU7.hKKpPtl0G4SyfZH3KSKzf54.EZyFND2', 'student', NULL),
+('110119068', '$2y$10$GgDDDWUPbi8iJfhcmt7Q7erBjrl.eI.BzcH8XgeMbHEC/IFR2wpWO', 'student', NULL),
+('110119069', '$2y$10$PpIZp9q5jp/EqcUX2PX2revHauNsSA30oEn2Jkzkl4Qyl.S7UBOSi', 'student', NULL),
+('110119070', '$2y$10$Q0in3Nn0OCefgf9KE7PvvePxjWz7WdVO5XfXU4kHYDnGW/wYzC.e2', 'student', NULL),
+('110119072', '$2y$10$NpvFIE4iR9ofo4/BxJdfC.y.k3zz0fZOYn0BNTGWtyDGfOMS9BOwm', 'student', NULL),
+('110119074', '$2y$10$mYh.GVfTU1yqOZmc1MB00eNENfwf9W2eEQbUXrbRZyj4GcCQ8KBZK', 'student', NULL),
+('110119075', '$2y$10$E5f4DAlx686Rw/VXcTBiLeJFWs.F2KMVinMq6DEks2i2XUnD4b5ga', 'student', NULL),
+('110119078', '$2y$10$ENQujGrpplshGWAY0puM/ucaBK0d/n40kgJ1ZZ2pQUp63W9LgNrQ.', 'student', NULL),
+('110119081', '$2y$10$ulhwDnuV39ELY90/boPEN.ktuSDh6Ymn./.DvnfHnC7F4AFzYxfpy', 'student', NULL),
+('110119082', '$2y$10$2TlkXwwQfVSvl6RVo1F0EuYKfxF/EHcTDIcJOalffTo94Pl4wF0kW', 'student', NULL),
+('110119083', '$2y$10$8//QuyXXTr26hTZ6f8hEze7vnGVFhE.T3ElyN/EBTgFSYpWcMDb8q', 'student', NULL),
+('110119084', '$2y$10$fPgMpS92UYLHn2OcHjdF7ePSMf48AVcGAmyD7WYts526Fv2hWYLye', 'student', NULL),
+('110119085', '$2y$10$eDeYmi/70PKzX7pHYEFViuNEJrxi6n3AOnZY.lXK0O.SjbMs31tXe', 'student', NULL),
+('110119086', '$2y$10$3NGCQaJDtH43TM8iiykqbefNYpTJ1cji.dxHscQqsaYPsLXk0P/va', 'student', NULL),
+('110119088', '$2y$10$a46KK7pOvut73kOWnl6dt.5y1WFeIdZliECy58HC7iPx6TcAEOQVy', 'student', NULL),
+('110119089', '$2y$10$cPE1O6M4BHtl6j2PY.wej.yZmjd8wP/0/58Ollz/qpRN.ZriXFtRW', 'student', NULL),
+('110119090', '$2y$10$QyMcOONUWGGo7L91jj3c4OiDylV0O23IcoJb1wkTmyBWyCSpZCuju', 'student', NULL),
+('110119092', '$2y$10$c22XjaMHmiBiYEMl1bqJ6e2MYawtSTp5VEvaeoTA8ffQ9W/WTGYHK', 'student', NULL),
+('110119097', '$2y$10$WS0o2r9WC4aEWZhdddLKTO59eaNCU0nIk2bBo6JqDgj087Y.L7q6m', 'student', NULL),
+('110119098', '$2y$10$K/xi1Lk4mX7lwK4ftlMMk.DFl81Rv1NXrcOSxyPBGLfbuTzgZlZAS', 'student', NULL),
+('110119099', '$2y$10$sGVJ40L9FOc25xZ5JXnuxOPCVWArE.wrrcCkQS9/TEL25.RzjwZCW', 'student', NULL),
+('110119101', '$2y$10$w/RCgNqfxLxznTXM5xYAwemiYiuq7.FUzZrjPikVVwKKhRQuz24/q', 'student', NULL),
+('110119103', '$2y$10$bP4yqvBEDdXwEjdakIQXjOjlbShLU0JWbiKeDcjAfzG/0yn8luS/O', 'student', NULL),
+('110119104', '$2y$10$cGilyvgSUZB1K1nOsdPRguDCHPsAwMrXOvFAZLjfM/NgjJvvm.p4a', 'student', NULL),
+('110119105', '$2y$10$OP5B01I8ORgPQPqcjrr.RO70CMxqaYChW3SZkM.SZOqGC/Cag5ArW', 'student', NULL),
+('110119106', '$2y$10$DTYZHPvdY7UqFWsOXFE/GOKNOjVFaXaGBTCcbZXkLLrK9tHd0dEQi', 'student', NULL),
+('110119108', '$2y$10$O038O.UOswSDl3ZqaOpXqeZZrxX.ZeywWg734Xxh6v8TZA/6vB2tO', 'student', NULL),
+('110119109', '$2y$10$2OS.XodDMIt2kjnYRpHOfuJ8yDWbcELrLtV.DVuwgBlXD7nvKOa6y', 'student', NULL),
+('110119110', '$2y$10$Wj2WPn39hXFCgudGa3oQfeTKcbFhrbtSMN99IrQAZZ7VNFI0Hqboq', 'student', NULL),
+('110119111', '$2y$10$yuGcaf5wBejGqx5r4ySpzOF0t6Lb9BDzpkIrQmVXARXwp2DKdpUj.', 'student', NULL),
+('110119113', '$2y$10$EKeg2RE.yPdOHMiwxqI4RuqTZkMRUYIr24e68Fw.1m9erFDPi9Li2', 'student', NULL),
+('110119114', '$2y$10$Fnqfr13SOstSUIdAFB0UAeVB4A.xpvY.KqFI1ze8QmkRmTdRKbYy2', 'student', NULL),
+('110119115', '$2y$10$AFZHPPVDHAAc99/v41kBxuZFPxKOETVib9Wm3CLZ1BFDZzO/LEIe6', 'student', NULL),
+('110119116', '$2y$10$usBTPWJ9aRTiJkzALg.ZYu7wes.qAMjhMj86kafgmkIsGHb4GRGdC', 'student', NULL),
+('110119119', '$2y$10$Ag/Pz2J0G2I.qeviRR70gOSOT/GnhgrSqP92gZeLoAfubuleYsAMK', 'student', NULL),
+('110119121', '$2y$10$1Dri1rSb2zwhw5Wv39CdHOvs1vj8eBDcHrZKlq3WoxmclIh5psqCO', 'student', NULL),
+('110119122', '$2y$10$Bb2u5X7RryNZfmY2jm36/OV2tR0IlKBsDwF0tjXjx0NYMmnMqhtYq', 'student', NULL),
+('110119123', '$2y$10$Ap1DNfigpc1oAz5z/Oqxqevm4RmNAwbPi3.ZeLd52lWdGJ4ZIRUim', 'student', NULL),
+('110119127', '$2y$10$o61BnT9iirn6PB.d3sWYB.9bpzBaorDCbDuWCScIExlqDHuQZxYhK', 'student', NULL),
+('110119131', '$2y$10$vPuZfnfcn9nZXrtcLFPP/OemWBhxWHKPlRHeZqnoW3MeYjvQVmXtC', 'student', NULL),
+('110119132', '$2y$10$j4.ZMTZVuA0G84n.o.PIpOEI4m2EIReCzOXErcOjXz2mpI/YNbJjq', 'student', NULL),
+('110119134', '$2y$10$w8q6CABHQN6Dx6PUr6iNruQW6tO6.WKfWzsASsAV0OlZGNiDeaJ72', 'student', NULL),
+('110119136', '$2y$10$XsrmHCQ7CVa8ouFYVJcBmO.Y/gBThZi8kuPkOylsppsSrSuxpEmwO', 'student', NULL),
+('110119137', '$2y$10$R7HdcOjPY8lop2yePXHfuOPqU6pFucqkV9D2h7tpNV3lWqJe9TmvW', 'student', NULL),
+('110119139', '$2y$10$aQOUnvm2rDwtKZDINKb5IO8azxHUpJwY/UQHPyXFma3js18ohUzE6', 'student', NULL),
+('110119140', '$2y$10$BVbF76v7VaJqFUVBNo3ksuCgw5G6rsGO8R2FhQWNBJr8fufZAb.nq', 'student', NULL),
+('110119143', '$2y$10$PUrG4xcbQXuzHthCUAdOHOpJ7cu/2RDtt9vDAkne1hhYdeBP0fd4S', 'student', NULL),
+('110119144', '$2y$10$wsgQPUbz.cz4FLVwP94HaOEBEkXA9vq2BfUArQat4JAmnSprkyy8y', 'student', NULL),
+('110119146', '$2y$10$/vwt8vM3/F7w53y8Fza6D.w2gsW/rChu9VmPdYaFH3e/cy2SjA3LC', 'student', NULL),
+('110119147', '$2y$10$lyhWh/OnkToi4Q2JYFldcuij2pYJJkcEX2RqE6B0wH2Io8YJrgw7m', 'student', NULL),
+('110119148', '$2y$10$P0RDl0g5ZN5cPy7SBUA7qeU5zJvLjUWUVUNxILDH7H/HoOo/kIZHm', 'student', NULL),
+('110119149', '$2y$10$c22vXAGuMYb20Hc0r6.XPeh1prhicUhD/6ocgJc3LGNtCqwNDmh7y', 'student', NULL),
+('110119152', '$2y$10$HHLhDJ7Zgp5lUTFV2pCOk.qey89HWLjGdthy5LWgjFFm05g6kNvGe', 'student', NULL),
+('110119154', '$2y$10$S2xrhxcqFjegBJGEdQH9QuVwVm3JUkEfKgX2HrPwHZMpbXgzkYpKi', 'student', NULL),
+('110119155', '$2y$10$kB69u3a8yvIyGW9E2JBQhOoWp4QSKfsYLY18Bskidw/SBC9D/QhmC', 'student', NULL),
+('110119156', '$2y$10$jcL.MnLDiNA4ylz1HEkT5OGYivbDxoBNBVmb2VNIS/w8ubWesuH5q', 'student', NULL),
+('110119158', '$2y$10$3Ee6b0kSGp17Z0sJYGRG2ONQ/rynGI1zF/B8hnO6SGTHAGMZkB/uO', 'student', NULL),
+('110119160', '$2y$10$3.vqQNHG4Lfz7J142Nr8P.bzk5hQJVPyAIT1m66nhlHHSEDkcdKuW', 'student', NULL),
+('110119161', '$2y$10$YNHj1VsIxz5y7QT5a1LtOer6J6mJtvkAzkU3ESn74m2CPvtOj2rnC', 'student', NULL),
+('110119163', '$2y$10$94qEcPXD24mR4diCGnBL2.bSK43ddWuFg7WYfGgvFz2yIN8AQa..O', 'student', NULL),
+('110119166', '$2y$10$Ft9FgMt/1jjgz73rYVkxA.MoXfP.OMWc/OxbjUtGB1bQh2Qys2Vb.', 'student', NULL),
+('110119168', '$2y$10$XEmwQNHd8Dne6k69f5KmcOWU9SUWbr4bHj8qBB8iFF7TG8Gqfd48u', 'student', NULL),
+('110119169', '$2y$10$jp3SLoaXciPZYQCwzlumouuo4OUGblKV5t9kgdjENUe.TRn3dzWCC', 'student', NULL),
+('110119170', '$2y$10$qFR52ULy3qTRA/KTS20TJ.sGn1TldvTFKJuCPfKBdPXSybwzzLzqe', 'student', NULL),
+('110119171', '$2y$10$vVCGNm.lxvo6KSK9Agu8fOBC1BCg.l0rsNcoHRBHgQO6v6932FB0u', 'student', NULL),
+('110119172', '$2y$10$CHwmScw2kseiSXrfWl86VepfCpvq951d3qYueGXRrszlF9rpMrVa.', 'student', NULL),
+('110119174', '$2y$10$NCJPUZaKSRa.6.keeCJXPueo9oKBIKYfUckwPdCQRcME1z9jPWMre', 'student', NULL),
+('110119175', '$2y$10$m6Ux6jKoKPZfFfIbt1dr1u7k3./yC8RWNE8lofBZzf/6T4o0AgiES', 'student', NULL),
+('110119177', '$2y$10$baHx5SwJd2FDLzwSndACVO2Bpw4D.XKEa9Qp1g/cLAROZ9D0tNp9u', 'student', NULL),
+('110119178', '$2y$10$274yrtVEITq4FaAeBiKc0ulgOXssDNIF6iPxIOPK9PidZBF5Lib2.', 'student', NULL),
+('110119180', '$2y$10$v5Kt8FYDA60ohy/qbUPR9..YpiNEXWKD.C3n3T18UoS4.OhfdOBVC', 'student', NULL),
+('110119181', '$2y$10$XiZhFLIMBDVoNgxiFQ8h3OKYxrNNj5ouAFGNXULMYCqFOGXi/NRcq', 'student', NULL),
+('110119182', '$2y$10$Wrq8aMo9bU3ZTxKRq7ZK1uMupXRSthx/as0IP7/RI3gi5dtC8DMsa', 'student', NULL),
+('110119183', '$2y$10$vnfKFMakAMtXvIsALVePpOveNARRNGUXYQ3ewPrMt855UMOvbtn8S', 'student', NULL),
+('110119186', '$2y$10$AH203Il90htx/Gvq6BszpeD9fvZBRM7gFgFZaKNopWEhQdZUmma9i', 'student', NULL),
+('110119187', '$2y$10$OBmWoL6CvqwJa4mRXyNC6OLxqcWKXXXIZkd/s8wkFEEvevUlYArzy', 'student', NULL),
+('110119188', '$2y$10$qyENrYJ86XhP0yXXZqoTaeQsLVP90kKmcV1Tli7rvSbUxw2BmqHVS', 'student', NULL),
+('110119189', '$2y$10$ETp.Y3KYFzqmYu34yhNgp.XxqK9ihPBY9O7PoQtePYhIchiALR1rO', 'student', NULL),
+('110119191', '$2y$10$DKe8pDtIz0EDEy9yMRv1eexD85gJQXrraUPJi0PJL6v1jr.qkSuS2', 'student', NULL),
+('110119193', '$2y$10$lLPubk9AMN5DRdc.nWpARue44R6Ee0H1mm.SVlDNc7i6B7Y18k9ZK', 'student', NULL),
+('110119194', '$2y$10$hXAWkYjvDlPLfJCUkrGG7eK2eC1OKp5mUrY.GeS/rfK.rQOrN5sfi', 'student', NULL),
+('110119195', '$2y$10$tsH85GFKwF8x67ui.aLESeZCU/mvSeIEDuNKnGqrtep8q3mJzrQOW', 'student', NULL),
+('110119196', '$2y$10$P.SlCWG1CPp/bXpsQV3mS.i9YJG.ayRdkKQUk/EVOnGOBZR6h/g7m', 'student', NULL),
+('110119197', '$2y$10$IH7oHEc/eBf.78gWeFiu1.tV2T1T99OrUvUBxFhXadXLM7/1T467m', 'student', NULL),
+('110119198', '$2y$10$ANYY36XYkA1xPVmt/0Y7gOSsoteESZsGq7mqf35BqXXlDlF9JoSQW', 'student', NULL),
+('110119200', '$2y$10$09WcgLyPYHqc6u88wXc3w.dM8JeUqSaTfa34UM8xhZarvJAGXC/k.', 'student', NULL),
+('110119201', '$2y$10$tb4tWOQLQWIul8rscP5azeOAY2UntVPQCAi6.xDeWjBANBhFpmSgO', 'student', NULL),
+('110119202', '$2y$10$mQUbdADUb1JlNtWr.gJ.Su9mpWP2TOZhjFgEI2LxLh4R7qjbYn7hO', 'student', NULL),
+('110119205', '$2y$10$XNMnKWejyUJ2uPxSRYILT.ivVNPux3TerN0cpdJCR7nMlXWZ20oVy', 'student', NULL),
+('110119206', '$2y$10$fjuyvTH0nZEsxGziF8LwleruxEvDqsZPgasCkO8ziyRbJkSjFBT6O', 'student', NULL),
+('110119207', '$2y$10$nL.yMG2WvofutqIrjMwCgegAsCuniQIiU7XRkyuJacRLHlvHhsQpm', 'student', NULL),
+('110119210', '$2y$10$95vum64Xy0AMyH7Ya0B/sO.DvbtRoqIsM3sQTv8lFHPFvGiPSFDbO', 'student', NULL),
+('110119212', '$2y$10$S.nkhEs5pr2RVnLCgdCHeOCT10UyjURaqIiy7/FF2Ja2OnMB9HOiy', 'student', NULL),
+('110119213', '$2y$10$lpiWS1y8LtvCbo6mjh8RHeQSP7PjBeajewMpqjj3p7RM1Elj3.f8S', 'student', NULL),
+('110119214', '$2y$10$8Ksi.5Yt6exOV8HWnBTchuXm8Z7x4Hq/Az50V6Blyp.yG/cvaCpyy', 'student', NULL),
+('110119215', '$2y$10$fQRRh5Yw.cBXd5UAS9CmveoHeYgkHKN6UD0DCyP8vEBqQ2KQyQjia', 'student', NULL),
+('110119216', '$2y$10$QgrCb0c9zR6ktncdIG3vsu6Hb9Iyz/CSqX/g/JK6pjU.xCRNTic/u', 'student', NULL),
+('110119217', '$2y$10$kdL/NP3ES8dENYpOqTmmKuVKW3NUo9WJ331ONcKKfRJILb8TWf/o.', 'student', NULL),
+('110119218', '$2y$10$jmk9yhQ.1oh6dq.QOJ3d3ORSdg2fa0vAwl0HwBW.bXZ7R3PUoa7ay', 'student', NULL),
+('110119220', '$2y$10$1ga0oMYiaPFJ/vvhkchwyuYjV3u8sy9joSQ5XjPKgjv0brmtF65H.', 'student', NULL),
+('110119221', '$2y$10$UgRZqFZwUzCQ1gy6PIFy1upDshZzHR3KkhM25bnrUNYv428mw.6He', 'student', NULL),
+('110119222', '$2y$10$BNHkaeNxREUepG3k8gj58uiQsAudIQuq2.H24jpFHq.JckApS7EgC', 'student', NULL),
+('110119223', '$2y$10$1B.OscY1OfG0G3FmuOo.HOyUWVVtD21cwggTOJVnByu4OqpTJn6JC', 'student', NULL),
+('110119224', '$2y$10$lFiuyx/xgHmqhvioUM6dMu37dVYwkWxL7mfCMkjFZWbpgJCZmmeoC', 'student', NULL),
+('110119225', '$2y$10$fGC9VMUAOW0ecoUKKPMD2uhvx/6hS7k3UEUlhfKhpyWHdz0QERI3W', 'student', NULL),
+('110119226', '$2y$10$GHLIWSNzygOuy1XaY/PIR.I/Ugh7tkz3sLVkKM6yaTdJpQvN3hN0q', 'student', NULL),
+('110119227', '$2y$10$m9IZyaTmTZhbkBDKGrsi3u1ut/GgBW2hPmXub.3mMCsMEKh/12H/e', 'student', NULL),
+('110119228', '$2y$10$9AqlbJJ192m69ysZ5ce4luLqEfdwWi6m2qXz6oXUfFCZF1s4D3qP2', 'student', NULL),
+('110119229', '$2y$10$Aotre57tB0hbpOAv5e7.eugVuQes0VH6LQrVWyYEdz1B3IsLf/KRG', 'student', NULL),
+('110119230', '$2y$10$WaO/u4PFYxZ4zedbLl8Jf.R9VYxTzIy4AZrjrutSeniqOXV6gJKjq', 'student', NULL),
+('110119234', '$2y$10$Npg99tPMrBDhyiag0xRQg.OvV6ImS9q93VbaRIvejEaVN5k0MEHr6', 'student', NULL),
+('110119235', '$2y$10$RdZpdxApVfVurQGdNu0RHedI5SgvBiw0ffmLMlkDjJArLH68e18b6', 'student', NULL),
+('110119236', '$2y$10$oR98AbTmtYp6.AXJd1UbJeYYdcLNsK5G5bi2nF79vbRh8oKJ7adrK', 'student', NULL),
+('110119237', '$2y$10$wmpgeNQzsrbDxMVAOYfyV.MoG0Hj1Hl2dl3IzJszHaCXAvRi2DOiS', 'student', NULL),
+('110119238', '$2y$10$1Jlz9j9iYGvpz0UMAQ2xs.2vr9dEdJI83hPhaxCaQMwMKfEl3G4XG', 'student', NULL),
+('110119239', '$2y$10$j0MjLeX5h0tOq7c9LsPYhekwvQl50Y9VUR9YvHRjS.djev2cvk9fK', 'student', NULL),
+('110119240', '$2y$10$.SuimWQrYjEKizuUfAyIKOnzahXu.O1ngXulieW1Il9HJSTtTsdF.', 'student', NULL),
+('110119241', '$2y$10$sh/Z27uLCRJKDzRMFNpAPOPPc7VkWaR6qgh08W16qQfZwTMTEnZ1y', 'student', NULL),
+('110119242', '$2y$10$446aHJUEqcao7aKW6ZhZs.neYzXBpUENbCB/IMsquptPpn96Qs1FG', 'student', NULL),
+('110119243', '$2y$10$NzVL5HkccM8aV9gany/78.OY9w9tbObpO2W994r87TwNO7RlzTU0O', 'student', NULL),
+('110119245', '$2y$10$vQdgkpUrRJuBP8N/HzcVDugucJiOU7p6P.2430qxHooXf/uHgvXqu', 'student', NULL),
+('110119246', '$2y$10$H0P1XaAIj/oOt3kTMvtBJu3LYKAxOtIkEjZFlgK2SaDhD4VdBW6S6', 'student', NULL),
+('110119249', '$2y$10$1/auD8.x.uByBHIAGKuCC.4JD1yb8kMUXYixxNPWi3pCo9K.U1mny', 'student', NULL),
+('110119250', '$2y$10$dfBYeIhbGiBmeZXa1lBLTuFVaWclCFZTaDidRgcq7sAZ1KePM1FI2', 'student', NULL),
+('110119251', '$2y$10$njp1uoO49PABpoqxxf3c5.jG3IW.mrD.QjiHM6Q1O2UuddJ17Yj6K', 'student', NULL),
+('110119253', '$2y$10$E9XIgiq6A0fjUwkAtkNSJud3Ge0Ja/rqkJZ6G3k35pC2QFr9fHF.6', 'student', NULL),
+('110119254', '$2y$10$Q2rseZeCOwAhFowoISLnoeFRSfViCtCQpxKSPqVtVtH9n5srxIZsC', 'student', NULL),
+('110119255', '$2y$10$nVfwxkyZxNuDz1ilFjAuD.nLihruaXJwZAsL/ZMX1yZr7NldmFepC', 'student', NULL),
+('110119258', '$2y$10$fNgOzuG5AYvKHgOOoRCrmex07cnMcG5/LjiI857SKHpPlUL/Vwnsq', 'student', NULL),
+('110119259', '$2y$10$Q02lO1gZhXLRw6d/VZEr0efWbNTY03A1V8SBuKVRYZYSrnHzbdD6O', 'student', NULL),
+('110119260', '$2y$10$So0BgxDK0hQnWsrhWP8ZfuSGfK80ls9gR2qhkh.DZSDLDvSXAA43y', 'student', NULL),
+('110119262', '$2y$10$uEXGY6OclMACAgUpTiJgqOZpCPo9AEYRNF/yYUvBJWUYGvgOCeGiy', 'student', NULL),
+('110119263', '$2y$10$EmNNtr0Gcfg94ItAToRWzOz/MMX2GMk9u2O89nmU6yrsoLNkw1Ph2', 'student', NULL),
+('110119264', '$2y$10$IBTpsV02qxzfGLKObu3b5O3/SjkaEcPv5RSfkf0Ku6CRx9TrK5kgy', 'student', NULL),
+('110119265', '$2y$10$JiLZL7cinKNXiXnJnPAZD.GsjZqiRF3x6AIgrsFNkTp4WE1.DXBfC', 'student', NULL),
+('110119266', '$2y$10$r/HbAAYP5aQ10IV7CYktwOQrUt46smC8mCquKL/ooAWdBcj2qjJT6', 'student', NULL),
+('110119267', '$2y$10$fFkbevzM9u7v.bkJMCm2xu9b/avOqK2oM9e3g.LRHjQ5mBZfcUF4i', 'student', NULL),
+('110119268', '$2y$10$zRR03RQTK3G9YZSs1Md7veP5osXMCZZwg3mar95GUUTtOQLy7llOW', 'student', NULL),
+('110119269', '$2y$10$DN4gXDZnpoCBF662nE0SqekzXTEZtnCErriHunC/JgyP/SGVdpAb6', 'student', NULL),
+('110119271', '$2y$10$Oo5Pdq6HQM7hDEfsIzxn8uUeYSz1oKUW9HfftDF.HfNb0FCAwF5CO', 'student', NULL),
+('110119273', '$2y$10$6n7.rMkcTlHSRgs0pFDBjOPKwH2CGOeTAtBD6syZe8UPt9tutdqSK', 'student', NULL),
+('110119274', '$2y$10$8O3mXgmsQAx1LiALnXysFu.yrLMjTeqnwpxY6wBj57p4PqmTfc3Gu', 'student', NULL),
+('110119275', '$2y$10$DP9RZ4WnSkhB8FVFkWWS2ui4FhqLhpKfcQwkKdFF74ZG/whe3rE2e', 'student', NULL),
+('110119276', '$2y$10$GdiaM73jPdLTOzeCZtwAteRHdnX/7gzHXQcQZ59nfrbKSKWO3M1xK', 'student', NULL),
+('110119278', '$2y$10$faUtZU0q8gNSLKiNgkg5/.Q17ZacUl7KVaSRlQshzA6KhOlgHQI.y', 'student', NULL),
+('110119279', '$2y$10$4zL4.Ywx/puqm60UJ.uDv.u86FX/diwcoX6s1Ud1oASOY6zMY57GW', 'student', NULL),
+('110119281', '$2y$10$OtGW01AIjA/Y4G7vLjP/7.ui1y9/k2y62KOClaF01ug3u9tziDFGa', 'student', NULL),
+('110119282', '$2y$10$Pg8BtpdxuD69DCJNDO/wbe4eYHKKacQ16itXrgJCyHhdRXfrgbCT6', 'student', NULL),
+('110119283', '$2y$10$JEQRJrhyF1.nsTNgnffD5uzRp3A8G0EOPxOswbeTeCwt5vvr2J.ui', 'student', NULL),
+('110119284', '$2y$10$31KI8PZ3hNYJPPaLnFX9HuR161XfRApK9xehQV.eQa7bvckgD7FKG', 'student', NULL),
+('110119288', '$2y$10$fUUjAxo7NWR6sBJshwjFnebVw9FKZg2hvV7435J9MGPROaVtjh3eK', 'student', NULL),
+('110119289', '$2y$10$A/fqh5plKAr.dkGdsJIo4.M0.M9qLEZDDHwa8PWkpLWOoKLzcQ/A2', 'student', NULL),
+('110119290', '$2y$10$.zRx6Ry5F9LqycUwqwDw9.G2uCVIA34LgubWB3HeAiWnmNhw.c7ke', 'student', NULL),
+('110119291', '$2y$10$MpCr/Twy1SYa4ZVQLMWlneZvVSPkDNTAToETPvZgiArWn3KG73GOC', 'student', NULL),
+('110119292', '$2y$10$312j5lBOwCFM2IDG.jNo9.EBbXPS6CTAHdn83qyAMwmLVvmVcsXFu', 'student', NULL),
+('110119294', '$2y$10$B7HHHNQff40yorJeEK41/.126KAMJyzdC7mKUn0sMJkRHN/EXYYGS', 'student', NULL),
+('110119298', '$2y$10$us4.TxTA0.NBwVoDt4CcxeqnIJ0gnQyXbV0kQMkJ.co6v5mA4wVJe', 'student', NULL),
+('110119299', '$2y$10$fplkLUWqFIy3guif.rCzU.HdgI2DcjOoBAJIiPDTywpbYGBu0nfgK', 'student', NULL),
+('110119300', '$2y$10$.O/yw8e8f8GpSxWrNEDLWOzTEcWdVEwKSEomcKqEZYtnvFu1WQGnq', 'student', NULL),
+('110119302', '$2y$10$lbiniJYvPm/Kirr1l052Eejsk8naDwjcQWYtJ.T752vtsq.swGh.y', 'student', NULL),
+('110119305', '$2y$10$gOOBfCLObshbefSLakSX0Ob7T6KBPeNKjUJxD3FZStyuQsSjjEXJW', 'student', NULL),
+('110119308', '$2y$10$RVyzmCeAxrtOf9jOXQEBK.2w5c9p1.g/AuuIi6gm8Bwdg4yvp9DEq', 'student', NULL),
+('110119309', '$2y$10$ADoqxW3zo/BcrxR9fhABQeG0STs/qysa1GuJ4uJAZMqDfqDdln7h6', 'student', NULL),
+('110119310', '$2y$10$Z3Uz0tcl5OH7i3JXrjb/pOyNP.hppfNF28slVObdqql3QYw81.Q3q', 'student', NULL),
+('110119311', '$2y$10$gw9FRFT.8ZAkCQMCAEL2vubbsw2JY8ZYR8VCq5.GSqRG0maW6AAl2', 'student', NULL),
+('110119313', '$2y$10$q3ZtZhNbHGaU0cO32EYFG.xGQ2P9MDyUxXRqQOqwGlWBmsNlCaeuq', 'student', NULL),
+('110119314', '$2y$10$1A02fR8WDxQu9uoMda/9JevJNJx/py8c6YlAcsGwjY9o2.UHlOygm', 'student', NULL),
+('110119315', '$2y$10$8jlC2s1aRJJCzhBtjNpMtOQBXkrn46nJhpmcsZOZmXkSFIV22sZE6', 'student', NULL),
+('110119316', '$2y$10$yv8EGSJpyleiAl7hc9sJcOjET1PIaSoLqb4bW5lWH244OH/3j3age', 'student', NULL),
+('110119317', '$2y$10$GZ03rWw..Qr.WTf3pKIyMOxv4mHmPc7zb3yKNuldrppHSzhqonFMG', 'student', NULL),
+('110119318', '$2y$10$GasP9qhy8PzkNZ3Un6wtdu6R.R02fGp93GuWKXgOj0GBt6TeD5Y5u', 'student', NULL),
+('110119319', '$2y$10$OL/oGYnUunY7fZ9TH3Mup.L84HGg1sL.XHx9d4A5AgHWbLvBM8UmS', 'student', NULL),
+('110119321', '$2y$10$Jvzsdbr6wrbs1YXEwQXA6.IgW5.bFvvDs.D/fe6ufLWCq3mZEaNuq', 'student', NULL),
+('110119322', '$2y$10$ig9pQXP8.XuUheZkuO4TP.Sq.sqzp.V2MiydxlCGu3i1.L.GpeGQO', 'student', NULL),
+('110119323', '$2y$10$5YejkZpd1kgoIVuVvU8KF.3IPqAx4xvEaatcLd3irpPHpJKdEq022', 'student', NULL),
+('110119325', '$2y$10$UV9f6v2Wz17NpjVkJPM.jez5Kqs7W1hcYs8KnQBRWeOX0sFSN7eeS', 'student', NULL),
+('110119326', '$2y$10$cMMqG/pgAFTHueiWO.M07e3C.OonNNW.Yq80EaLDXO6FhF2AETYdS', 'student', NULL),
+('110119327', '$2y$10$qc6kWc/15m6HUF03xnQJm.0uusNcHlRwR164OfDh5ahIGhbVvvcIS', 'student', NULL),
+('110119328', '$2y$10$ehFSe9js6U5X8HGI5lva0.yp4ICxwxcjG6OSpu5qLgwBetFJFcNny', 'student', NULL),
+('110119329', '$2y$10$yAodt2u4TW/iP8DVEurIaeyzy1umMHfCHinbrP84n/7wfK/jEyioi', 'student', NULL),
+('110119331', '$2y$10$Qrw6INV8SxjG3pS4Noi5juZuXcfa6selJQtQSMWosIGgVXvuQxVcy', 'student', NULL),
+('110119332', '$2y$10$2fu.lj1F5zJAbc4kJKpgwOxfLvr4CJ1gW.eAYB9GVw.aJx36ZjimK', 'student', NULL),
+('110119333', '$2y$10$B24csabC529/jQ.txbFjE.i6d4cT5ItsnjqX3JgkTwm/Eeole04na', 'student', NULL),
+('110119334', '$2y$10$8Xd3syXZhfOfgFusE.Uv7e26e1aTtDtJCaLYO9v71SqPqQOQS9x6W', 'student', NULL),
+('110119337', '$2y$10$462sOtb5K4.Kaz/gyFC9bOvV62YYK32aQPEI4sdFyZR9.kF.6UhK6', 'student', NULL),
+('110119338', '$2y$10$uI2NyxypqYneRQ.4zDxG3OXLg235NqYSUx.cVOIYBWlMvAioTZGYm', 'student', NULL),
+('110119339', '$2y$10$1i3vMvKuUVkA4kSNOZ3Qw.4c03ltdSDLKIZzBmwhYi2pOk0iPm.12', 'student', NULL),
+('110119340', '$2y$10$ZQ6BWlJ4uTL19OT//hkB0ONZ0qWsaeI5tijCo12qRnVVClb0r831S', 'student', NULL),
+('110119341', '$2y$10$eVjxosPWoI.wLatYGWXNUucpWs9RS/qMbc5Ihfy73ip39139lCBJe', 'student', NULL),
+('110119342', '$2y$10$yxOCS0928k4r3HgY2aGSrOSulYEy.qmTYuANX0egcLUrEbn.6q4IG', 'student', NULL),
+('110119344', '$2y$10$cu7iI90dCY4gM37guqKAmOb6g6RSFA/aVSXVNPtGuWVXnKGKaLuxy', 'student', NULL),
+('110119346', '$2y$10$J9lpv9AUh.DDY4Uhhz0Lq.LIJ8NS3hyCzG4XNwxq0XCrBfI0vSGw2', 'student', NULL),
+('110119347', '$2y$10$R1mABdYtyzErVI0BM7Wu5uSM27xM72F22VolHeh0ysqdbTHE7Ln7u', 'student', NULL),
+('110119348', '$2y$10$IenfB.srdgDq2whb70oRu.41E9EvjwaXQuxyBeqeMEVmFhtvDYUju', 'student', NULL),
+('110119349', '$2y$10$Aa38mEdQ943evrrZjPskI.LjihdPy5YerDEsN0gTK.Sd1EjkelRSm', 'student', NULL),
+('110119350', '$2y$10$UX4OhEdC1uajXlcvNlgXUOyu6Kch2vGiM9mdZ4sJ.yueF9OlKgMSa', 'student', NULL),
+('110119351', '$2y$10$lBpopFI9Pl19ZXgoTi/A6.4wX80DkNF2jgsmSimRxkuqkGb4Nb0ly', 'student', NULL),
+('110119352', '$2y$10$I9t3zXUpSTJJ4p/j3KFZBOrgNav4.Ci/a.cNZc0UOBC66pyEuz/Hy', 'student', NULL),
+('110119353', '$2y$10$6hJd5LJJWLiVIN/UNbF0j./x.31.K89rz/WWMdi/OMGYv/sy6c/Rm', 'student', NULL),
+('110119354', '$2y$10$IgHsvrH8F/DY5U3CO/Nm.uNUkLSV3Ly.XZIbfpGluy5C3CJcOPJQu', 'student', NULL),
+('110119355', '$2y$10$HyWKPZ/DGHbtls1YPJkdxehUqWdX5xglyOU3zWvOTGNsruKdZbX7m', 'student', NULL),
+('110119356', '$2y$10$hD8Zi9udpbYvP7kaELo..ugR5JEIkPyYEluciPVMgNncp2pq.82FO', 'student', NULL),
+('110119357', '$2y$10$wqR/.FfFIUQFYqudGCxx.O541WCAp/GcMWLRldIwleC8bWaFFz4gq', 'student', NULL),
+('110119358', '$2y$10$uscVG60kBkjgb.p/itDeS.2JPta/.aV4F3N1/uAyF0Xfv37UVupne', 'student', NULL),
+('110119359', '$2y$10$yXLq9UQeKxp3SRHqGZCFC.wYJyKes1DN9UabGuhoc2aB2gH.PD9JG', 'student', NULL),
+('110119360', '$2y$10$pJ4V66OVGA2N2rgXuHmuN.Ykyj02Rgtv8ceCmHweVxC28Y3F.rmVO', 'student', NULL),
+('110119361', '$2y$10$YaZvd2GvxdV7nQA9nxSrQeQs18acQ83Uls5REMhpXKABq4AfhjGnG', 'student', NULL),
+('110119362', '$2y$10$AXSgFarkLk4V1xaJQIBmhOu6h4BzCTO8i3H.zbVRvk.xbNMjbfqLO', 'student', NULL),
+('110119363', '$2y$10$oJPAqw0fy2Qc5f2BDLBQ1.ga8ulMPgBH2hNS0P2ypXxLC9pZMw3KO', 'student', NULL),
+('110119364', '$2y$10$3uVp1V3FCYbIOO06yf3uuewo/eqYjx50.AFDqlLiTBpwf9H2C0gW2', 'student', NULL),
+('110119365', '$2y$10$VuWVyEjqtelbiRhs1l7dPuhCW66Nnr7jCPm9zePDx4wGjr5bAKJ8i', 'student', NULL),
+('110119366', '$2y$10$NsUxeKX2iAq3YyehxtcimuP4lkDUnzniA8LkPux.csLYqPDjReylu', 'student', NULL),
+('110119368', '$2y$10$GWh/JoZ/w49WTgpYozbBp.hixUgpRh7dTaHd3W//UVvLWzAaytJk2', 'student', NULL),
+('110119372', '$2y$10$.7UlBwIGdTpY3ljVGH6keOzbOoPOfyMCrBbsqS4wFrIMK4AwWcP72', 'student', NULL),
+('110119373', '$2y$10$hgYpL6TWfVTjE8YRKur7TeWKkCkRQU6M0iLPZ7XZclV3bmZOsq1Jm', 'student', NULL),
+('110119374', '$2y$10$efV.oCUGvVMW90kvzr4PS.mUPWeS34YlblxnkFKg0w8E3AgTowTdu', 'student', NULL),
+('110119376', '$2y$10$.zJaUcDU/KVNdkdbR/ePoOicW0or2Mvc0QJ/n17or.mcBzYhbYNxO', 'student', NULL),
+('110119377', '$2y$10$58nUgTFnH9aYn/P7HyS6j.8LoGcriy4wSwqRaqukB0viISoYH6PCy', 'student', NULL),
+('110119381', '$2y$10$tVCKJsJNBMk6YMCyU6su/ewkl1WVzxQdlEl0hVLfy0GDRhqS4LJCq', 'student', NULL),
+('110119382', '$2y$10$Ae/IoGn34KC3Wm9NCTxK2uK5G/kMAUWtvWCyf3ikTLXhGOJgY0Vwy', 'student', NULL),
+('110119385', '$2y$10$UAWsUdjmQjDActq54sGWjuUYhWpPulj3nUhb0037wC9hVaZVuRS3e', 'student', NULL),
+('110119388', '$2y$10$y7Bdpcy5rJQ5lk31qc7FR.rynVcTmrvPezO6aSqd8FKUeM2uyevm2', 'student', NULL),
+('110119389', '$2y$10$7dNIQTCcE1oTr6FsEiqhlOetIt17agZIM.tW9FSLBC8RcYIGg5VHO', 'student', NULL),
+('110119390', '$2y$10$oDD9U.tiwJsyN2Ujs2Dcv.2zBLXJaqbnZI9xPt4tUJ0VkHYGRUku6', 'student', NULL),
+('110119391', '$2y$10$V7l.ZQCvdjtdV91mXcQvneSznjeSJb7wHYBlUSuSyBMdwB9O4T/M6', 'student', NULL),
+('110119392', '$2y$10$JGXrpXKgswMrVnwXHUuoXeiYl175AhIZdt.zZQFZumAZ66w.gT0/O', 'student', NULL),
+('110119393', '$2y$10$dMtNYGc3mWnIwi4jtiLNbOP90ytu3lR5cwJ0axxDShmQuLa63EzGi', 'student', NULL),
+('110119394', '$2y$10$4LyDBK6T2gQIpMQKDadcq.LvXqF4hJ09zTgP4aNJc.Act0Xdm7TCm', 'student', NULL),
+('110119395', '$2y$10$O.b7AydzRKTpF9PzwqW.HuEnLa/VE723myE6abywNb1Wbq2PqocjS', 'student', NULL),
+('110119397', '$2y$10$OlGZoiMBSll/nPqKDZT0q.CPdUcna05Go5U9mxPyvvrQbYYiJAJWK', 'student', NULL),
+('110119398', '$2y$10$KADNVFjIYPqhgMA7gOeu4ubQpSsEEOd23SKgsW/7vJuEc0.CgLyy2', 'student', NULL),
+('110119399', '$2y$10$x9TXxyynkMmGjMlgFbtLwOJFmzhWp32.x7.arVqFOk9jK3OzjFUBS', 'student', NULL),
+('110119400', '$2y$10$ke5LC9ZB6YIOEv0DfodrMeWcRJfWvPHZICbqvUxqLXqk/6Qp9togO', 'student', NULL),
+('110119402', '$2y$10$VqRtiqHXP24.gimlNrFGmuLa9T1ckeKw6UV3CKCx/XpWYkPWIIkBW', 'student', NULL),
+('110119404', '$2y$10$JNdPwRsvftn431S/R5UaCuXtXdlaxYf7goKWWvUtyGLKsW5G58CYe', 'student', NULL),
+('110119405', '$2y$10$JAlpNjfCEFctCiAp360RFu4MHneaua8CWpVrbpS2RpkU4AURs1bsu', 'student', NULL),
+('110119406', '$2y$10$d/G1dLfCKZtVRXrBeGfv3eOnsIhHEkG.M6qHsGLM3VPnqY4xDHMuO', 'student', NULL),
+('110119407', '$2y$10$NhqFE6y6Xc8oI5jMwmYJFuFRW/lajAcgTvU30SBhw5MJ.5RX4ZvdS', 'student', NULL),
+('110119408', '$2y$10$UEg76JOznCq10J690gvZz.fE2gT6L1VgkDz1KNt7VqmfAKdmGojaW', 'student', NULL),
+('110119410', '$2y$10$4TmEA6Xxr2FcDnxtDHW4i.xFnPStHW2Ff3UG0My65cuinq4gcbMx6', 'student', NULL),
+('110119411', '$2y$10$/ITtQ9SZUb3rXr7lXQvl/OdqpMWkI64vAXx0vY5x3aealzdgKGaUi', 'student', NULL),
+('110119415', '$2y$10$b6X7YLVWg8rW4yTeUrshqOFnSq6I4D751dsvMzHwgS6bhtwAb7uhS', 'student', NULL),
+('110119416', '$2y$10$k1p859wlsnktyDoiaDuCrOPtt2mEKTVDipk9yUlMOK1oevDDC72TG', 'student', NULL),
+('110119417', '$2y$10$MI9ivCzlNA3lWEoUOI1ohO3tLqKL.0p3ERxCoQFzlMgjODMAFqRe2', 'student', NULL),
+('110119418', '$2y$10$orpAIQyDYwia09JYp1JbiucwYnUsA4ADpYtDRdGCfuM/xkAoKtIlK', 'student', NULL),
+('110119421', '$2y$10$g6u7eDe/NswviJtUnLiw.uIw6ro5w3tz/L.JRjnU04EXmNBnrC.ym', 'student', NULL),
+('110119422', '$2y$10$X9IdOISl3EPv1/rig4xIe.VEIRuE60j78PWuS50JtvaZYGR.P6w/G', 'student', NULL),
+('110119423', '$2y$10$lC5hilruX9mexzxFxY5ZaOFqnWxZXNLcFbWqgQSLXD4ktijTg3W0e', 'student', NULL),
+('110119424', '$2y$10$LexlW8narfGdXF5c4/Hr8u1PYeXxgET2/EPlXhNMnUR5tKI0YvOjO', 'student', NULL),
+('110119425', '$2y$10$wudQy9uXnF1h43YQrkhRjODjQQcQr4Y0tYPpdXoEHrEq08bYtmZrO', 'student', NULL),
+('110119426', '$2y$10$jSAitZI.ymY9ywiHwGVk8upa3kZdxFyuVbxjcL1E3lk8AcebHk/12', 'student', NULL),
+('110119427', '$2y$10$zpg3uLlqDt8yA1PiLP3wAOcGUz7DrJaxbPgHqIerso4nerRaRzvrW', 'student', NULL),
+('110119428', '$2y$10$0VVFNZgauzJ4zs9dHjX87eTGnFTTJbQoe.LsbkJHy58SrND6UdPr.', 'student', NULL),
+('110119429', '$2y$10$.IaNcHaMr1Z0e2nvc83yQOWmongGdgQ6LEbh5Lswtx7hPCOClwWoq', 'student', NULL),
+('110119432', '$2y$10$qar0la1DzykBKhWMagIGS.7UFYshDOokrFNoiGF09pb0EGxb5/Pge', 'student', NULL),
+('110119433', '$2y$10$HZ17Wnitj6GB1U3npX/ThejpHrI6oVMOqacTUPIkVw6RUxz6c5BYW', 'student', NULL),
+('110119434', '$2y$10$Ge8KSMeNDT73Grh5jL2aIuTtERxweNyB1rbF/TxufnJ6kpXP5OHyG', 'student', NULL),
+('110119435', '$2y$10$ixVOGDYh63KsKLnD5qQcwe.u7Krw15k8EbyXTYS9x08s53PAwW8xq', 'student', NULL),
+('110119436', '$2y$10$Ib7NmueZmntVkNZ856Y2wOLopQiO0Hxe/hG9JwLuBX2Q13qCLdkT.', 'student', NULL),
+('110119437', '$2y$10$jwSlAFEfJjU5gRCkh6IYM.n5JNNcGSeWCdEGFiJpzGHzOCGssF3Y6', 'student', NULL),
+('110119438', '$2y$10$fNpLj2JxSH2dNXFdcfSDCebt/f92m9MFCmswTHqRXlnk1b9BplNpC', 'student', NULL),
+('110119439', '$2y$10$MoQvbHM.vYF7MgrT8UVuKO8CDRaMpwSj2X76CE/xDOsDcQ.ADqXEa', 'student', NULL),
+('110119440', '$2y$10$aJt159wcQRbrkondsJaloOMeSJnIhURRrLFU6EMfBrjRYatv3nnqC', 'student', NULL),
+('110119441', '$2y$10$LSmi5MHPt.H3M7th0sHbzOEQ0PmcDUsmObduUllb9bpMyGxGy0/Zu', 'student', NULL),
+('110119442', '$2y$10$S2l2VFHReKHyvRUxfMrvkuXHlueo9nnP5h1nyjMhZgTUcOAG4oU/q', 'student', NULL),
+('110119444', '$2y$10$wymg300RPaP0GXyNRNkwUeRrqyWeto74.5x/.uBh05wdCo8TZ4jO.', 'student', NULL),
+('110119446', '$2y$10$ZDqTVAZTqFtfQ5dw.w6h9e2cubwNGfFP2qgsRiLSEAm8gV1OXs9x2', 'student', NULL),
+('110119448', '$2y$10$AN/RT0isOiwb2ghdOob/fue6LzABCOFZet8QWPsVRmzeQnbg8x6Mq', 'student', NULL),
+('110119449', '$2y$10$b4vIrA9yk/HSRUXCmkPFZeJLpYcdVH71yxgahf/iGMkgUxP9Mmy8y', 'student', NULL),
+('110119450', '$2y$10$QqQ2cjMY1oV.CkAsjSU9WeRuCeHoywUeiBegR3WlXv7xn94FaXavy', 'student', NULL),
+('110119451', '$2y$10$XOQUbp9pmwKXxAt1TTu1MutdvgfA/x0GMRevLGoSfyKVnnfCNDsSm', 'student', NULL),
+('110119452', '$2y$10$qg4UhJyQ2UV2j.QOPI6mZeLVq2lmyZy0LdhRsRrAnD8QLs2m6F6ai', 'student', NULL),
+('110119454', '$2y$10$gPmfZkYGCy9nxDdf.3ikuePkKVvzNqoKcKzk5OVxfywCSZpE3QbNq', 'student', NULL),
+('110119455', '$2y$10$k9/Pk7CXMtE8oOjyIiuZV.uhEli.K4K32Gv2eqQfxnYoAHWonkQ7.', 'student', NULL),
+('110119456', '$2y$10$yzQcvmOl7IPURobH4p7nO.zTcmXbS12uh.SZmikg/UkMPXMlMANeS', 'student', NULL),
+('110119458', '$2y$10$IuXzZBW8imkU176noKuaMu5p4D2xdWtJwhV8fhye77fWRPiU2oWSS', 'student', NULL),
+('110119459', '$2y$10$zuwE15XvJIa89gLYlyvgruEAiGl3Hpy180N4o5rJY2d0nk2ND2Ix6', 'student', NULL),
+('110119464', '$2y$10$pYJ3vR/WTYjenG5yvrcas.hk8vaGpEOau4U1t3NlCqjQ4tW6iWltq', 'student', NULL),
+('110119465', '$2y$10$OX21EQgcSWB7P/Mp0566RunDmt6IdE6iGBi7ERR7CUh/tlroRzI0a', 'student', NULL),
+('110119466', '$2y$10$Dyhkg9B0UBIINDgGDsMXsuUunKb272iJ1oCtisJSDBagPi6YKkDVW', 'student', NULL),
+('110119467', '$2y$10$roJWU93zPfQAWL/nqZJQD.mR197ji9xGmwt1rfdmpg7vr287d2MyK', 'student', NULL),
+('110119468', '$2y$10$2ZLx31KNxy6zBmXGq5/cxerOp/ihJqwQojeB3Oa1Ha4fUl64aciGa', 'student', NULL),
+('110119469', '$2y$10$56A4oK6Ze.iUlYcZQ3095.2vmxiA26Cy9cnD/SOwnljZpspjZogbu', 'student', NULL),
+('110119472', '$2y$10$8gziovKF5/r32qKmOX.xTOsjnNWH2ZOxGckXQloUr71bbHk3L.PHe', 'student', NULL),
+('110119474', '$2y$10$3lXaIUxwVsFKUwZXsqLBnONuTnywsW1rsLq8kuK/hReLgiI90c6A.', 'student', NULL),
+('110119475', '$2y$10$K/WpJFtqOi86CTircxjQC.7VBMU9iIiN.R1ZyCvl3C9EJYFSXSe7G', 'student', NULL),
+('110119478', '$2y$10$AxAwX7vp0pBTup1X6aH/wOnwrs7twRUQNfFb4JD8kQuV80F5tFZzy', 'student', NULL),
+('110119479', '$2y$10$EwHNSxqU0g72kLs/xBnFKeMcP5Zlho1hhoX6V6WbjVakEPE6jsmp2', 'student', NULL),
+('110119480', '$2y$10$9bWIGpR.M2wNBabD.q4khuQ.ICPne09Qt2PPvGSSsarp/vhtvZIdO', 'student', NULL),
+('110119481', '$2y$10$ipRKgkxdctLXS2ABwDe8XePume5kRZWmB9xx9ct/p214QY8gc9wZm', 'student', NULL),
+('110119482', '$2y$10$uhHix6gLflfmRHsJD4dO3O6uwbqu5fq9FGzhx8/mVHWnnzRFyqXui', 'student', NULL);
+INSERT INTO `user` (`username`, `password`, `user_type`, `last_login`) VALUES
+('110119483', '$2y$10$KoiBB9ymWvtdxcmM0/m/8e372rQxzwk8Wui5pLFFsE1JmKqZFoXOq', 'student', NULL),
+('110119484', '$2y$10$VaKYfzVPIxOYhTJThtQiouDZ13gEOpdHFn.kH.7gH8RhlAk5IydN.', 'student', NULL),
+('110119485', '$2y$10$uYPQKpihPc0ug70gnE8Hpu8I.qqqLk7etXvAtEMoSjqL4.9pzPT.i', 'student', NULL),
+('110119487', '$2y$10$mCsVKJn6IXiHweglltG2du26WeZaRhYioS0ggbdNeVPqVZnyjnwQW', 'student', NULL),
+('110119488', '$2y$10$VnD2iUO48QhNGmcY.9ctGeW/7IoaPSzCFVrXk2Kdb4waKb79n2ILa', 'student', NULL),
+('110119489', '$2y$10$/n4FikJ0NpWI/lzJC/Lhb.vtBpTQsMAcb3IB8QMpx89deX7GGnvnu', 'student', NULL),
+('110119490', '$2y$10$.Rpmkp8.ukH/V0rt.wTPNOzXFy6Dm.wjHJwv.akM5u.vcigzzrPaS', 'student', NULL),
+('110119491', '$2y$10$RNUF4EfT9RtRiOZoevI1cudfiz7GnbrJbHFQOueUh1gvSKFddPHbC', 'student', NULL),
+('110119492', '$2y$10$1gtESydzGjvpfUhxG/2T4eF31yK/cNdblqdyrNPiDQ.pUATmHUCW6', 'student', NULL),
+('110119494', '$2y$10$CpUtXnjN1W/q2qrHPntxYeZDljDRDX/jX0Zpj7/gQrJt/oYiV5xb6', 'student', NULL),
+('110119495', '$2y$10$DiXNNV68ZOQhPB/cHxZYAujbC./phRdOEpM6K3vrn0izXSb.cSlQ6', 'student', NULL),
+('110119496', '$2y$10$UiWjgfNBHieMYqGKetk.ueI9UEHt9sTCHI0EsLSd/.K34QHUQ04Ym', 'student', NULL),
+('110119497', '$2y$10$rWBCcEDzN/9Q79SXn3MJ5uwSRkvYUKe6w84IRqqsdAZxTBhTSoNOG', 'student', NULL),
+('110119498', '$2y$10$SYg0pBjaXJVsoz6bz9sPG.kni3LMk6yXqf1VMS7PZNon93iXQv0a.', 'student', NULL),
+('110119499', '$2y$10$Xgr10t7g.H6pWLf5NiGJyeVqdBax1diVHJI2irzAtD.O53UE/Frfm', 'student', NULL),
+('182018', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', '2022-11-30 02:41:12'),
+('187020', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('189005', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('199003', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', '2022-11-30 01:52:25'),
+('199014', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('199015', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('200031', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', '2022-11-30 02:25:30'),
+('200032', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('201010', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('201037', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', '2022-11-30 02:46:22'),
+('202027', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('203006', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('203007', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('204031', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('206023', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('207011', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('208019', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
 ('208020', '$2y$10$/AeHemhmEgwvJIOdWIsNo.B3fLXqT7/Imsspm8KNbgTy5vchXFMTy', 'lecturer', NULL),
-('211002', '$2y$10$jN9imDKGs5Z/d7hkmCok4.L7IuhXBs1rW.vfSnKvWwxsI/2osyXM6', 'lecturer', NULL),
-('211019', '$2y$10$Sr4FElbste5rRh3/I6Laqe89sBTWiTHUR9Fdx7XY9UHa.fOBeyBzW', 'lecturer', NULL),
-('212003', '$2y$10$Jm.LNCQJNFHAUlwGWDvT2OUGUVpo21rBsiY2n6fGYMNsTjKRlfCIa', 'lecturer', NULL),
-('212020', '$2y$10$s8EadGWy.sG7QNHadQ3BBOZRG1UDZwTu7zQIpbfvwCyxZSd1cOheC', 'lecturer', NULL),
-('213002', '$2y$10$4az60KuhV1ft/zhNpwXx6OhaVjEJDMdYZryCql2oJZciIncRI3uVK', 'lecturer', NULL),
-('214011', '$2y$10$DDejrp7lT0OPzJa1u3UDsOwMs0//15w2VXromaUzQfP/fImfC4jpi', 'lecturer', NULL),
-('214012', '$2y$10$K7FHngUxc89xlhzIm9Fw0ebfPjdWl467v.rVfjRp7DMXiBpoG3CUm', 'lecturer', NULL),
-('214031', '$2y$10$Cj2AIvR0yZ0Di7R.CKb4iuxbNSpcRAc7CFfyXLTkUzMohF9/CZxKe', 'lecturer', NULL),
-('214032', '$2y$10$3vuHLg2E4ayaZG417nWujOQhpP2FlkmM9kQIjsGGe2ohIfhnrXztq', 'lecturer', NULL),
-('215039', '$2y$10$0NZhLC4NUHAKJoYEirhWQeKS3OHNf3N4rqFPMpzNFFgeeiyZSPyGm', 'lecturer', NULL),
-('215040', '$2y$10$KMVQYvtAqFLKQ.S3TqSi3.iF0Q4EI0t8vkAoUgsMpdVx2i4RoJpr6', 'lecturer', NULL),
-('216012', '$2y$10$pmVO09LO.hRKrzl8K6twDO/53VKOd0VeBjhcJOVhKtwqxdjT376m6', 'lecturer', NULL),
-('216013', '$2y$10$5YSNMZPW5yV34hTbI38PoO/VSMkFutuxOOJld86htG2wRUgDLliUO', 'lecturer', NULL),
+('210004', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('210006', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211002', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211017', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211019', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211020', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211021', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('211029', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('212003', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('212020', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('213002', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('214011', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('214012', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('214031', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('214032', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('215030', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('215039', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('215040', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('215041', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('216012', '$2y$10$pmVO09LO.hRKrzl8K6twDO/53VKOd0VeBjhcJOVhKtwqxdjT376m6', 'lecturer', '2022-10-24 05:08:32'),
+('216013', '$2y$10$5YSNMZPW5yV34hTbI38PoO/VSMkFutuxOOJld86htG2wRUgDLliUO', 'lecturer', '2022-09-27 03:55:39'),
 ('216039', '$2y$10$L9zRKyppbe5eZIQj8q86P.RKN.rU.tV4qvnTmVpACKSlCyLMu6GTu', 'lecturer', NULL),
-('216060', '$2y$10$udcYUNq3vEm89Kr1ih8F1uv0CEIOqQIpTtDPAL9ZHx4zVkmYuanVK', 'lecturer', NULL),
-('217001', '$2y$10$MSW41DYuDA5BnI.dXDou5eoLkjxdw.H6ufMnB3i4Xtdm03YnGxbqK', 'lecturer', NULL),
-('217006', '$2y$10$e.nkY.ntX3qmXJiRawaSXOV2QFLXeLX1mYY02vy3Rak/FNcZV4Y5G', 'lecturer', NULL),
+('216060', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('217001', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('217006', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
 ('217024', '$2y$10$xG2d/r2zr817TkS3RR2ELu3zHtjj45u3SCNFomfB0bDfN7FdbgiRO', 'lecturer', NULL),
-('217068', '$2y$10$o8LY.KuocaJL8BxwBEswDOH7dTNuKKGAQB0K3dVQ6Q9o3qvHrGUx6', 'lecturer', NULL),
-('218008', '$2y$10$cc5h.H3XfP49HLsvLebyoeXWUo9NIPDDf33xevQ5Rkgq/jvBLYBYO', 'lecturer', NULL),
-('218024', '$2y$10$K2J6Ccu/jKnqqTDLtVOHc.GcAM.s311J0M7L4E5T1CwiLW40MVuMC', 'lecturer', NULL),
-('218025', '$2y$10$cDhxXDnx6E5RdFC0bgBEkuxZRPEtsbJlrojEqpaZVnYTvGBzaSgAa', 'lecturer', NULL),
-('218027', '$2y$10$eD89v43Q/CiLIO5kfe4Wpe8saI9HE93IiqG0ojeymwlESO1x/nmym', 'lecturer', NULL),
-('218036', '$2y$10$ok3P0EdS8t.kuq8fGhR9e.nM3vhDrouxhN5WFoak1p0/cdQtbBAau', 'lecturer', NULL),
+('217058', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('217068', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('218008', '$2y$10$cc5h.H3XfP49HLsvLebyoeXWUo9NIPDDf33xevQ5Rkgq/jvBLYBYO', 'lecturer', '2022-10-20 21:52:47'),
+('218024', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('218025', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('218026', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('218027', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('218036', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
 ('219032', '$2y$10$BlJdKLValBkF0mzTFXECKuGbG6O9HV//iOOTW8K7kt0F1QOZ41vQ6', 'lecturer', NULL),
 ('219038', '$2y$10$8Q7krGuwDfIsaUMjb35Rz.uiUa871nVKYCugTBnCxXFtkZnfJ7Gwm', 'lecturer', NULL),
-('219065', '$2y$10$.ow2uOkmSSlRSGNq0KWCfey1iTFL11xIyOUNyU5jFctH2XXfwo71e', 'lecturer', NULL),
-('219066', '$2y$10$iUdFugvaG.QujVPbyw8UdOvpEKghGLb3S16T5XefmXJhw.9eJqq0S', 'lecturer', NULL),
+('219065', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
+('219066', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
 ('221011', '$2y$10$tkm12m7WQAoCK4jJJuZd9u/4JgIFKfSNzdS5I2.BI9QN/8q7By0W6', 'lecturer', NULL),
 ('221012', '$2y$10$.PyVAiqYXFsViHZmZ2M6ReL2yb1893L2FudmM7B.ZlJ7nSXC6BbjO', 'lecturer', NULL),
 ('221016', '$2y$10$M3dOMLsab7kURbDsQV9A.uZiKQ3xaO03/lP5zlSI3fbjlbCI115Tm', 'lecturer', NULL),
-('221042', '$2y$10$E9ltN0NMikK3zze8jVRzGetG8eIxOwIul674Lbh5XP4JUgLOtOYlK', 'lecturer', NULL),
+('221042', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'lecturer', NULL),
 ('221048', '$2y$10$O7VnYmaQo9P18mG0Hkf1bu4QNXzrj0G0wDArGhCR4t.VJamMytUGq', 'lecturer', NULL),
-('ajeng', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'staff', '2022-09-08 08:18:50');
+('admintu', '$2y$10$eg5NMSMoA4SEMq9uioiIxei/n5iIR58VlenBBi/CyXHvOiFk.yyBe', 'staff', '2022-11-30 02:42:30'),
+('ajeng', '$2y$10$aYe.Du9UNxU4sHlzAencw.MWQXjmFqXZiFFfDGyNuwmu8CKx9mx7O', 'staff', '2022-11-30 02:45:52');
 
 -- --------------------------------------------------------
 
@@ -1067,7 +2080,6 @@ INSERT INTO `user` (`username`, `password`, `user_type`, `last_login`) VALUES
 -- Table structure for table `user_lab`
 --
 
-DROP TABLE IF EXISTS `user_lab`;
 CREATE TABLE `user_lab` (
   `npk` varchar(30) NOT NULL,
   `id_lab` int(11) NOT NULL
@@ -1081,7 +2093,8 @@ INSERT INTO `user_lab` (`npk`, `id_lab`) VALUES
 ('182018', 1),
 ('200031', 2),
 ('201037', 4),
-('203007', 3);
+('203007', 3),
+('218008', 1);
 
 -- --------------------------------------------------------
 
@@ -1089,11 +2102,10 @@ INSERT INTO `user_lab` (`npk`, `id_lab`) VALUES
 -- Table structure for table `user_roles`
 --
 
-DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
   `id` int(11) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `roles` enum('admin','student','lecturer','kalab','wd') NOT NULL
+  `roles` enum('admin','student','lecturer','kalab','wd','adminst') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -1111,56 +2123,8 @@ INSERT INTO `user_roles` (`id`, `username`, `roles`) VALUES
 (10, '110119015', 'student'),
 (11, '110119003', 'student'),
 (12, '110119013', 'student'),
-(13, '182018', 'lecturer'),
-(14, '189005', 'lecturer'),
-(17, '200031', 'lecturer'),
-(18, '200032', 'lecturer'),
-(19, '201010', 'lecturer'),
-(20, '201037', 'lecturer'),
-(21, '203007', 'lecturer'),
-(22, '204031', 'lecturer'),
-(23, '206023', 'lecturer'),
-(24, '207011', 'lecturer'),
-(25, '208019', 'lecturer'),
-(26, '211002', 'lecturer'),
-(27, '211019', 'lecturer'),
-(28, '212003', 'lecturer'),
-(29, '212020', 'lecturer'),
-(30, '213002', 'lecturer'),
-(31, '214011', 'lecturer'),
-(32, '214012', 'lecturer'),
-(33, '214031', 'lecturer'),
-(34, '214032', 'lecturer'),
-(35, '215039', 'lecturer'),
-(36, '215040', 'lecturer'),
-(37, '216012', 'lecturer'),
-(38, '216013', 'lecturer'),
-(39, '216039', 'lecturer'),
-(40, '216060', 'lecturer'),
-(41, '217001', 'lecturer'),
-(42, '217006', 'lecturer'),
-(43, '217024', 'lecturer'),
-(44, '217068', 'lecturer'),
-(45, '218008', 'lecturer'),
-(46, '218024', 'lecturer'),
-(47, '218025', 'lecturer'),
-(48, '218027', 'lecturer'),
-(49, '218036', 'lecturer'),
-(50, '219032', 'lecturer'),
-(51, '219038', 'lecturer'),
-(52, '219065', 'lecturer'),
-(53, '219066', 'lecturer'),
-(54, '221011', 'lecturer'),
-(55, '221012', 'lecturer'),
-(56, '221016', 'lecturer'),
-(57, '221042', 'lecturer'),
-(58, '221048', 'lecturer'),
-(59, '199014', 'lecturer'),
-(60, '199015', 'lecturer'),
-(62, '208020', 'lecturer'),
 (64, 'ajeng', 'admin'),
 (65, '200031', 'kalab'),
-(66, '201037', 'kalab'),
 (67, '203007', 'kalab'),
 (68, '182018', 'wd'),
 (69, '110118045', 'student'),
@@ -1351,7 +2315,404 @@ INSERT INTO `user_roles` (`id`, `username`, `roles`) VALUES
 (255, '110118316', 'student'),
 (256, '110118438', 'student'),
 (257, '110118362', 'student'),
-(258, '110118135', 'student');
+(258, '110118135', 'student'),
+(260, '110119016', 'student'),
+(261, '110119017', 'student'),
+(262, '110119019', 'student'),
+(263, '110119020', 'student'),
+(264, '110119022', 'student'),
+(265, '110119023', 'student'),
+(266, '110119024', 'student'),
+(267, '110119025', 'student'),
+(268, '110119026', 'student'),
+(269, '110119027', 'student'),
+(270, '110119028', 'student'),
+(271, '110119031', 'student'),
+(272, '110119032', 'student'),
+(273, '110119034', 'student'),
+(274, '110119037', 'student'),
+(275, '110119038', 'student'),
+(276, '110119040', 'student'),
+(277, '110119041', 'student'),
+(278, '110119042', 'student'),
+(279, '110119044', 'student'),
+(280, '110119045', 'student'),
+(281, '110119046', 'student'),
+(282, '110119047', 'student'),
+(283, '110119049', 'student'),
+(284, '110119050', 'student'),
+(285, '110119051', 'student'),
+(286, '110119052', 'student'),
+(287, '110119053', 'student'),
+(288, '110119054', 'student'),
+(289, '110119056', 'student'),
+(290, '110119057', 'student'),
+(291, '110119059', 'student'),
+(292, '110119060', 'student'),
+(293, '110119061', 'student'),
+(294, '110119062', 'student'),
+(295, '110119063', 'student'),
+(296, '110119064', 'student'),
+(297, '110119065', 'student'),
+(298, '110119066', 'student'),
+(299, '110119067', 'student'),
+(300, '110119068', 'student'),
+(301, '110119069', 'student'),
+(302, '110119070', 'student'),
+(303, '110119072', 'student'),
+(304, '110119074', 'student'),
+(305, '110119075', 'student'),
+(306, '110119078', 'student'),
+(307, '110119081', 'student'),
+(308, '110119082', 'student'),
+(309, '110119083', 'student'),
+(310, '110119084', 'student'),
+(311, '110119085', 'student'),
+(312, '110119086', 'student'),
+(313, '110119088', 'student'),
+(314, '110119089', 'student'),
+(315, '110119090', 'student'),
+(316, '110119092', 'student'),
+(317, '110119097', 'student'),
+(318, '110119098', 'student'),
+(319, '110119099', 'student'),
+(320, '110119101', 'student'),
+(321, '110119103', 'student'),
+(322, '110119104', 'student'),
+(323, '110119105', 'student'),
+(324, '110119106', 'student'),
+(325, '110119108', 'student'),
+(326, '110119109', 'student'),
+(327, '110119110', 'student'),
+(328, '110119111', 'student'),
+(329, '110119113', 'student'),
+(330, '110119114', 'student'),
+(331, '110119115', 'student'),
+(332, '110119116', 'student'),
+(333, '110119119', 'student'),
+(334, '110119121', 'student'),
+(335, '110119122', 'student'),
+(336, '110119123', 'student'),
+(337, '110119127', 'student'),
+(338, '110119131', 'student'),
+(339, '110119132', 'student'),
+(340, '110119134', 'student'),
+(341, '110119136', 'student'),
+(342, '110119137', 'student'),
+(343, '110119139', 'student'),
+(344, '110119140', 'student'),
+(345, '110119143', 'student'),
+(346, '110119144', 'student'),
+(347, '110119146', 'student'),
+(348, '110119147', 'student'),
+(349, '110119148', 'student'),
+(350, '110119149', 'student'),
+(351, '110119152', 'student'),
+(352, '110119154', 'student'),
+(353, '110119155', 'student'),
+(354, '110119156', 'student'),
+(355, '110119158', 'student'),
+(356, '110119160', 'student'),
+(357, '110119161', 'student'),
+(358, '110119163', 'student'),
+(359, '110119166', 'student'),
+(360, '110119168', 'student'),
+(361, '110119169', 'student'),
+(362, '110119170', 'student'),
+(363, '110119171', 'student'),
+(364, '110119172', 'student'),
+(365, '110119174', 'student'),
+(366, '110119175', 'student'),
+(367, '110119177', 'student'),
+(368, '110119178', 'student'),
+(369, '110119180', 'student'),
+(370, '110119181', 'student'),
+(371, '110119182', 'student'),
+(372, '110119183', 'student'),
+(373, '110119186', 'student'),
+(374, '110119187', 'student'),
+(375, '110119188', 'student'),
+(376, '110119189', 'student'),
+(377, '110119191', 'student'),
+(378, '110119193', 'student'),
+(379, '110119194', 'student'),
+(380, '110119195', 'student'),
+(381, '110119196', 'student'),
+(382, '110119197', 'student'),
+(383, '110119198', 'student'),
+(384, '110119200', 'student'),
+(385, '110119201', 'student'),
+(386, '110119202', 'student'),
+(387, '110119205', 'student'),
+(388, '110119206', 'student'),
+(389, '110119207', 'student'),
+(390, '110119210', 'student'),
+(391, '110119212', 'student'),
+(392, '110119213', 'student'),
+(393, '110119214', 'student'),
+(394, '110119215', 'student'),
+(395, '110119216', 'student'),
+(396, '110119217', 'student'),
+(397, '110119218', 'student'),
+(398, '110119220', 'student'),
+(399, '110119221', 'student'),
+(400, '110119222', 'student'),
+(401, '110119223', 'student'),
+(402, '110119224', 'student'),
+(403, '110119225', 'student'),
+(404, '110119226', 'student'),
+(405, '110119227', 'student'),
+(406, '110119228', 'student'),
+(407, '110119229', 'student'),
+(408, '110119230', 'student'),
+(409, '110119234', 'student'),
+(410, '110119235', 'student'),
+(411, '110119236', 'student'),
+(412, '110119237', 'student'),
+(413, '110119238', 'student'),
+(414, '110119239', 'student'),
+(415, '110119240', 'student'),
+(416, '110119241', 'student'),
+(417, '110119242', 'student'),
+(418, '110119243', 'student'),
+(419, '110119245', 'student'),
+(420, '110119246', 'student'),
+(421, '110119249', 'student'),
+(422, '110119250', 'student'),
+(423, '110119251', 'student'),
+(424, '110119253', 'student'),
+(425, '110119254', 'student'),
+(426, '110119255', 'student'),
+(427, '110119258', 'student'),
+(428, '110119259', 'student'),
+(429, '110119260', 'student'),
+(430, '110119262', 'student'),
+(431, '110119263', 'student'),
+(432, '110119264', 'student'),
+(433, '110119265', 'student'),
+(434, '110119266', 'student'),
+(435, '110119267', 'student'),
+(436, '110119268', 'student'),
+(437, '110119269', 'student'),
+(438, '110119271', 'student'),
+(439, '110119273', 'student'),
+(440, '110119274', 'student'),
+(441, '110119275', 'student'),
+(442, '110119276', 'student'),
+(443, '110119278', 'student'),
+(444, '110119279', 'student'),
+(445, '110119281', 'student'),
+(446, '110119282', 'student'),
+(447, '110119283', 'student'),
+(448, '110119284', 'student'),
+(449, '110119288', 'student'),
+(450, '110119289', 'student'),
+(451, '110119290', 'student'),
+(452, '110119291', 'student'),
+(453, '110119292', 'student'),
+(454, '110119294', 'student'),
+(455, '110119298', 'student'),
+(456, '110119299', 'student'),
+(457, '110119300', 'student'),
+(458, '110119302', 'student'),
+(459, '110119305', 'student'),
+(460, '110119308', 'student'),
+(461, '110119309', 'student'),
+(462, '110119310', 'student'),
+(463, '110119311', 'student'),
+(464, '110119313', 'student'),
+(465, '110119314', 'student'),
+(466, '110119315', 'student'),
+(467, '110119316', 'student'),
+(468, '110119317', 'student'),
+(469, '110119318', 'student'),
+(470, '110119319', 'student'),
+(471, '110119321', 'student'),
+(472, '110119322', 'student'),
+(473, '110119323', 'student'),
+(474, '110119325', 'student'),
+(475, '110119326', 'student'),
+(476, '110119327', 'student'),
+(477, '110119328', 'student'),
+(478, '110119329', 'student'),
+(479, '110119331', 'student'),
+(480, '110119332', 'student'),
+(481, '110119333', 'student'),
+(482, '110119334', 'student'),
+(483, '110119337', 'student'),
+(484, '110119338', 'student'),
+(485, '110119339', 'student'),
+(486, '110119340', 'student'),
+(487, '110119341', 'student'),
+(488, '110119342', 'student'),
+(489, '110119344', 'student'),
+(490, '110119346', 'student'),
+(491, '110119347', 'student'),
+(492, '110119348', 'student'),
+(493, '110119349', 'student'),
+(494, '110119350', 'student'),
+(495, '110119351', 'student'),
+(496, '110119352', 'student'),
+(497, '110119353', 'student'),
+(498, '110119354', 'student'),
+(499, '110119355', 'student'),
+(500, '110119356', 'student'),
+(501, '110119357', 'student'),
+(502, '110119358', 'student'),
+(503, '110119359', 'student'),
+(504, '110119360', 'student'),
+(505, '110119361', 'student'),
+(506, '110119362', 'student'),
+(507, '110119363', 'student'),
+(508, '110119364', 'student'),
+(509, '110119365', 'student'),
+(510, '110119366', 'student'),
+(511, '110119368', 'student'),
+(512, '110119372', 'student'),
+(513, '110119373', 'student'),
+(514, '110119374', 'student'),
+(515, '110119376', 'student'),
+(516, '110119377', 'student'),
+(517, '110119381', 'student'),
+(518, '110119382', 'student'),
+(519, '110119385', 'student'),
+(520, '110119388', 'student'),
+(521, '110119389', 'student'),
+(522, '110119390', 'student'),
+(523, '110119391', 'student'),
+(524, '110119392', 'student'),
+(525, '110119393', 'student'),
+(526, '110119394', 'student'),
+(527, '110119395', 'student'),
+(528, '110119397', 'student'),
+(529, '110119398', 'student'),
+(530, '110119399', 'student'),
+(531, '110119400', 'student'),
+(532, '110119402', 'student'),
+(533, '110119404', 'student'),
+(534, '110119405', 'student'),
+(535, '110119406', 'student'),
+(536, '110119407', 'student'),
+(537, '110119408', 'student'),
+(538, '110119410', 'student'),
+(539, '110119411', 'student'),
+(540, '110119415', 'student'),
+(541, '110119416', 'student'),
+(542, '110119417', 'student'),
+(543, '110119418', 'student'),
+(544, '110119421', 'student'),
+(545, '110119422', 'student'),
+(546, '110119423', 'student'),
+(547, '110119424', 'student'),
+(548, '110119425', 'student'),
+(549, '110119426', 'student'),
+(550, '110119427', 'student'),
+(551, '110119428', 'student'),
+(552, '110119429', 'student'),
+(553, '110119432', 'student'),
+(554, '110119433', 'student'),
+(555, '110119434', 'student'),
+(556, '110119435', 'student'),
+(557, '110119436', 'student'),
+(558, '110119437', 'student'),
+(559, '110119438', 'student'),
+(560, '110119439', 'student'),
+(561, '110119440', 'student'),
+(562, '110119441', 'student'),
+(563, '110119442', 'student'),
+(564, '110119444', 'student'),
+(565, '110119446', 'student'),
+(566, '110119448', 'student'),
+(567, '110119449', 'student'),
+(568, '110119450', 'student'),
+(569, '110119451', 'student'),
+(570, '110119452', 'student'),
+(571, '110119454', 'student'),
+(572, '110119455', 'student'),
+(573, '110119456', 'student'),
+(574, '110119458', 'student'),
+(575, '110119459', 'student'),
+(576, '110119464', 'student'),
+(577, '110119465', 'student'),
+(578, '110119466', 'student'),
+(579, '110119467', 'student'),
+(580, '110119468', 'student'),
+(581, '110119469', 'student'),
+(582, '110119472', 'student'),
+(583, '110119474', 'student'),
+(584, '110119475', 'student'),
+(585, '110119478', 'student'),
+(586, '110119479', 'student'),
+(587, '110119480', 'student'),
+(588, '110119481', 'student'),
+(589, '110119482', 'student'),
+(590, '110119483', 'student'),
+(591, '110119484', 'student'),
+(592, '110119485', 'student'),
+(593, '110119487', 'student'),
+(594, '110119488', 'student'),
+(595, '110119489', 'student'),
+(596, '110119490', 'student'),
+(597, '110119491', 'student'),
+(598, '110119492', 'student'),
+(599, '110119494', 'student'),
+(600, '110119495', 'student'),
+(601, '110119496', 'student'),
+(602, '110119497', 'student'),
+(603, '110119498', 'student'),
+(604, '110119499', 'student'),
+(605, 'admintu', 'adminst'),
+(607, '218008', 'kalab'),
+(658, '201037', 'kalab'),
+(659, '182018', 'lecturer'),
+(660, '187020', 'lecturer'),
+(661, '189005', 'lecturer'),
+(662, '199003', 'lecturer'),
+(663, '199014', 'lecturer'),
+(664, '199015', 'lecturer'),
+(665, '200031', 'lecturer'),
+(666, '200032', 'lecturer'),
+(667, '201010', 'lecturer'),
+(668, '201037', 'lecturer'),
+(669, '202027', 'lecturer'),
+(670, '203006', 'lecturer'),
+(671, '203007', 'lecturer'),
+(672, '204031', 'lecturer'),
+(673, '206023', 'lecturer'),
+(674, '207011', 'lecturer'),
+(675, '208019', 'lecturer'),
+(676, '210004', 'lecturer'),
+(677, '210006', 'lecturer'),
+(678, '211002', 'lecturer'),
+(679, '211017', 'lecturer'),
+(680, '211019', 'lecturer'),
+(681, '211020', 'lecturer'),
+(682, '211021', 'lecturer'),
+(683, '211029', 'lecturer'),
+(684, '212003', 'lecturer'),
+(685, '212020', 'lecturer'),
+(686, '213002', 'lecturer'),
+(687, '214011', 'lecturer'),
+(688, '214012', 'lecturer'),
+(689, '214031', 'lecturer'),
+(690, '214032', 'lecturer'),
+(691, '215030', 'lecturer'),
+(692, '215039', 'lecturer'),
+(693, '215040', 'lecturer'),
+(694, '215041', 'lecturer'),
+(695, '216060', 'lecturer'),
+(696, '217001', 'lecturer'),
+(697, '217006', 'lecturer'),
+(698, '217058', 'lecturer'),
+(699, '217068', 'lecturer'),
+(700, '218024', 'lecturer'),
+(701, '218025', 'lecturer'),
+(702, '218026', 'lecturer'),
+(703, '218027', 'lecturer'),
+(704, '218036', 'lecturer'),
+(705, '219065', 'lecturer'),
+(706, '219066', 'lecturer'),
+(707, '221042', 'lecturer');
 
 --
 -- Indexes for dumped tables
@@ -1388,15 +2749,39 @@ ALTER TABLE `periode`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `periode_sidang`
+--
+ALTER TABLE `periode_sidang`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `proposal`
 --
 ALTER TABLE `proposal`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `room`
+--
+ALTER TABLE `room`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sempro`
+--
+ALTER TABLE `sempro`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `setting_eligibility`
 --
 ALTER TABLE `setting_eligibility`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sidang_time`
+--
+ALTER TABLE `sidang_time`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1412,6 +2797,18 @@ ALTER TABLE `staff`
 ALTER TABLE `student`
   ADD PRIMARY KEY (`nrp`),
   ADD KEY `username` (`username`);
+
+--
+-- Indexes for table `student_topik`
+--
+ALTER TABLE `student_topik`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `student_transcript`
+--
+ALTER TABLE `student_transcript`
+  ADD PRIMARY KEY (`student_nrp`,`kode_mk`,`academic_year`,`semester`);
 
 --
 -- Indexes for table `topik`
@@ -1457,7 +2854,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `lab`
@@ -1472,10 +2869,28 @@ ALTER TABLE `periode`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `periode_sidang`
+--
+ALTER TABLE `periode_sidang`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `proposal`
 --
 ALTER TABLE `proposal`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `room`
+--
+ALTER TABLE `room`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `sempro`
+--
+ALTER TABLE `sempro`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `setting_eligibility`
@@ -1487,19 +2902,25 @@ ALTER TABLE `setting_eligibility`
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `student_topik`
+--
+ALTER TABLE `student_topik`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `topik`
 --
 ALTER TABLE `topik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=708;
 
 --
 -- Constraints for dumped tables
@@ -1510,7 +2931,6 @@ ALTER TABLE `user_roles`
 --
 ALTER TABLE `staff`
   ADD CONSTRAINT `FK_USERNAME` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
-SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
