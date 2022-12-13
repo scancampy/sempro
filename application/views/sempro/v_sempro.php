@@ -75,16 +75,17 @@
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
-                    <th>Judul</th>
-                    <th>NRP</th>
-                   
-                    <th>Tanggal Daftar</th>
+                    <th>Keterangan</th>
+                    <th>Tanggal Sidang</th>
+                    <th>Jam Sidang</th>
+                    <th>Ruang Sidang</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th width="100px;">Aksi</th>
                   </tr>
                   </thead>
                   <tbody>
                     <?php if(isset($sempro)) {
+                      //print_r($sempro);
                       foreach($sempro as $row) { 
                       ?>
                   <tr>                   
@@ -96,7 +97,7 @@
                       </div>
                       <div class="col-12">
                         <p class="text-sm"><b>Mahasiswa</b>
-                          <span class="d-block"><?php echo $row->nama; ?></span>
+                          <span class="d-block"><?php echo $row->nama.' / '.$row->nrp; ?></span>
                         </p>
                       </div>
                       <div class="col-12">
@@ -109,10 +110,22 @@
                           <span class="d-block"><?php echo $row->dosbing2; ?></span>
                         </p>
                       </div>
+                      <div class="col-12">
+                        <p class="text-sm"><b>Tanggal Daftar</b>
+                          <span class="d-block"><?php echo strftime("%d %B %Y", strtotime($row->registered_date)); ?></span>
+                        </p>                        
+                      </div>
                     </td>
-                    <td><?php echo $row->nrp; ?></td>
+                    <td><?php if($row->sidang_date != null && $row->ruang_id != null) { 
+                      echo strftime("%d %B %Y", strtotime($row->sidang_date));
+                     } else { echo '<span class="badge badge-secondary">belum tersedia</span>'; } ?></td>
                     
-                    <td><?php echo strftime("%d %B %Y", strtotime($row->registered_date)); ?></td>
+                    <td><?php if($row->sidang_date != null && $row->ruang_id != null) { 
+                      echo $row->label;
+                     } else { echo '<span class="badge badge-secondary">belum tersedia</span>'; } ?></td>
+                     <td><?php if($row->sidang_date != null && $row->ruang_id != null) { 
+                      echo $row->roomlabel;
+                     } else { echo '<span class="badge badge-secondary">belum tersedia</span>'; } ?></td>
                     <td >
                        <?php
                         if($row->is_failed == 1) {
@@ -121,12 +134,10 @@
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->admin_plotting_date == null) {
                           echo '<span class="badge badge-success">Menunggu Admin TU Ploting Ruang</span>';
-                        } else if($row->lecturer1_npk == null) {
-                          echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
-                        }  else if($row->judul == '') {
-                          echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
-                        } else if($row->judul != '' && $row->lecturer1_validate_date == null) {
-                          echo '<span class="badge badge-success">Menunggu Validasi Judul Dosbing</span>';
+                        }  else if($row->naskah_filename == null) {
+                          echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
+                        } else if( $row->hasil == null) {
+                          echo '<span class="badge badge-success">Menunggu Hasil Sidang</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
                         }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
@@ -140,6 +151,7 @@
                     </td>
                     <td>
                       <a href="<?php echo base_url('sempro/detail/'.$row->id); ?>" class="btn btn-primary btn-flat btn-sm">Detail</a>
+                      <a href="<?php echo base_url('uploads/naskah/'.$row->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
                     </td>
                   </tr>
 

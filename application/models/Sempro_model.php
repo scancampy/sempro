@@ -6,7 +6,9 @@ class Sempro_model extends CI_Model {
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');
                 $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
-                $this->db->select('student_topik.judul, sempro.*, student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label,  student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
 
 
                 // TODO: check jika statusnya cancelled
@@ -24,7 +26,9 @@ class Sempro_model extends CI_Model {
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');
                 $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
-                $this->db->select('student_topik.judul, sempro.*, student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label, student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
 
 
                 // TODO: check jika statusnya cancelled
@@ -45,9 +49,10 @@ class Sempro_model extends CI_Model {
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
                 $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
                 $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
                 $this->db->join('lecturer l3', 'l3.npk = sempro.kalab_npk_verified', 'left');
                 $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
-                $this->db->select('student_topik.judul, sempro.*, student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel",  student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
 
 
                 // TODO: check jika statusnya cancelled
@@ -79,16 +84,40 @@ class Sempro_model extends CI_Model {
                 }
         }
 
-        public function get_student_sempro_by_lab($idlab) {
+        public function get_student_sempro_by_npk($npk, $periode_id) { 
+                $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
+                $this->db->join('student', 'student.nrp=sempro.nrp','left');
+                $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
+                $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('lecturer l3', 'l3.npk = sempro.kalab_npk_verified', 'left');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
+
+                $this->db->where('sempro.periode_sidang_id='.$periode_id.' AND (sempro.penguji1 = "'.$npk.'" OR sempro.penguji2 = "'.$npk.'" OR sempro.pembimbing1 = "'.$npk.'" OR sempro.pembimbing2 = "'.$npk.'") ');
+                $q = $this->db->get('sempro');
+                if($q->num_rows() > 0) {
+                        return $q->result();        
+                } else {
+                        return false;
+                }
+        }
+
+        public function get_student_sempro_by_lab($idlab, $npk, $periode_id) {
                 $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
                 $this->db->join('topik', 'topik.id=student_topik.topik_id','left'); 
                 
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');
                 $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
-                $this->db->select('student_topik.judul, sempro.*, student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2"');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label, student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2"');
 
-                $this->db->where('topik.id_lab', $idlab);
+                $this->db->where('sempro.periode_sidang_id='.$periode_id.' AND ((sempro.penguji1 = "$npk" OR sempro.penguji2 = "$npk" OR sempro.pembimbing1 = "$npk" OR sempro.pembimbing2 = "$npk") OR topik.id_lab = "'.$idlab.'" ) ');
+             //   $this->db->where('topik.id_lab', $idlab);
                 
 
                 // TODO: check jika statusnya cancelled
@@ -221,10 +250,33 @@ class Sempro_model extends CI_Model {
 
         }
 
-        public function update_ruang_sidang($id, $ruang_id) {
-                $data = array('ruang_id' => $ruang_id);
+        public function update_ruang_sidang($id, $ruang_id, $username) {
+                $data = array('ruang_id' => $ruang_id, 'admin_plotting_date' => date('Y-m-d H:i:s'), 'admin_plotting_username' => $username);
                 $this->db->where('id', $id);
                 $this->db->update('sempro', $data);
+        }
+
+        public function update_naskah_filename($id, $naskah_filename) {
+                $data = array('naskah_filename' => $naskah_filename, 'naskah_upload_date' => date('Y-m-d H:i:s'));
+                $this->db->where('id', $id);
+                $this->db->update('sempro', $data);
+        }
+
+        public function submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $hasil, $cekrevisijudul) {
+                $data = array(
+                        'materi'                => $materi,
+                        'rumusan'               => $rumusan,
+                        'tujuan'                => $tujuan,
+                        'metodologi'            => $metodologi,
+                        'analisis'              => $analisis,
+                        'hasil'                 => $hasil,
+                        'revision_required'     => $cekrevisijudul,
+                        'hasil_submited_date'   => date('Y-m-d H:i:s')
+                );
+
+                $this->db->where('id', $id);
+                $this->db->update('sempro', $data);
+
         }
 }
 

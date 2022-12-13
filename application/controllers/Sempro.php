@@ -16,6 +16,7 @@ class Sempro extends CI_Controller {
 
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
+		//print_r($roles); die();
 		$data['periodeaktif'] = $this->Periode_model->get_periode_sidang_aktif(); 
 
 		foreach($roles as $role) {
@@ -45,16 +46,29 @@ class Sempro extends CI_Controller {
 					$data['sempro'] = $semprodata;
 				}
 				break;
-			} else if($role->roles == 'kalab') {
-				// cek if kalab
-				$idlab =  $info[0]->lab_id;
-				$data['roles'] = 'kalab';
-				$sempro = $this->Sempro_model->get_student_sempro_by_lab($idlab);
+			} else if($role->roles == 'lecturer') {
+
+				$data['is_lecturer'] = true;
+				$data['roles'] = 'lecturer';
+				$sempro = $this->Sempro_model->get_student_sempro_by_npk($roles[0]->username, $data['periodeaktif']->id); 
 
 				if($sempro) {
 					$data['sempro'] = $sempro;
 
 				}
+			
+			} else if($role->roles == 'kalab') {
+				// cek if kalab
+				$idlab =  $info[0]->lab_id;
+				$data['roles'] = 'kalab';
+				$sempro = $this->Sempro_model->get_student_sempro_by_lab($idlab, $roles[0]->username, $data['periodeaktif']->id);
+
+				if($sempro) {
+					$data['sempro'] = $sempro;
+
+				}
+
+				break;
 			} 
 		}
 
@@ -200,12 +214,57 @@ class Sempro extends CI_Controller {
 
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
+		$data['info'] = $info;
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
 				// cek apakah proposal ini punyanya ybs
 				if($data['detail']->nrp != $info[0]->nrp) {
 					redirect('dashboard');
 				}
+
+				$data['is_student'] = true;
+
+				if($this->input->post('btnuploadnaskah')) {
+		    	 	$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/naskah';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'naskah_'.$id.date('Ymdhis').'.pdf';
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ( ! $this->upload->do_upload('filekk')) {
+			          	$this->session->set_flashdata('notif', 'error_validated');
+			          	$this->session->set_flashdata('msg', $this->upload->display_errors());
+			          	redirect('sempro/detail/'.$id);
+			        }
+				            
+				  	$this->Sempro_model->update_naskah_filename($id, $config['file_name']);
+		    	  	$this->session->set_flashdata('notif', 'success');
+		    	  	$this->session->set_flashdata('msg', 'Sukses upload naskah sempro');
+				  	redirect('sempro/detail/'.$id);
+			    }
+			} else if($role->roles =='lecturer') {
+				if($this->input->post('btndosbingsubmitnilai')) {
+					$materi = $this->input->post('materi');
+					$rumusan = $this->input->post('rumusan');
+					$tujuan = $this->input->post('tujuan');
+					$metodologi = $this->input->post('metodologi');	
+					$analisis = $this->input->post('analisis');
+					$hasil = $this->input->post('hasil');
+					if($this->input->post('cekrevisijudul')) {
+						$cekrevisijudul = true;
+					} else {
+						$cekrevisijudul = false;
+					}
+
+					$this->Sempro_model->submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $hasil, $cekrevisijudul);
+					$this->session->set_flashdata('notif', 'success');
+					$this->session->set_flashdata('msg', 'Sukses submit hasil Sempro');
+					redirect('sempro/detail/'.$id);
+				} 
 			} else if($role->roles == 'kalab') {
 				//print_r($data['detail']); die();
 				$topik = $this->Student_topik_model->get($data['detail']->nrp, $data['detail']->student_topik_id );
@@ -303,6 +362,18 @@ class Sempro extends CI_Controller {
 			}
 		});
 		';
+
+
+		// CHECKBOX HANDLE
+		$data['js'] .= '
+			$("#ceksempro").on("click", function() {
+				if($("#ceksempro").is(":checked")) {
+						$("#btndosbingsubmitnilai").prop("disabled", false); 
+				} else {
+					
+						$("#btndosbingsubmitnilai").prop("disabled", true); 
+				}
+			});';
 
 		// NOTIF
 
@@ -449,11 +520,13 @@ class Sempro extends CI_Controller {
 		$data = array();
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
+		//print_r($info);
+		//die();
 
 		if($this->input->post('btnsubmit')) {
 			$ruang = $this->input->post('ruang');
 			$sempro_id = $this->input->post('sempro_id');
-			$this->Sempro_model->update_ruang_sidang($sempro_id, $ruang);
+			$this->Sempro_model->update_ruang_sidang($sempro_id, $ruang, $info[0]->username);
 			$this->session->set_flashdata('notif', 'success');
 			$this->session->set_flashdata('msg', 'Sukses plot ruang');
 			redirect('sempro/plotruang');

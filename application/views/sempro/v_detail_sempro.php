@@ -49,16 +49,30 @@
                     </div>
 
                     <?php if($detail->sidang_date != null) { ?>
-                    <div class="col-6">
+                    <div class="col-3">
                       <p class="text-sm">Tanggal Sidang
                         <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
                       </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                       <p class="text-sm">Jam Sidang
                         <b class="d-block"><?php echo $detail->label; ?></b>
                       </p>
                     </div>
+                    <?php if($detail->ruang_id != null) { ?>
+                    <div class="col-3">
+                      <p class="text-sm">Ruang Sidang
+                        <b class="d-block"><?php echo $detail->roomlabel; ?></b>
+                      </p>
+                    </div>
+                  <?php } ?>
+                    <?php if($detail->naskah_filename != null) { ?>
+                    <div class="col-3">
+                      <p class="text-sm">Download Naskah
+                        <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+                      </p>
+                    </div>
+                  <?php } ?>
                   <?php } ?>
                     
                   </div>
@@ -272,6 +286,8 @@
                               <small><i class="fas fa-user"></i>
                                 <?php echo $detail->kalabnama; ?>
                               </small>
+                              
+                              <?php if(isset($kalab)) { ?>
                               <div class="row" style="margin-top: 20px;">
                                 <div class="col-4">
                                   <p class="text-sm">Jadwal Sidang
@@ -280,12 +296,16 @@
                                 </div>
                                 <div class="col-4">
                                   <p class="text-sm">Jam Sidang
-                                    <b class="d-block"><?php 
-                                      foreach($sidang_time as $st) {
-                                        if($st->id == $detail->sidang_time) { echo $st->label; break; }
-                                      }  ?></b>
+                                    <b class="d-block"><?php echo $detail->label; ?></b>
                                   </p>
                                 </div>
+                                <?php if($detail->ruang_id != null) {?>
+                                <div class="col-4">
+                                  <p class="text-sm">Ruang Sidang
+                                    <b class="d-block"><?php echo $detail->roomlabel; ?></b>
+                                  </p>
+                                </div>
+                              <?php } ?>
 
                                 <div class="col-6">
                                   <p class="text-sm">Pembimbing 1
@@ -311,6 +331,7 @@
                                   </p>
                                 </div>
 
+                                <?php if(is_null($detail->naskah_filename)) { ?>
                                 <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" >
                                   <div class="col-12 text-right">
                                       <div class="form-group ">
@@ -318,7 +339,9 @@
                                       </div>
                                     </div>
                                 </form>
+                              <?php } ?>
                               </div>
+                            <?php } ?>
 
                               <?php } ?>
                               <?php
@@ -419,12 +442,205 @@
                             
                             <div class="timeline-body">
                               Admin - Plot Ruangan<br/>
+                              <?php if(!is_null($detail->admin_plotting_date)) { ?>
+                                  <small><i class="fas fa-clock"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail->admin_plotting_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i> Admin
+                              </small>
+                              <?php } ?>
                             </div>
                           </div>
                         </div>
                         <!-- END timeline item -->
 
-                        
+                        <!-- timeline item -->
+                        <div>
+                           <?php if(!is_null($detail->naskah_filename)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                              Mahasiswa - Upload Naskah<br/>
+
+                              <?php if(isset($is_student)) { ?>
+                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
+                                      
+                                      <div class="form-group ">
+                                        <label for="juduledit" class="col-sm-12 col-form-label">File Naskah Sempro</label>
+                                        <div class="col-sm-12">
+                                          <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
+                                        </div>
+                                      </div>
+
+                                      <?php if(!is_null($detail->naskah_filename)) { ?>
+                                        <div class="form-group ">
+                                        <label for="juduledit" class="col-sm-12 col-form-label">Download Naskah Sempro</label>
+                                        <div class="col-sm-12">
+                                          <a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
+                                        </div>
+                                      </div>
+                                      <?php } ?>
+                                      <div class="form-group ">
+                                        <div class="col-sm-12 text-right">
+                                          <button type="submit" class="btn btn-primary" value="Submit" name="btnuploadnaskah"  id="btnuploadnaskah">Simpan</button>
+                                        </div>
+                                      </div>
+                                    </form>
+                                  <?php } else { 
+                                    if(!is_null($detail->naskah_filename)) { ?>
+<small><i class="fas fa-clock"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail->naskah_upload_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i> <?php echo $detail->nama; ?>
+                              </small>
+
+                                    <?php }
+                                  }
+                                  ?>
+                              
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END timeline item -->
+
+                        <!-- timeline item -->
+                        <div>
+                           <?php if(!is_null($detail->hasil)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                              Dosbing - Input Hasil Sidang<br/><br/>
+                                <div class="col-12">
+                      <p class="text-sm">Tanggal Sidang
+                        <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
+                          <?php if(is_null($detail->hasil)) { 
+                                $now = time(); // or your date as well
+                                $your_date = strtotime($detail->sidang_date);
+                                $datediff = $now - $your_date;
+
+                                $diff = round($datediff / (60 * 60 * 24));
+                                if($diff > 0) {
+                                  echo ' ('.$diff.' hari sebelum sidang )';
+                                } 
+                              } ?>
+                            </p>
+                          </div>
+
+                          <?php if(!is_null($detail->hasil)) { ?>
+                            <div class="col-12">
+                              <p class="text-sm">Materi
+                                <b class="d-block"><?php echo $detail->materi; ?></b>
+                              </p>
+                            </div>
+                            <div class="col-12">
+                              <p class="text-sm">Rumusan Permasalahan
+                                <b class="d-block"><?php echo $detail->rumusan; ?></b>
+                              </p>
+                            </div>
+                            <div class="col-12">
+                              <p class="text-sm">Tujuan Penelitian
+                                <b class="d-block"><?php echo $detail->tujuan; ?></b>
+                              </p>
+                            </div>
+                            <div class="col-12">
+                              <p class="text-sm">Metodologi
+                                <b class="d-block"><?php echo $detail->metodologi; ?></b>
+                              </p>
+                            </div>  
+                            <div class="col-12">
+                              <p class="text-sm">Analisis Hasil
+                                <b class="d-block"><?php echo $detail->analisis; ?></b>
+                              </p>
+                            </div>  
+                            <div class="col-12">
+                              <p class="text-sm">Hasil
+                                <b class="d-block"><?php echo $detail->hasil; ?></b>
+                              </p>
+                            </div>  
+                            <div class="col-12">
+                              <p class="text-sm">Revisi Judul
+                                <b class="d-block"><?php if($detail->revision_required)  { echo 'Diperlukan'; } else { echo 'Tidak diperlukan'; } ?></b>
+                              </p>
+                            </div>  
+                          <?php } ?>
+                              
+                          <?php if(is_null($detail->hasil) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
+                          <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
+                             <div class="row">
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label for="materi">Materi</label>
+                                       <input type="text" class="form-control "  value="" id="materi"  name="materi" />
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label  for="rumusan">Rumusan Permasalahan</label>
+                                       <input type="text" class="form-control "  value="" id="rumusan" name="rumusan" />
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label for="tujuan">Tujuan Penelitian</label>
+                                       <input type="text" class="form-control "  value=""  name="tujuan" id="tujuan" />
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label for="metodologi">Metodologi</label>
+                                       <input type="text" class="form-control "  value=""  name="metodologi" id="metodologi" />
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label for="analisis">Analisis Hasil</label>
+                                       <input type="text" class="form-control "  value=""  name="analisis" id="analisis" />
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                   <div class="form-group">
+                                       <label for="hasil">Nilai</label>
+                                       <input type="number" class="form-control " min="0" max="100"  value=""  name="hasil" id="hasil" />
+                                  </div>
+                                </div>
+
+
+                                <div class="col-12">
+                                  <div class="form-check">
+                                    <input class="form-check-input" id="cekrevisijudul" name="cekrevisijudul" value="valid" type="checkbox">
+                                    <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi judul</label>
+                                  </div>
+                                </div>
+
+
+                                <div class="col-12">
+                                  <div class="form-check">
+                                    <input class="form-check-input" id="ceksempro" name="ceksempro" value="valid" type="checkbox">
+                                    <label class="form-check-label" for="ceksempro">Saya telah memeriksa hasil penilaian sempro mahasiswa ini</label>
+                                  </div>
+                                </div>
+
+                                <div class="form-group " style="margin-top: 20px;">
+                                    <div class="col-sm-12 text-right">
+                                      <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmitnilai" disabled id="btndosbingsubmitnilai">Submit Hasil Sempro</button>
+                                    </div>
+                                  </div>
+                              </div>
+                          </form>
+                        <?php } ?>
+                      </p>
+                    </div>
+
+                              
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END timeline item -->
+
                     </div>
                   </div>
                 </div>
