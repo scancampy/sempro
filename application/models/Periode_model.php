@@ -51,7 +51,37 @@ class Periode_model extends CI_Model {
 
                 $this->db->insert('periode', $this);
         }
+       
 
+        public function update_data($id,$nama, $is_active = 0) {
+                $this->db->trans_start();
+                if($is_active == 1) {
+                        $this->db->update('periode', array('is_active' => 0));
+                }
+
+                $data = array('nama' => $nama, 'is_active' => $is_active);
+                $this->db->where('id', $id);
+                $this->db->update('periode', $data);
+
+                $this->db->trans_complete();
+        }
+
+      
+
+        public function del($id) {
+                $this->db->trans_start();
+                $data = array('is_deleted' => 1);
+                $this->db->where('id', $id);
+                $this->db->update('periode', $data);
+
+                $this->db->trans_complete();
+
+                return true;
+        }
+
+
+
+        //PERIODE SIDANG
         public function add_periode_sidang($date_start, $date_end, $is_active = 0) {
                 if($is_active == 1) {
                         $this->db->update('periode_sidang', array('is_active' => 0));
@@ -79,17 +109,15 @@ class Periode_model extends CI_Model {
                 }
         }
 
-        public function update_data($id,$nama, $is_active = 0) {
+        public function del_periode_sidang($id) {
                 $this->db->trans_start();
-                if($is_active == 1) {
-                        $this->db->update('periode', array('is_active' => 0));
-                }
-
-                $data = array('nama' => $nama, 'is_active' => $is_active);
+                $data = array('is_deleted' => 1);
                 $this->db->where('id', $id);
-                $this->db->update('periode', $data);
+                $this->db->update('periode_sidang', $data);
 
                 $this->db->trans_complete();
+
+                return true;
         }
 
         public function update_data_periode_sidang($id,$date_start, $date_end, $is_active = 0) {
@@ -105,28 +133,7 @@ class Periode_model extends CI_Model {
                 $this->db->trans_complete();
         }
 
-        public function del($id) {
-                $this->db->trans_start();
-                $data = array('is_deleted' => 1);
-                $this->db->where('id', $id);
-                $this->db->update('periode', $data);
-
-                $this->db->trans_complete();
-
-                return true;
-        }
-
-        public function del_periode_sidang($id) {
-                $this->db->trans_start();
-                $data = array('is_deleted' => 1);
-                $this->db->where('id', $id);
-                $this->db->update('periode_sidang', $data);
-
-                $this->db->trans_complete();
-
-                return true;
-        }
-
+        
 }
 
 ?>

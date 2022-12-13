@@ -202,6 +202,14 @@
                   <p>ST Skripsi</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('sempro/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Plot Ruang Sempro
+                  </p>
+                </a>
+              </li>
             </ul>
           </li>    
             <?php } else if($role->roles == 'lecturer') { ?>

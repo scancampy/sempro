@@ -17,6 +17,7 @@ class Sempro extends CI_Controller {
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
 		$data['periodeaktif'] = $this->Periode_model->get_periode_sidang_aktif(); 
+
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
@@ -54,7 +55,7 @@ class Sempro extends CI_Controller {
 					$data['sempro'] = $sempro;
 
 				}
-			}
+			} 
 		}
 
 		// DATA TABLE
@@ -120,6 +121,10 @@ class Sempro extends CI_Controller {
 					//	die();
 						if($verified_proposal != false) {
 							$data['registration_available'] = $verified_proposal;
+							// hitung sks kum, dan ipk kum
+							$data['ipkkum'] = $this->Student_model->get_ipk_kum($info[0]->nrp);
+							$data['skskum'] = $this->Student_model->get_sks_kum($info[0]->nrp);
+
 
 							if($this->input->post('btnSubmit')) {
 								if($this->input->post('checkbox_setuju') != true) {
@@ -246,6 +251,17 @@ class Sempro extends CI_Controller {
 						$this->session->set_flashdata('msg', 'Berhasil validasi pengajuan daftar sidang');
 						redirect('sempro/detail/'.$id);
 					}
+				}
+
+				if($this->input->post('btnbatalplot')) {
+					// cek dulu id dan kode kalab
+					if($data['kalab'] && $info[0]->npk == $data['detail']->kalab_npk_verified) {
+						$this->Sempro_model->kalab_cancel_plot($id);
+						$this->session->set_flashdata('notif', 'success');
+						$this->session->set_flashdata('msg', 'Berhasil membatalkan plot sidang sempro');
+						redirect('sempro/detail/'.$id);
+					}
+					
 				}
 			}
 		}
@@ -420,8 +436,124 @@ class Sempro extends CI_Controller {
 				}
 			});';
 
+		
+
+
 		$this->load->view('v_header', $data);
 		$this->load->view('sempro/v_plot', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function plotruang() {
+		$this->load->helper('text');
+		$data = array();
+		$roles = $this->session->userdata('user')->roles;
+		$info = $this->session->userdata('user')->info;
+
+		if($this->input->post('btnsubmit')) {
+			$ruang = $this->input->post('ruang');
+			$sempro_id = $this->input->post('sempro_id');
+			$this->Sempro_model->update_ruang_sidang($sempro_id, $ruang);
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('msg', 'Sukses plot ruang');
+			redirect('sempro/plotruang');
+		}
+
+		$data['periodeaktif'] = $this->Periode_model->get_periode_sidang_aktif(); 
+		$data['periodeall'] = $this->Periode_model->get_periode_sidang();
+		$data['admintu'] = null;
+		$data['sidang_time'] = $this->Sempro_model->get_sidang_time();
+		$data['ruang'] = $this->Room_model->get();
+
+		foreach($roles as $role) {
+			if($role->roles == 'adminst') {
+				$data['admintu'] = true;
+			}
+		}
+
+		if($data['admintu'] == null) { redirect('dashboard'); }
+
+		if($this->input->post('btnbatalplotruang')) {
+			$this->Sempro_model->admin_cancel_room_plot($this->input->post('sempro_id'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('msg', 'Sukses membatalkan plot ruang');
+			redirect('sempro/plotruang');
+		}
+
+		$data['sempro'] = $this->Sempro_model->get_student_sempro_by_periode($data['periodeaktif']->id);
+
+		$data['js'] = "
+			$('.btnplot').on('click', function() {
+				var tsl = $(this).attr('tanggalsidanglabel');
+				var stl = $(this).attr('sidangtimelabel');
+				var ts = $(this).attr('tanggalsidang');
+				var st = $(this).attr('sidangtimeid');
+				var roomlabel = $(this).attr('ruanglabel');
+
+				if(roomlabel == '') {
+					$('#btnsubmit').show();
+					$.post('".base_url('ajaxcall/get_available_room')."', { 'tglsidang': ts, 'jamsidang': st }, function(data) {
+						//alert(data);
+						var obj = JSON.parse(data);
+						var str = '<option value=\"0\">[Pilih Ruang]</option>';
+						for(var i = 0; i < obj['data'].length; i++) { 
+							var room = obj['data'][i];
+							str += '<option value=\"' + room.id + '\">' + room.label + '</option>';							
+						}
+						$('#ruang').html(str);
+					});
+				} else {
+					$('#btnsubmit').hide();
+					$('#ruangsidang').html(roomlabel + ' <button type=\"submit\" name=\"btnbatalplotruang\" onclick=\"return confirm(\'Yakin batalkan plot ruang ini?\');\" value=\"submit\" class=\"btn btn-xs btn-danger\"><i class=\"fa fa-times\"></i> Batalkan Ruang</button>');
+				}
+
+				$('#txt_tanggal_sidang').val(tsl);
+				$('#txt_jam_sidang').val(stl);
+				$('#tglsidang').val(ts);
+				$('#jamsidang').val(st);
+				$('#judul').val($(this).attr('judul'));
+				$('#mahasiswa').val($(this).attr('nama') + ' - ' + $(this).attr('nrp'));
+				$('#dosbing1').val($(this).attr('dosbing1'));
+				$('#dosbing2').val($(this).attr('dosbing2'));
+				$('#namapenguji1').val($(this).attr('namapenguji1'));
+				$('#namapenguji2').val($(this).attr('namapenguji2'));
+				$('#sempro_id').val($(this).attr('sempro_id'));
+				
+			});
+
+		";
+
+		 // NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+		// CHECKBOX HANDLE
+		$data['js'] .= '
+			$("#ruang").on("change", function() {
+				if($(this).val() != 0) {
+					$("#btnsubmit").prop("disabled", false); 
+				} else {					
+					$("#btnsubmit").prop("disabled", true); 
+				}
+			});';
+
+		if($this->session->flashdata('notif') == 'success') {
+  		$data['js'] .= '
+  			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+	  		';
+	  	}
+
+		$this->load->view('v_header', $data);
+		$this->load->view('sempro/v_plot_ruang', $data);
 		$this->load->view('v_footer', $data);
 	}
 
@@ -432,5 +564,7 @@ class Sempro extends CI_Controller {
 		$prasyarat = $this->Topik_model->get_prasyarat($hasil);
 		echo json_encode(array('data' => $hasil, 'prasyarat' => $prasyarat));
 	}
+
+	
 	
 }

@@ -8,6 +8,41 @@ class Student_model extends CI_Model {
         public $ipk;
         public $ipkm;
 
+        // Hitung IPKKum
+        public function get_ipk_kum($nrp) {
+                $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));
+                if($q->num_rows() > 0) {
+                        $totalsks = 0;
+                        $total = 0;
+                        foreach ($q->result() as $key => $value) {
+                                if($value->nisbi != 'E') {
+                                        $total += $value->nisbi_value * $value->sks;
+                                        $totalsks += $value->sks;
+                                }
+                        }
+
+                        return $total / $totalsks;
+                } else {
+                        return 0.0;
+                }
+        }
+
+        public function get_sks_kum($nrp) {
+                $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));
+                if($q->num_rows() > 0) {
+                        $totalsks = 0;
+                        foreach ($q->result() as $key => $value) {
+                                if($value->nisbi != 'E') {                                        
+                                        $totalsks += $value->sks;
+                                }
+                        }
+
+                        return $totalsks;
+                } else {
+                        return 0;
+                }
+        }
+
 
         public function set_eligible($nrp) {
                 $data = array('eligible' => 1);

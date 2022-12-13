@@ -396,7 +396,6 @@
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
                                     <?php } ?>
                                       
                                     </form>
@@ -439,58 +438,3 @@
     </section>
     <!-- /.content -->
   </div>
-
-    <!-- /.modal -->
-  <div class="modal fade" id="modal-pilih">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <form method="post" action="<?php echo base_url('sempro/detail/'.$data['detail']->id); ?>" enctype="multipart/form-data" method="post">
-          <div class="modal-header">
-            <h4 class="modal-title">Pilih Topik</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row">
-              <label for="nrpedit" class="col-sm-2 col-form-label">Lab</label>
-              <div class="col-sm-10">
-                 <select class="form-control" id="lab" name="lab">
-                    <option value="">Pilih Lab</option>
-                    <?php foreach($lab as $row) { ?>
-                      <option value="<?php echo $row->id; ?>"><?php echo $row->nama; ?></option>
-                    <?php } ?>
-                  </select>
-              </div>
-            </div>
-           <div class="form-group row">
-              <label for="namaedit" class="col-sm-2 col-form-label">Daftar Topik</label>
-              <div class="col-sm-10">
-                 <table id="example3" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>Topik</th>
-                    <th>MK Prasyarat 1</th>
-                    <th>MK Prasyarat 2</th>
-                    <th width="5%">Kuota</th>
-                    <th width="5%">Aksi</th>
-                  </tr>
-                  </thead>
-                  <tbody id="tabletopik">
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-
-          </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-          </div>
-        </form>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-  

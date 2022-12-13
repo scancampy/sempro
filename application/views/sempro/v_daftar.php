@@ -154,13 +154,13 @@
                     </div>
                     <div class="col-4">
                       <p class="text-sm">SKS Kum
-                        <input type="number" required min="1" name="skskum" max="200" class="form-control" value="" />
+                        <input type="number" required min="1" name="skskum" max="200" class="form-control" value="<?php echo $skskum; ?>" />
                       </p>
 
                     </div>
                     <div class="col-4">
                       <p class="text-sm">IPK Kum
-                        <input type="number" required min="1" name="ipkkum" step="0.01" class="form-control" value="" />
+                        <input type="number" required min="1" name="ipkkum" step="0.01" class="form-control" value="<?php echo $ipkkum; ?>" />
                       </p>
 
                     </div>
