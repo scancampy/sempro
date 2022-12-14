@@ -49,10 +49,11 @@ class Sempro_model extends CI_Model {
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
                 $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
                 $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('lecturer l6', 'l6.npk=sempro.dosbing_validate_npk', 'left');
                 $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
                 $this->db->join('lecturer l3', 'l3.npk = sempro.kalab_npk_verified', 'left');
                 $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
-                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel",  student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel",  student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2", l6.nama as "namadosbingvalidaterevisi"');
 
 
                 // TODO: check jika statusnya cancelled
@@ -277,6 +278,32 @@ class Sempro_model extends CI_Model {
                 $this->db->where('id', $id);
                 $this->db->update('sempro', $data);
 
+        }
+
+        public function update_judul($id, $newjudul) {
+                $q = $this->db->get_where('sempro', array('id' => $id));
+                if($q->num_rows() > 0) {
+                        $hq = $q->row();
+                        $this->db->trans_start();
+                        $data = array('judul' => $newjudul);
+                        $this->db->where('id', $hq->student_topik_id);
+                        $this->db->update('student_topik', $data);
+
+                        $data = array('revision_judul_date' => date('Y-m-d H:i:s'));
+                        $this->db->where('id', $id);
+                        $this->db->update('sempro', $data);
+                        $this->db->trans_complete();
+
+                        return true;
+                } else {
+                        return false;
+                }
+        }
+
+        public function validate_revisi_judul($id, $npk) {
+                $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk);
+                $this->db->where('id', $id);
+                $this->db->update('sempro', $data);
         }
 }
 

@@ -464,7 +464,7 @@
                             <div class="timeline-body">
                               Mahasiswa - Upload Naskah<br/>
 
-                              <?php if(isset($is_student)) { ?>
+                              <?php if(isset($is_student) && is_null($detail->naskah_filename) && !is_null($detail->ruang_id)) { ?>
                                <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                       
                                       <div class="form-group ">
@@ -513,134 +513,222 @@
                           <div class="timeline-item">
                             
                             <div class="timeline-body">
-                              Dosbing - Input Hasil Sidang<br/><br/>
+                              Dosbing - Input Hasil Sidang<br/>
+                              <?php if(!is_null($detail->sidang_date)) { ?>
                                 <div class="col-12">
-                      <p class="text-sm">Tanggal Sidang
-                        <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
-                          <?php if(is_null($detail->hasil)) { 
-                                $now = time(); // or your date as well
-                                $your_date = strtotime($detail->sidang_date);
-                                $datediff = $now - $your_date;
+                                    <p class="text-sm">Tanggal Sidang
+                                      <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
+                                      <?php if(is_null($detail->hasil)) { 
+                                      $now = time(); // or your date as well
+                                      $your_date = strtotime($detail->sidang_date);
+                                      $datediff = $now - $your_date;
 
-                                $diff = round($datediff / (60 * 60 * 24));
-                                if($diff > 0) {
-                                  echo ' ('.$diff.' hari sebelum sidang )';
-                                } 
-                              } ?>
-                            </p>
-                          </div>
+                                      $diff = round($datediff / (60 * 60 * 24));
+                                      if($diff > 0) {
+                                        echo ' ('.$diff.' hari sebelum sidang )';
+                                      } 
+                                    } ?>
+                                  </p>
+                                </div>
+                              <?php } ?>
 
-                          <?php if(!is_null($detail->hasil)) { ?>
-                            <div class="col-12">
-                              <p class="text-sm">Materi
-                                <b class="d-block"><?php echo $detail->materi; ?></b>
-                              </p>
-                            </div>
-                            <div class="col-12">
-                              <p class="text-sm">Rumusan Permasalahan
-                                <b class="d-block"><?php echo $detail->rumusan; ?></b>
-                              </p>
-                            </div>
-                            <div class="col-12">
-                              <p class="text-sm">Tujuan Penelitian
-                                <b class="d-block"><?php echo $detail->tujuan; ?></b>
-                              </p>
-                            </div>
-                            <div class="col-12">
-                              <p class="text-sm">Metodologi
-                                <b class="d-block"><?php echo $detail->metodologi; ?></b>
-                              </p>
-                            </div>  
-                            <div class="col-12">
-                              <p class="text-sm">Analisis Hasil
-                                <b class="d-block"><?php echo $detail->analisis; ?></b>
-                              </p>
-                            </div>  
-                            <div class="col-12">
-                              <p class="text-sm">Hasil
-                                <b class="d-block"><?php echo $detail->hasil; ?></b>
-                              </p>
-                            </div>  
-                            <div class="col-12">
-                              <p class="text-sm">Revisi Judul
-                                <b class="d-block"><?php if($detail->revision_required)  { echo 'Diperlukan'; } else { echo 'Tidak diperlukan'; } ?></b>
-                              </p>
-                            </div>  
-                          <?php } ?>
-                              
-                          <?php if(is_null($detail->hasil) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
-                          <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
-                             <div class="row">
+                              <?php if(!is_null($detail->hasil)) { ?>
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label for="materi">Materi</label>
-                                       <input type="text" class="form-control "  value="" id="materi"  name="materi" />
-                                  </div>
+                                  <p class="text-sm">Materi
+                                    <b class="d-block"><?php echo $detail->materi; ?></b>
+                                  </p>
                                 </div>
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label  for="rumusan">Rumusan Permasalahan</label>
-                                       <input type="text" class="form-control "  value="" id="rumusan" name="rumusan" />
-                                  </div>
+                                  <p class="text-sm">Rumusan Permasalahan
+                                    <b class="d-block"><?php echo $detail->rumusan; ?></b>
+                                  </p>
                                 </div>
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label for="tujuan">Tujuan Penelitian</label>
-                                       <input type="text" class="form-control "  value=""  name="tujuan" id="tujuan" />
-                                  </div>
+                                  <p class="text-sm">Tujuan Penelitian
+                                    <b class="d-block"><?php echo $detail->tujuan; ?></b>
+                                  </p>
                                 </div>
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label for="metodologi">Metodologi</label>
-                                       <input type="text" class="form-control "  value=""  name="metodologi" id="metodologi" />
-                                  </div>
-                                </div>
+                                  <p class="text-sm">Metodologi
+                                    <b class="d-block"><?php echo $detail->metodologi; ?></b>
+                                  </p>
+                                </div>  
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label for="analisis">Analisis Hasil</label>
-                                       <input type="text" class="form-control "  value=""  name="analisis" id="analisis" />
-                                  </div>
-                                </div>
+                                  <p class="text-sm">Analisis Hasil
+                                    <b class="d-block"><?php echo $detail->analisis; ?></b>
+                                  </p>
+                                </div>  
                                 <div class="col-12">
-                                   <div class="form-group">
-                                       <label for="hasil">Nilai</label>
-                                       <input type="number" class="form-control " min="0" max="100"  value=""  name="hasil" id="hasil" />
-                                  </div>
-                                </div>
+                                  <p class="text-sm">Hasil
+                                    <b class="d-block"><?php echo $detail->hasil; ?></b>
+                                  </p>
+                                </div>  
+                                <div class="col-12">
+                                  <p class="text-sm">Revisi Judul
+                                    <b class="d-block"><?php if($detail->revision_required)  { echo 'Diperlukan'; } else { echo 'Tidak diperlukan'; } ?></b>
+                                  </p>
+                                </div>  
+                              <?php } ?>
+                                  
+                              <?php 
 
-
-                                <div class="col-12">
-                                  <div class="form-check">
-                                    <input class="form-check-input" id="cekrevisijudul" name="cekrevisijudul" value="valid" type="checkbox">
-                                    <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi judul</label>
-                                  </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                  <div class="form-check">
-                                    <input class="form-check-input" id="ceksempro" name="ceksempro" value="valid" type="checkbox">
-                                    <label class="form-check-label" for="ceksempro">Saya telah memeriksa hasil penilaian sempro mahasiswa ini</label>
-                                  </div>
-                                </div>
-
-                                <div class="form-group " style="margin-top: 20px;">
-                                    <div class="col-sm-12 text-right">
-                                      <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmitnilai" disabled id="btndosbingsubmitnilai">Submit Hasil Sempro</button>
+                              if(isset($is_lecturer)) {
+                                if(is_null($detail->hasil) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
+                              <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
+                                 <div class="row">
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="materi">Materi</label>
+                                           <input type="text" class="form-control "  value="" id="materi"  name="materi" />
+                                      </div>
                                     </div>
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label  for="rumusan">Rumusan Permasalahan</label>
+                                           <input type="text" class="form-control "  value="" id="rumusan" name="rumusan" />
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="tujuan">Tujuan Penelitian</label>
+                                           <input type="text" class="form-control "  value=""  name="tujuan" id="tujuan" />
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="metodologi">Metodologi</label>
+                                           <input type="text" class="form-control "  value=""  name="metodologi" id="metodologi" />
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="analisis">Analisis Hasil</label>
+                                           <input type="text" class="form-control "  value=""  name="analisis" id="analisis" />
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="hasil">Nilai</label>
+                                           <input type="number" class="form-control " min="0" max="100"  value=""  name="hasil" id="hasil" />
+                                      </div>
+                                    </div>
+
+
+                                    <div class="col-12">
+                                      <div class="form-check">
+                                        <input class="form-check-input" id="cekrevisijudul" name="cekrevisijudul" value="valid" type="checkbox">
+                                        <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi judul</label>
+                                      </div>
+                                    </div>
+
+
+                                    <div class="col-12">
+                                      <div class="form-check">
+                                        <input class="form-check-input" id="ceksempro" name="ceksempro" value="valid" type="checkbox">
+                                        <label class="form-check-label" for="ceksempro">Saya telah memeriksa hasil penilaian sempro mahasiswa ini</label>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group " style="margin-top: 20px;">
+                                        <div class="col-sm-12 text-right">
+                                          <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmitnilai" disabled id="btndosbingsubmitnilai">Submit Hasil Sempro</button>
+                                        </div>
+                                      </div>
                                   </div>
-                              </div>
-                          </form>
-                        <?php } ?>
-                      </p>
+                              </form>
+                            <?php }
+                            } ?>
                     </div>
 
                               
                             </div>
                           </div>
+                          <?php if($detail->revision_required == true) { ?>
+                        <!-- timeline item -->
+                        <div>
+                           <?php if(!is_null($detail->revision_judul_date)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                              Mahasiswa - Revisi Judul<br/>
+                              <?php if(!is_null($detail->revision_judul_date)) { ?>
+                                  <small><i class="fas fa-clock"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail->revision_judul_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i> <?php echo $detail->nama; ?>
+                              </small>
+                              <?php } ?>
+
+                               <?php if(isset($is_student)) { ?>
+                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>">
+                                  <div class="form-group ">
+                                    <label for="juduledit" class="col-sm-12 col-form-label">Judul</label>
+                                    <div class="col-sm-12">
+                                      <input type="text"  name="revisijudul" class="form-control" value="<?php echo $detail->judul; ?>"/>
+                                    </div>
+                                  </div>
+
+                                   <div class="form-group " style="margin-top: 20px;">
+                                    <div class="col-sm-12 text-right">
+                                      <button type="submit" class="btn btn-primary" value="Submit" name="btnmhssimpanjudul" id="btnmhssimpanjudul">Simpan Judul</button>
+                                    </div>
+                                  </div>
+                                </form>
+                              <?php } ?>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END timeline item -->
+                      <?php } ?>
+                        <!-- timeline item -->
+                        <?php if($detail->revision_required == true) { ?>
+                        <div>
+                           <?php if(!is_null($detail->dosbing_validate_date)) { ?>
+                          <i class="fas fa-check bg-green"></i>
+                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                          <div class="timeline-item">
+                            
+                            <div class="timeline-body">
+                              Dosbing - Validasi Revisi Judul<br/>
+                              <?php if(!is_null($detail->dosbing_validate_date)) { ?>
+                                  <small><i class="fas fa-clock"></i>
+                                <?php echo strftime("%d %B %Y", strtotime($detail->dosbing_validate_date)); ?>
+                              </small><br/>
+                              <small><i class="fas fa-user"></i> <?php echo $detail->namadosbingvalidaterevisi; ?>
+                              </small>
+                              <?php } ?>
+
+                              <?php 
+
+                              if(isset($is_lecturer)) {
+                                if(is_null($detail->dosbing_validate_date) AND !is_null($detail->revision_judul_date) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
+                              
+                              <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" >
+                                <div class="col-12">
+                                  <div class="form-check">
+                                    <input class="form-check-input" id="cekjudul" name="cekjudul" value="valid" type="checkbox">
+                                    <label class="form-check-label" for="cekjudul">Saya telah memeriksa hasil revisi judul mahasiswa ini</label>
+                                  </div>
+                                </div>
+                                <div class="form-group ">
+                                  <div class="col-sm-12 text-right">
+                                    <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingvalidasirevisijudul" disabled id="btndosbingvalidasirevisijudul">Validasi</button>
+                                  </div>
+                                </div>
+                              </form>
+                            <?php } } ?>
+                            </div>
+                          </div>
+                        </div>
+                      <?php } ?>
+                        <!-- END timeline item -->
+
                         </div>
                         <!-- END timeline item -->
 
+                        
                     </div>
                   </div>
                 </div>

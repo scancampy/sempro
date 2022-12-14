@@ -224,6 +224,26 @@ class Sempro extends CI_Controller {
 
 				$data['is_student'] = true;
 
+				if($this->input->post('btnmhssimpanjudul')) {
+					$newjudul = $this->input->post('revisijudul');
+
+					if($data['detail']->judul == $newjudul) {
+						$this->session->set_flashdata('notif', 'failed');
+			          	$this->session->set_flashdata('msg', 'Judul masih sama. Silahkan revisi judul anda.');
+			          	redirect('sempro/detail/'.$id);
+					} else {
+						if($this->Sempro_model->update_judul($id,$newjudul)) {
+							$this->session->set_flashdata('notif', 'success');
+				          	$this->session->set_flashdata('msg', 'Suskes merevisi judul');
+				          	redirect('sempro/detail/'.$id);
+						} else {
+							$this->session->set_flashdata('notif', 'failed');
+				          	$this->session->set_flashdata('msg', 'Gagal ubah judul');
+				          	redirect('sempro/detail/'.$id);
+						}
+					}
+				}
+
 				if($this->input->post('btnuploadnaskah')) {
 		    	 	$this->load->library('upload');
 
@@ -247,6 +267,22 @@ class Sempro extends CI_Controller {
 				  	redirect('sempro/detail/'.$id);
 			    }
 			} else if($role->roles =='lecturer') {
+				$data['is_lecturer'] = true;
+				if($this->input->post('btndosbingvalidasirevisijudul')) {
+					// cek apakah betul dosbignya
+					if($info[0]->npk == $data['detail']->pembimbing1 || $info[0]->npk == $data['detail']->pembimbing2) {
+						$this->Sempro_model->validate_revisi_judul($id, $info[0]->npk);
+						$this->session->set_flashdata('notif', 'success');
+			          	$this->session->set_flashdata('msg', 'Sukses validasi revisi judul');
+			          	redirect('sempro/detail/'.$id);
+					} else {
+						// bukan dosbingnya
+						$this->session->set_flashdata('notif', 'failed');
+			          	$this->session->set_flashdata('msg', 'Anda bukan dosbing mahasiswa ini');
+			          	redirect('sempro/detail/'.$id);
+					}
+				}
+
 				if($this->input->post('btndosbingsubmitnilai')) {
 					$materi = $this->input->post('materi');
 					$rumusan = $this->input->post('rumusan');
@@ -375,6 +411,17 @@ class Sempro extends CI_Controller {
 				}
 			});';
 
+			// CHECKBOX HANDLE
+		$data['js'] .= '
+			$("#cekjudul").on("click", function() {
+				if($("#cekjudul").is(":checked")) {
+						$("#btndosbingvalidasirevisijudul").prop("disabled", false); 
+				} else {
+					
+						$("#btndosbingvalidasirevisijudul").prop("disabled", true); 
+				}
+			});';
+
 		// NOTIF
 
 		 // NOTIF
@@ -432,9 +479,12 @@ class Sempro extends CI_Controller {
 
 	
 	public function plot($id, $p1, $p2) {
+		
+		$this->load->helper('text');
 		$data = array();
 		$data['p1'] = $p1;
 		$data['p2'] = $p2;
+		$data['room'] = $this->Room_model->get();
 
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
@@ -464,6 +514,8 @@ class Sempro extends CI_Controller {
 			$data['penguji2'] = $this->Lecturer_model->get($p2);
 			// get sidang time
 			$data['sidang_time'] = $this->Sempro_model->get_sidang_time();
+
+			$data['sempro'] = $this->Sempro_model->get_student_sempro_by_periode($data['periodeaktif']->id);
 
 			if($this->input->post('btnsubmit')) {
 				$hasilplot = $this->Sempro_model->insert_plot($id, $p1, $p2, $this->input->post('tglsidang'), $this->input->post('jamsidang'), $info[0]->npk);

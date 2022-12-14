@@ -94,12 +94,63 @@
                       <?php 
                       $curdate = strtotime($periodeaktif->date_start);
                       $dayidx = 1; 
-                      while($curdate <= strtotime($periodeaktif->date_end)) { ?>
-                        <td data-toggle="modal" data-target="#modal-pilih" style="text-align:center;"><input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-primary" value="Plot" /></td>
+                      while($curdate <= strtotime($periodeaktif->date_end)) { 
+                        // cek apakah tanggal ini ada yg ngeplot nggak
+                        $adasidang = null;
+                        $bolehplot = true;
+                        $jmlroom = 0;  ?>
+                        <td style="text-align:center; vertical-align: top;">
+                          <?php 
+
+                        foreach($sempro as $smp) {
+                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) { 
+                            $adasidang = $smp; 
+                            $jmlroom++;
+
+                            // cek dosbing dan penguji ga boleh di jam yg sama
+                            //print_r($smp);
+                           /* echo 'P1:'.$smp->pembimbing1;
+                            echo '<br/>P2:'.$smp->pembimbing2;
+                            echo '<br/>Peng1:'.$smp->penguji1;
+                            echo '<br/>Peng2:'.$smp->penguji2;
+
+                            echo '<br/><br/>P1:'.$detail->lecturer1_npk;
+                            echo '<br/>P2:'.$detail->lecturer2_npk;
+                            echo '<br/>Peng1:'.$penguji1[0]->npk;
+                            echo '<br/>Peng2:'.$penguji2[0]->npk;*/
+                            
+                            if($detail->lecturer1_npk == $smp->pembimbing1 || $detail->lecturer1_npk == $smp->pembimbing2 || $detail->lecturer1_npk == $smp->penguji1 || $detail->lecturer1_npk == $smp->penguji2) {
+                              $bolehplot = false; break;
+                            }
+
+                            if($detail->lecturer2_npk == $smp->pembimbing1 || $detail->lecturer2_npk == $smp->pembimbing2 || $detail->lecturer2_npk == $smp->penguji1 || $detail->lecturer2_npk == $smp->penguji2) {
+                              $bolehplot = false; break;
+                            }
+
+                            if($penguji1[0]->npk == $smp->pembimbing1 || $penguji1[0]->npk == $smp->pembimbing2 || $penguji1[0]->npk == $smp->penguji1 || $penguji1[0]->npk == $smp->penguji2) {
+                              $bolehplot = false; break;
+                            }
+
+                            if($penguji2[0]->npk == $smp->pembimbing1 || $penguji2[0]->npk == $smp->pembimbing2 || $penguji2[0]->npk == $smp->penguji1 || $penguji2[0]->npk == $smp->penguji2) {
+                              $bolehplot = false; break;
+                            }
+                           } 
+                        }
+
+                        if($jmlroom <= count($room) && $bolehplot) {
+                      ?>
+                        <input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" data-toggle="modal" data-target="#modal-pilih" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-primary" value="Plot" />
+                    
                         <?php
-                        $curdate = strtotime($periodeaktif->date_start.' +'.$dayidx.' day');
+                        
+                      } else { ?>
+<input type="button"  class="btn  btn-block btn-secondary" value="N/A" />
+                      <?php } ?>  
+                      </td>
+                      <?php
+                      $curdate = strtotime($periodeaktif->date_start.' +'.$dayidx.' day');
                         $dayidx++;
-                      }
+                    }
                     ?>       
                       
                                                               

@@ -128,7 +128,9 @@
                      } else { echo '<span class="badge badge-secondary">belum tersedia</span>'; } ?></td>
                     <td >
                        <?php
-                        if($row->is_failed == 1) {
+                        if($row->is_done == true) {
+                          echo '<span class="badge badge-success">Lulus Sidang Sempro</span>';
+                        } else if($row->is_failed == 1) {
                           echo '<span class="badge badge-danger">Tidak Lulus</span>';
                         } else if($row->kalab_verified_date == null) {
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
@@ -138,20 +140,20 @@
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
                         } else if( $row->hasil == null) {
                           echo '<span class="badge badge-success">Menunggu Hasil Sidang</span>';
-                        } else if($row->is_verified == 0) {
-                          echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
-                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
-                          echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
-                        } else if($row->is_st_created == 1) {
-                          echo '<span class="badge badge-success">ST Sudah Terbit</span>';
-                        }
+                        } else if($row->revision_required == true && $row->revision_judul_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Mahasiswa Revisi Judul</span>';
+                        }  else if($row->dosbing_validate_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Dosbing Validasi Revisi Judul</span>';
+                        } 
                       ?>
 
                       
                     </td>
                     <td>
                       <a href="<?php echo base_url('sempro/detail/'.$row->id); ?>" class="btn btn-primary btn-flat btn-sm">Detail</a>
+                      <?php if(!is_null($row->naskah_filename)) { ?>
                       <a href="<?php echo base_url('uploads/naskah/'.$row->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
+                    <?php } ?>
                     </td>
                   </tr>
 
