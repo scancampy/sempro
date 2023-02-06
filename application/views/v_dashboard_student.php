@@ -112,6 +112,25 @@
                     </div>
                     <!-- /.card -->
                   </div>
+
+                  <div class="col-12">
+                     <?php if(@$skterbit && $skterbit >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lulus'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo count($skterbit); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>SK LULUS</strong><br/>Sudah dapat diunduh</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
+                  </div>
                 <!-- /.row -->
                 </div>
                 <!-- /.card-body -->

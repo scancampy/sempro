@@ -183,7 +183,7 @@ class Lecturer extends CI_Controller {
 				$this->Topik_model->update_periode($this->input->post('hidid'), $this->input->post('periodecheck'));
 			}
 
-			$this->Topik_model->update($this->input->post('hidid'), $this->input->post('namaedit'),$this->input->post('kuotaedit'), $this->input->post('course_id1'),$this->input->post('minimum_mark1'), $this->input->post('course_id2'),$this->input->post('minimum_mark2'));
+			$this->Topik_model->update($this->input->post('hidid'), $this->input->post('namaedit'),$this->input->post('kuotaedit'), $this->input->post('course_id1'),$this->input->post('minimum_mark1'), $this->input->post('course_id2'),$this->input->post('minimum_mark2'), $this->input->post('radioaktif'));
 
 			$this->session->set_flashdata('notif', 'success_edit');
 			
@@ -283,6 +283,7 @@ class Lecturer extends CI_Controller {
     			$("#hididvalidasi").val(id);
     			$("#namavalidasi").val(nama);
     			$("#kuotavalidasi").val(kuota);
+
     			
     			var min1str = "";
     			if(prasyarat1 != "") { min1str = " (minimum " + min1 + ")"; }
@@ -323,6 +324,16 @@ class Lecturer extends CI_Controller {
 
     			$("#course_id2").val(prasyarat2);
     			$("#minimum_mark2").val(min2);
+
+    			var aktif = $(this).attr("targetaktif");
+
+    			if(aktif == 0) {
+    				//alert("tes");
+    				$("#edit_radiotidakaktif").prop("checked", true);
+    			} else{
+
+    				$("#edit_radioaktif").prop("checked", true);
+    			}
     		});
     	';
 

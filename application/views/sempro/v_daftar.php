@@ -5,13 +5,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Daftar Sidang Proposal</h1>
+            <h1 class="m-0">Daftar Sidang Sempro</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item"><a href="<?php echo base_url('sempro'); ?>">Sidang Proposal</a></li>
-              <li class="breadcrumb-item active">Daftar Sidang Proposal</li>
+              <li class="breadcrumb-item"><a href="<?php echo base_url('sempro'); ?>">Sidang Sempro</a></li>
+              <li class="breadcrumb-item active">Daftar Sidang Sempro</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -160,13 +160,13 @@
                     </div>
                     <div class="col-4">
                       <p class="text-sm">IPK Kum
-                        <input type="number" required min="1" name="ipkkum" step="0.01" class="form-control" value="<?php echo $ipkkum; ?>" />
+                        <input type="number" required min="1" name="ipkkum" step="0.01" class="form-control" value="<?php echo number_format((float)$ipkkum,2,'.',''); ?>" />
                       </p>
 
                     </div>
                     <div class="col-4">
                       <p class="text-sm">MK yang sedang ditempuh (SKS)
-                        <input type="number" required  name="sksks" max="200" class="form-control" value="" />
+                        <input type="number" required  name="sksks" max="200" class="form-control" value="<?php echo $sks_in_ks; ?>" />
                       </p>
 
                     </div>

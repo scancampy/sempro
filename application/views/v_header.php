@@ -134,6 +134,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="<?php echo base_url('master/periodesidangskripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'periodesidangskripsi') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Periode Sidang Skripsi</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="<?php echo base_url('master/room'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'room') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ruang</p>
@@ -157,7 +164,13 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Lab</p>
                 </a>
-              </li>             
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/ruanglab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'ruanglab') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ruang Lab</p>
+                </a>
+              </li>              
               <li class="nav-item">
                 <a href="<?php echo base_url('master/roles'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'roles') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -168,6 +181,13 @@
                 <a href="<?php echo base_url('master/eligibility'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'eligibility') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Setting Eligibility</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('master/mklulus'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'mklulus') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Setting MK Kelulusan</p>
                 </a>
               </li>
 
@@ -210,6 +230,22 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('skripsi/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Plot Ruang Skripsi
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('lulus'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'lulus') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-graduation-cap"></i>
+                  <p>
+                    Daftar Kelulusan
+                  </p>
+                </a>
+              </li>
             </ul>
           </li>    
             <?php } else if($role->roles == 'lecturer') { ?>
@@ -221,18 +257,45 @@
           </li>
           <li class="nav-item">
             <a href="<?php echo base_url('lecturer/proposal'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
-              <i class="far fa-circle nav-icon"></i>
+              <i class="nav-icon fas fa-book"></i>
               <p>
                 Proposal
               </p>
             </a>
           </li>
 
+          <li class="nav-item">
+                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-flask"></i>
+                  <p>
+                    Ijin Pemakaian Lab
+                  </p>
+                </a>
+              </li>
+
            <li class="nav-item">
                 <a href="<?php echo base_url('sempro'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
-                  <i class="nav-icon fas fa-book"></i>
+                  <i class="nav-icon fas fa-user"></i>
                   <p>
-                    Ujian Proposal
+                    Sidang Sempro
+                  </p>
+                </a>
+              </li>
+
+               <li class="nav-item">
+                <a href="<?php echo base_url('skripsi'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-user-graduate"></i>
+                  <p>
+                     Sidang Skripsi
+                  </p>
+                </a>
+              </li>
+
+               <li class="nav-item">
+                <a href="<?php echo base_url('lulus'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'lulus') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-graduation-cap"></i>
+                  <p>
+                    Daftar Kelulusan
                   </p>
                 </a>
               </li>
@@ -248,16 +311,45 @@
 
                <li class="nav-item">
                 <a href="<?php echo base_url('sempro'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
-                  <i class="nav-icon fas fa-book"></i>
+                  <i class="nav-icon fas fa-user"></i>
                   <p>
-                    Ujian Proposal
+                    Daftar Sidang Sempro
                   </p>
                 </a>
               </li>
 
+               <li class="nav-item">
+                <a href="<?php echo base_url('skripsi'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-user-graduate"></i>
+                  <p>
+                    Daftar Sidang Skripsi
+                  </p>
+                </a>
+              </li>
+
+               <li class="nav-item">
+                <a href="<?php echo base_url('lulus'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'lulus') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-graduation-cap"></i>
+                  <p>
+                    Daftar Kelulusan
+                  </p>
+                </a>
+              </li>
+
+               <li class="nav-item">
+                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-flask"></i>
+                  <p>
+                    Ijin Pemakaian Lab
+                  </p>
+                </a>
+              </li>
+
+
+
               <li class="nav-item">
                 <a href="<?php echo base_url('transkrip/student'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'transkrip') { echo  'active'; } ?>">
-                  <i class="nav-icon fas fa-book"></i>
+                  <i class="nav-icon fas fa-list"></i>
                   <p>
                     Transkrip
                   </p>
@@ -266,7 +358,25 @@
             <?php }
           }
           ?>
-         
+          
+          <?php if($role->roles != 'student') { ?>
+           <li class="nav-item menu-open">
+            <a href="#" class="nav-link <?php //active ?>">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Laporan
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'ijinlab') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ijin Lab</p>
+              </a>
+            </li>
+          </ul>
+          <?php } ?>
           <li class="nav-header">SETTINGS</li>
           <li class="nav-item">
             <a href="pages/calendar.html" class="nav-link">

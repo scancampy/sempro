@@ -16,8 +16,8 @@ class Topik_model extends CI_Model {
                 $this->db->update('topik', $data);
         }
 
-        public function update($id, $nama, $kuota, $courseid1, $minimummark1, $courseid2, $minimummark2 ) {
-                $data = array('nama' => $nama, 'kuota' => $kuota);
+        public function update($id, $nama, $kuota, $courseid1, $minimummark1, $courseid2, $minimummark2, $is_active) {
+                $data = array('nama' => $nama, 'kuota' => $kuota, 'is_active' => $is_active);
 
                 $this->db->where('id', $id);
                 $this->db->update('topik', $data);

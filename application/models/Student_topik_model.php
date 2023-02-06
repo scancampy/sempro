@@ -227,6 +227,64 @@ class Student_topik_model extends CI_Model {
                 return $data;
         }
 
+        public function get_proposal_need_dosbing_validation($npk) {
+                // query the lecturer topic
+                $q = $this->db->get_where('topik', array('lecturer_npk' => $npk, 'is_deleted' => 0));
+                $hitung = 0;
+
+                foreach ($q->result() as $key => $value) {
+                        // query the student proposal of selected topic
+                        $qd = $this->db->get_where('student_topik', array('topik_id' => $value->id, 'lecturer1_npk_verified' => null));
+
+                        if($qd->num_rows() >0) {
+                                $hitung++;
+                        }
+                }
+                return $hitung;
+        }
+
+        public function get_proposal_need_wd_validation() {
+                $q = $this->db->get_where('student_topik', array('wd_npk_verified' => null, 'is_deleted' => 0));
+                return $q->num_rows();
+        }
+
+        public function get_proposal_need_final_wd_validation() {
+                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'is_deleted' => 0));
+                return $q->num_rows();
+        }
+
+         public function get_proposal_need_st() {
+                $q = $this->db->get_where('student_topik', array('is_st_created' => 0, 'is_deleted' => 0));
+                return $q->num_rows();
+        }
+
+        public function get_proposal_title_need_kalab_validation($npk) {
+                $data = array();
+                $hitung = 0;
+
+                // cek apakah kalab
+                $q = $this->db->get_where('user_lab', array('npk' => $npk));
+                if($q->num_rows() > 0) {
+                        $rq = $q->row();
+                        $idlab = $rq->id_lab;
+
+
+                        $p = $this->db->get_where('topik', array('id_lab' => $idlab, 'is_deleted' => 0));
+                        foreach($p->result() as $value) {
+                                $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
+                                
+                                $this->db->select('student_topik.*');
+                                $r = $this->db->get_where('student_topik', array('topik_id' => $value->id,'student_topik.kalab_npk_verified_judul' => null));
+
+                                if($r->num_rows() >0){
+
+                                       $hitung++;
+                                }
+                        }
+                } 
+                return $hitung;
+        }
+
         public function guardian_is_verified($npk, $reason, $id) {
                 $data = array(
                                 'guardian_npk_verified' => $npk,

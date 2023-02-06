@@ -8,6 +8,7 @@ class Course_model extends CI_Model {
         public $old_kode_mk3;
         public $old_kode_mk4;
         public $nama;
+        public $sks;
         public $is_deleted = 0;
 
 
@@ -31,12 +32,13 @@ class Course_model extends CI_Model {
                 return $q->result();                       
         }
 
-        public function update_course($id,$old_kode_mk1, $old_kode_mk2,$old_kode_mk3, $nama ) {
+        public function update_course($id,$old_kode_mk1, $old_kode_mk2,$old_kode_mk3, $nama, $sks ) {
                 $data = array(
                         "old_kode_mk1" => $old_kode_mk1,
                         "old_kode_mk2" => $old_kode_mk2,
                         "old_kode_mk3" => $old_kode_mk3,
-                        "nama" => $nama
+                        "nama" => $nama,
+                        "sks" => $sks
                 );
 
                 $this->db->where('id', $id);
@@ -51,7 +53,7 @@ class Course_model extends CI_Model {
                 $this->db->trans_start();
                 while (($row = fgetcsv($csv, 10000, ";")) != FALSE) //get row vales
                 {  
-                    if($i==0 && strtolower($row[0]) =='kodebaru' && strtolower($row[1]) == 'kodelama1'  && strtolower($row[2]) == 'kodelama2' && strtolower($row[3]) == 'kodelama3' && strtolower($row[4]) == 'nama') {
+                    if($i==0 && strtolower($row[0]) =='kodebaru' && strtolower($row[1]) == 'kodelama1'  && strtolower($row[2]) == 'kodelama2' && strtolower($row[3]) == 'kodelama3' && strtolower($row[4]) == 'nama' && strtolower($row[5]) == 'sks') {
                         $valid =  true;
                     }
 
@@ -63,6 +65,7 @@ class Course_model extends CI_Model {
                         $this->old_kode_mk2 = $row[2];
                         $this->old_kode_mk3 = $row[3];
                         $this->nama = $row[4];
+                        $this->sks = $row[5];
 
                         $q = $this->db->get_where('course', array('kode_mk' => $this->kode_mk,'is_deleted' => 0));
 

@@ -23,7 +23,69 @@
       <div class="container-fluid">
         <!-- Timelime example  -->
         <div class="row">
-          .
+          <?php if(@$need_create_st && $need_create_st >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('admintu/stskripsi'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_create_st; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Perlu Dibuatkan ST</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
+        <?php if(@$needcreatestkelulusan && $needcreatestkelulusan >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lulus'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo count($needcreatestkelulusan); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Pengajuan Pendaftaran Kelulusan</strong><br/>Perlu Dibuatkan SK</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
+        <?php if(@$need_room_plot && $need_room_plot >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('sempro/plotruang'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_room_plot; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Sidang Sempro</strong><br/>Belum Diplot Ruangannya</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
+        <?php if(@$need_room_plot_skripsi && $need_room_plot_skripsi >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('skripsi/plotruang'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_room_plot_skripsi; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Sidang Skripsi</strong><br/>Belum Diplot Ruangannya</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
         </div>
       </div><!-- /.container-fluid -->
     </section>

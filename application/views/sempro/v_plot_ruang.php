@@ -77,34 +77,35 @@
                     ?>                                          
                   </tr>
                   <?php foreach($sidang_time as $st) { ?>
-                    <tr>
-                      <td style="padding: 10px; position: absolute; background-color: white; width: 100px; "><b><?php echo $st->label; ?></b> &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></td>
+                    <tr style="vertical-align: top; border-bottom: 1px solid lightgray; ">
+                      <td style="padding: 10px; position: absolute;  width: 100px; "><b><?php echo $st->label; ?></b> &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></td>
 
                       <?php 
                       $curdate = strtotime($periodeaktif->date_start);
                       $dayidx = 1; 
                       while($curdate <= strtotime($periodeaktif->date_end)) {
-                        $adasidang = null;
+                        $adasidang = null; ?>
+
+                            <td  style="text-align:center;">
+                        <?php
                         foreach($sempro as $smp) {
                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) {
                             $adasidang = $smp; ?>
-                            <td data-toggle="modal" data-target="#modal-pilih" style="text-align:center;">
-                          <input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" 
+                          <input data-toggle="modal" data-target="#modal-pilih" type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" 
                           judul="<?php echo $adasidang->judul; ?>" nrp="<?php echo $adasidang->nrp; ?>" nama="<?php echo $adasidang->nama; ?>" dosbing1="<?php echo $adasidang->dosbing1; ?>"  dosbing2="<?php echo $adasidang->dosbing2; ?>" namapenguji1="<?php echo $adasidang->namapenguji1; ?>"  namapenguji2="<?php echo $adasidang->namapenguji2; ?>" sempro_id="<?php echo $adasidang->id; ?>" ruanglabel="<?php echo $adasidang->roomlabel; ?>"
-                          tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-<?php if($adasidang->roomlabel != '') { echo 'success'; } else { echo 'secondary'; } ?>" value="<?php echo character_limiter($adasidang->nama, 10,'...'); if($adasidang->roomlabel != '') { echo ' ('.$adasidang->roomlabel.')'; } ?>" />                          
-                        </td>
+                          tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-<?php if($adasidang->roomlabel != '') { echo 'info'; } else { echo 'primary'; } ?>" value="<?php echo character_limiter($adasidang->nama, 10,'...'); if($adasidang->roomlabel != '') { echo ' ('.$adasidang->roomlabel.')'; } ?>" />     
                             <?php 
                           }
                         }
 
                         if($adasidang == null) { 
-                       ?>
-                        <td data-toggle="modal" data-target="#modal-pilih" style="text-align:center;"><input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-secondary disabled" disabled value="-" />
-                        </td>
+                       ?><input type="button" data-toggle="modal" data-target="#modal-pilih" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-secondary disabled" disabled value="-" />
                         <?php
                       }  
                         $curdate = strtotime($periodeaktif->date_start.' +'.$dayidx.' day');
                         $dayidx++;
+                        ?> </td>
+                        <?php
                       }
                     ?>       
                       

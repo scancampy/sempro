@@ -147,7 +147,7 @@ class Master extends CI_Controller {
 
 		// EDIT COURSE
 		if($this->input->post('btnedit')) {
-			$this->Course_model->update_course($this->input->post('hid_mk_id'),$this->input->post('kode_mk_lama1_edit'), $this->input->post('kode_mk_lama2_edit'),$this->input->post('kode_mk_lama3_edit'), $this->input->post('namaedit') );
+			$this->Course_model->update_course($this->input->post('hid_mk_id'),$this->input->post('kode_mk_lama1_edit'), $this->input->post('kode_mk_lama2_edit'),$this->input->post('kode_mk_lama3_edit'), $this->input->post('namaedit'), $this->input->post('sksedit') );
 			$this->session->set_flashdata('notif', 'success_edit');
 			redirect('master/course');
 		}
@@ -808,6 +808,104 @@ class Master extends CI_Controller {
 		$this->load->view('v_footer', $data);
 	}
 
+	public function ruanglab($delaction = null, $dellab = null) {
+		$data = array();
+		
+		// LOAD RUANG LAB
+		$res = $this->Ruang_lab_model->get();
+		$data['lab'] = $res;
+		
+		// TAMBAH LAB
+		if($this->input->post('btntambah')) {
+			$this->Ruang_lab_model->add($this->input->post('namanew'));	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/ruanglab');
+		}
+
+		// EDIT LAB
+		if($this->input->post('btnubah')) {
+			$this->Ruang_lab_model->update_data($this->input->post('idedit'),$this->input->post('namaedit'));
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/ruanglab');
+		}
+
+		// DEL LAB
+		if($delaction != null) {
+			if($this->Ruang_lab_model->del($dellab)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/ruanglab');
+			}
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data ruang lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data ruang lab"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah ruang lab"
+			      });
+    		';
+    	}
+
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var nama = $(this).attr("targetnama");
+    			$("#idedit").val(id);
+    			$("#namaedit").val(nama);
+    		});
+    	';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_ruang_lab', $data);
+		$this->load->view('v_footer', $data);
+	}
+
 	public function periode($delaction = null, $delperiode = null) {
 		$data = array();
 		
@@ -822,7 +920,7 @@ class Master extends CI_Controller {
 			if($this->input->post('is_active')) {
 				$is_active = 1;
 			}
-			$this->Periode_model->add($this->input->post('nama'), $is_active);	
+			$this->Periode_model->add($this->input->post('tahun'), $this->input->post('radio_semester'), $is_active);	
 			$this->session->set_flashdata('notif', 'success_add');		
 			redirect('master/periode');
 		}
@@ -833,7 +931,7 @@ class Master extends CI_Controller {
 			if($this->input->post('is_active_edit')) {
 				$is_active = 1;
 			}
-			$this->Periode_model->update_data($this->input->post('idedit'),$this->input->post('namaedit'), $is_active);
+			$this->Periode_model->update_data($this->input->post('idedit'),$this->input->post('tahunedit'),$this->input->post('radio_edit_semester'),  $is_active);
 			$this->session->set_flashdata('notif', 'success_edit');
 			redirect('master/periode');
 		}
@@ -903,10 +1001,19 @@ class Master extends CI_Controller {
     	$data['js'] .= '
     		$("body").on("click",".editbtn", function() {
     			var id = $(this).attr("targetid");
-    			var nama = $(this).attr("targetnama");
+    			var tahun = $(this).attr("targettahun");
+    			var semester = $(this).attr("targetsemester");
     			var isactive = $(this).attr("targetactive");
     			$("#idedit").val(id);
-    			$("#namaedit").val(nama);
+    			$("#tahunedit").val(tahun);
+
+
+    			if(semester == "Genap") {
+    				$("#radio_semester_genap").prop( "checked", true ); 
+				} else {
+					$("#radio_semester_gasal").prop( "checked", true ); 
+				}
+
     			if(isactive == 1) {
     				$("#is_active_edit").prop( "checked", true ); 
     			} else {
@@ -1086,6 +1193,174 @@ class Master extends CI_Controller {
     	$data['js'] .= 'bsCustomFileInput.init(); ';
 		$this->load->view('v_header', $data);
 		$this->load->view('master/v_periode_sidang', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function periodesidangskripsi($delaction = null, $delperiode = null) {
+		$data = array();
+		
+		// LOAD PERIODE
+		$res = $this->Periode_model->get_periode_sidang_skripsi();
+		$data['periode'] = $res;
+		
+		// TAMBAH PERIODE
+		if($this->input->post('btntambah')) {
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end')));
+			
+			if(strtotime($this->input->post('date_start')) > strtotime($this->input->post('date_end'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periodesidangskripsi');
+			}
+
+			$is_active = 0;
+			if($this->input->post('is_active')) {
+				$is_active = 1;
+			}
+			$this->Periode_model->add_periode_sidang_skripsi($date_start,$date_end, $is_active);	
+			$this->session->set_flashdata('notif', 'success_add');		
+			redirect('master/periodesidangskripsi');
+		}
+
+		// EDIT PERIODE
+		if($this->input->post('btnubah')) {
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start_edit')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end_edit')));
+
+			if(strtotime($this->input->post('date_start_edit')) > strtotime($this->input->post('date_end_edit'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periodesidangskripsi');
+			}
+			
+			$is_active = 0;
+			if($this->input->post('is_active_edit')) {
+				$is_active = 1;
+			}
+			$this->Periode_model->update_data_periode_sidang($this->input->post('hidedit'),$date_start, $date_end, $is_active);
+			$this->session->set_flashdata('notif', 'success_edit');
+			redirect('master/periodesidangskripsi');
+		}
+
+		// DEL PERIODE
+		if($delperiode != null) {
+			if($this->Periode_model->del_periode_sidang_skripsi($delperiode)) {
+				$this->session->set_flashdata('notif', 'success_del');
+				redirect('master/periodesidangskripsi');
+			}
+		}
+
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": false,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+
+    	if($this->session->flashdata('notif') == 'success_del') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses hapus data periode sidang skripsi"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_edit') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses edit data periode sidang skripsi"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'success_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "Sukses tambah periode sidang skripsi"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+    		';
+    	}
+
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var targetstart = $(this).attr("targetstart");
+    			var targetend = $(this).attr("targetend");
+    			var isactive = $(this).attr("targetactive");
+    			$("#hidedit").val(id);
+    			$("#date_start_edit_id").val(targetstart);
+    			$("#date_end_edit_id").val(targetend);
+
+    			if(isactive == 1) {
+    				$("#is_active_edit").prop( "checked", true ); 
+    			} else {
+    				$("#is_active_edit").prop( "checked", false ); 
+    			}    
+
+
+			    $("#date_start_edit").datepicker("destroy").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_edit").datepicker("destroy").datetimepicker({
+			        format: "L"
+			    });			 
+    		});
+    	';
+
+    	// INIT DATE PICKER
+    	$data['js'] .= '
+			    	//Date picker
+			    $("#date_start").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end").datetimepicker({
+			        format: "L"
+			    });
+
+			    $("#date_start_edit").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_edit").datetimepicker({
+			        format: "L"
+			    });
+			';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_periode_sidang_skripsi', $data);
 		$this->load->view('v_footer', $data);
 	}
 
@@ -1407,6 +1682,77 @@ class Master extends CI_Controller {
     	$data['js'] .= 'bsCustomFileInput.init(); ';
 		$this->load->view('v_header', $data);
 		$this->load->view('master/v_eligibility', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function mklulus($delaction = null, $delroles = null) {
+		$data = array();
+		
+
+		// LOAD SETTING
+		$data['eligibility'] = $this->MK_lulus_model->get();
+
+		if($this->input->post('btntambah')) {
+			$this->MK_lulus_model->add($this->input->post('kode_mk'), $this->input->post('nama_mk'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses menambahkan mata kuliah');
+			redirect('master/mklulus');
+		}
+
+		// EDIT ELIGIBILITY
+		if($this->input->post('btnubah')) {
+			$this->MK_lulus_model->update($this->input->post('hid_id'),$this->input->post('edit_kode_mk'), $this->input->post('edit_nama_mk'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses mengubah mata kuliah');
+			redirect('master/mklulus');
+		}
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		    });';
+
+    	// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    	if($this->session->flashdata('notif') == 'success') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+    	// EDIT BTN
+    	$data['js'] .= '
+    		$("body").on("click",".editbtn", function() {
+    			var id = $(this).attr("targetid");
+    			var nama = $(this).attr("targetnama");
+    			var kode = $(this).attr("targetkode");
+    			$("#hid_id").val(id);
+    			$("#edit_nama_mk").val(nama);
+    			$("#edit_kode_mk").val(kode);
+    		});
+    	';
+
+    	$data['js'] .= 'bsCustomFileInput.init(); ';
+		$this->load->view('v_header', $data);
+		$this->load->view('master/v_mk_lulus', $data);
 		$this->load->view('v_footer', $data);
 	}
 }

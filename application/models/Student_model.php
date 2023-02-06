@@ -8,6 +8,36 @@ class Student_model extends CI_Model {
         public $ipk;
         public $ipkm;
 
+        // MK prasyarat kelulusan
+        public function generate_table_prasyarat($mkprasyarat, $nrp) { 
+                $this->load->helper('text');
+                $html = '';
+
+                foreach ($mkprasyarat as $key => $value) {
+                        $kodemk = explode(',', $value->kode_mk);
+                        $where = '';
+                        foreach($kodemk as $kode) {
+                                $this->db->or_where('kode_mk = ',trim($kode));
+                        }
+                        $this->db->where('student_nrp = ', $nrp);
+                        $q = $this->db->get('student_transcript');
+
+                        if($q->num_rows() > 0) {
+                                $qrow = $q->row();
+                                $html .= '<tr><td>'.$qrow->kode_mk.'</td>';
+                                $html .= '<td>'.$value->nama_mk.'</td>';
+                                $html .= '<td>'.$qrow->nisbi.'</td></tr>';
+                        } else {
+                                $html .= '<tr><td>'.character_limiter($value->kode_mk, 10).'</td>';
+                                $html .= '<td>'.$value->nama_mk.'</td>';
+                                $html .= '<td>-</td></tr>';       
+                        }
+                }
+
+                return $html;
+
+        }
+
         // Hitung IPKKum
         public function get_ipk_kum($nrp) {
                 $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));
@@ -25,6 +55,20 @@ class Student_model extends CI_Model {
                 } else {
                         return 0.0;
                 }
+        }
+
+        // SKS nilai D
+        public function get_sks_d($nrp) {
+                $this->db->select_sum('sks');
+                $query = $this->db->get_where('student_transcript', array('student_nrp' => $nrp, 'nisbi'=> 'D'));
+                $rowtotalsksdmax = $query->row();
+
+                if($rowtotalsksdmax->sks == 0) {
+                        return 0;
+                } else {
+                        return $rowtotalsksdmax->sks;
+                }
+                
         }
 
         public function get_sks_kum($nrp) {
@@ -121,7 +165,7 @@ class Student_model extends CI_Model {
                 return $q->result();*/
         }
 
-        public function check_mk_in_ks($nrp, $kodemk) {
+        public function check_ks() {
                 $dbsim = $this->load->database('sim',TRUE);
                 $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'ThnAkademik' => '2022', 'Semester' => 'Gasal'));
                 
@@ -131,6 +175,58 @@ class Student_model extends CI_Model {
 
                 foreach($kodeskripsi as $value) {
                         $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'KodeMK' => $value));
+
+                        if($q->num_rows() > 0) {
+                                $hasileligible = true;
+                                break;
+                        } 
+                
+                }
+
+                return $hasileligible;
+        }
+
+        public function get_jumlah_mk_in_ks($nrp) {
+                 // ambil periode aktif
+                $q = $this->db->get_where('periode', array('is_active' => 1));
+
+                if($q->num_rows() == 0) {
+                        return 0;
+                }
+                $qr = $q->row();
+
+                $dbsim = $this->load->database('sim',TRUE);
+                $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'ThnAkademik' => $qr->tahun, 'Semester' => $qr->semester));
+
+                $totalsks = 0;
+                foreach($q->result() as $key => $value) {
+                        $q = $this->db->query("SELECT sks FROM course WHERE kode_mk = '".$value->KodeMK."' OR old_kode_mk1 = '".$value->KodeMK."' OR old_kode_mk2 = '".$value->KodeMK."' OR old_kode_mk3 = '".$value->KodeMK."' OR old_kode_mk4 = '".$value->KodeMK."';");
+
+                        if($q->num_rows() > 0) {
+                                $qr = $q->row();
+                                $totalsks += $qr->sks;
+                        }
+                }
+                
+                return $totalsks;
+        }
+
+        public function check_mk_in_ks($nrp, $kodemk) {
+                // ambil periode aktif
+                $q = $this->db->get_where('periode', array('is_active' => 1));
+                $qr = $q->row();
+
+                $dbsim = $this->load->database('sim',TRUE);
+                $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp, 'ThnAkademik' => $qr->tahun, 'Semester' => $qr->semester));
+                
+                $kodeskripsi = explode(',',$kodemk);
+
+
+                $hasileligible = false;
+
+                foreach($kodeskripsi as $value) {
+
+                        $q = $dbsim->get_where('v_FarKartuStudi', array('NRP' => $nrp,'ThnAkademik' => $qr->tahun, 'Semester' => $qr->semester, 'KodeMK' => $value));
 
                         if($q->num_rows() > 0) {
                                 $hasileligible = true;
@@ -265,6 +361,22 @@ class Student_model extends CI_Model {
                 } else {
                         return $numbercreated;
                 }
+        }
+
+        public function get_transcript_from_array($kode_mk_arr, $nrp) {
+                foreach($kode_mk_arr  as $key => $value) {
+                        $this->db->or_where('kode_mk = ',trim($value));
+                }
+                        
+                $this->db->where('student_nrp = ', $nrp);
+                $q = $this->db->get('student_transcript');
+
+                if($q->num_rows() > 0) {
+                        return $q->row();
+                } else {
+                        return false;                    
+                }
+                
         }
 
         public function get_transcript($kode_mk_arr, $nrp) {

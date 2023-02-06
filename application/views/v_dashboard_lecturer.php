@@ -23,6 +23,39 @@
       <div class="container-fluid">
         <!-- Timelime example  -->
          <div class="row">
+          <?php 
+             if(@$needvalidatelulus) { if(count($needvalidatelulus) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lulus'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info "><?php echo count($needvalidatelulus); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Pengajuan Pendaftaran Kelulusan</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
+
+        <?php 
+             if(@$needvalidateluluswd) { if(count($needvalidateluluswd) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lulus'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info "><?php echo count($needvalidateluluswd); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Pengajuan Pendaftaran Kelulusan</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
             <?php if(count($student) >0 ) { ?>
              <div class="col-12">
                 <div class="card card card-outline card-primary">
@@ -103,12 +136,44 @@
           </div>
         <?php } ?>
 
+        <?php if($need_kalab_title_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_kalab_title_validation; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Judul Proposal</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
+        <?php if($need_kalab_sempro_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('sempro'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_kalab_sempro_validation; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Sidang Sempro</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
         <?php 
              if(isset($student_kalab)) { if(count($student_kalab) >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">
               <a href="<?php echo base_url('lecturer/proposal'); ?>">
                 <div class="info-box">
-                  <span class="info-box-icon bg-success "><?php echo count($student_kalab); ?></span>
+                  <span class="info-box-icon bg-info "><?php echo count($student_kalab); ?></span>
 
                   <div class="info-box-content" style="line-height: 14px;">
                     <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda</span>
@@ -120,11 +185,13 @@
           </div>
         <?php } } ?>
 
+        
+
         <?php if(isset($needdosbing)) { if(count($needdosbing) >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">
               <a href="<?php echo base_url('lecturer/proposal'); ?>">
                 <div class="info-box">
-                  <span class="info-box-icon bg-warning "><?php echo count($needdosbing); ?></span>
+                  <span class="info-box-icon bg-info "><?php echo count($needdosbing); ?></span>
 
                   <div class="info-box-content" style="line-height: 14px;">
                     <span ><strong>Proposal</strong><br/>Membutuhkan pemilihan dosbing</span>
@@ -135,10 +202,119 @@
             <!-- /.info-box -->
           </div>
         <?php } } ?>
+
+      
            <?php } ?>
             
+  <?php if(isset($need_dosbing1_validation)) { if($need_dosbing1_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info "><?php echo $need_dosbing1_validation; ?></span>
 
-          
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
+
+        <?php if(@$my_skripsi_schedule && $my_skripsi_schedule!= false) { ?>
+          <div class="col-md-12">
+        <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Jadwal Sidang Skripsi Anda</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Tanggal</th>
+                      <th>Jam</th>
+                      <th>Ruang</th>
+                      <th>Mahasiswa</th>
+                      <th>Pembimbing</th>
+                      <th>Penguji</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($my_skripsi_schedule as $key => $value) { ?>
+                      <tr>
+                        <td><?php echo $key+1; ?></td>
+                        <td><?php echo strftime("%d %B %Y", strtotime($value->sidang_date)); ?></td>
+                        <td><?php echo $value->label; ?></td>
+                        <td><?php echo $value->roomlabel; ?></td>
+                        <td><?php echo $value->nama.'<br/>'.$value->nrp; ?></td>
+                        <td><small>
+                          <?php if($info[0]->npk == $value->lecturer1_npk) { echo '<strong>(1) '.$value->dosbing1.'</strong><br/><br/>';  } else { echo '(1) '.$value->dosbing1.'<br/><br/>'; }
+
+                                if($info[0]->npk == $value->lecturer2_npk) { echo '<strong>(2) '.$value->dosbing2.'</strong>';  } else { echo '(2) '.$value->dosbing2; } ?></small></td>
+                          
+                        <td><small> <?php if($info[0]->npk == $value->penguji1) { echo '<strong>(Ketua) '.$value->namapenguji1.'</strong><br/><br/>';  } else { echo '(Ketua) '.$value->namapenguji1.'<br/><br/>'; }
+
+                                if($info[0]->npk == $value->penguji2) { echo '<strong>(Sekretaris) '.$value->namapenguji2.'</strong>';  } else { echo '(Sekretaris) '.$value->namapenguji2; } ?></small></td>
+                        <td><a href="<?php echo base_url('skripsi/detail/'.$value->id); ?>" class="btn btn-outline-primary btn-flat">Detil</a></td>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <?php } ?>
+
+        <?php if(@$my_sempro_schedule && $my_sempro_schedule!= false) { ?>
+          <div class="col-md-12">
+        <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Jadwal Sidang Sempro Anda</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Tanggal</th>
+                      <th>Jam</th>
+                      <th>Ruang</th>
+                      <th>Mahasiswa</th>
+                      <th>Pembimbing</th>
+                      <th>Penguji</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($my_sempro_schedule as $key => $value) { ?>
+                      <tr>
+                        <td><?php echo $key+1; ?></td>
+                        <td><?php echo strftime("%d %B %Y", strtotime($value->sidang_date)); ?></td>
+                        <td><?php echo $value->label; ?></td>
+                        <td><?php echo $value->roomlabel; ?></td>
+                        <td><?php echo $value->nama.'<br/>'.$value->nrp; ?></td>
+                        <td><small>
+                          <?php if($info[0]->npk == $value->lecturer1_npk) { echo '<strong>(1) '.$value->dosbing1.'</strong><br/><br/>';  } else { echo '(1) '.$value->dosbing1.'<br/><br/>'; }
+
+                                if($info[0]->npk == $value->lecturer2_npk) { echo '<strong>(2) '.$value->dosbing2.'</strong>';  } else { echo '(2) '.$value->dosbing2; } ?></small></td>
+                          
+                        <td><small> <?php if($info[0]->npk == $value->penguji1) { echo '<strong>(Ketua) '.$value->namapenguji1.'</strong><br/><br/>';  } else { echo '(Ketua) '.$value->namapenguji1.'<br/><br/>'; }
+
+                                if($info[0]->npk == $value->penguji2) { echo '<strong>(Sekretaris) '.$value->namapenguji2.'</strong>';  } else { echo '(Sekretaris) '.$value->namapenguji2; } ?></small></td>
+                        <td><a href="<?php echo base_url('sempro/detail/'.$value->id); ?>" class="btn btn-outline-primary btn-flat">Detil</a></td>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <?php } ?>
 
            <?php if($wd != false) { ?>
             <?php if(count($wd_topic) >0) { ?>
@@ -154,10 +330,45 @@
                 </div>
               </a>
             <!-- /.info-box -->
+        }
           </div>
         <?php } ?>
+
+        <?php if($need_wd_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_wd_validation; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+        <?php if($need_wd_final_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_wd_final_validation; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi final anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
            <?php }?>
          </div>
+
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

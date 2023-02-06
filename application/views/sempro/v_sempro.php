@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Ujian Proposal</h1>
+            <h1 class="m-0">Sidang Sempro</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item active">Ujian Proposal</li>
+              <li class="breadcrumb-item active">Sidang Sempro</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -29,7 +29,7 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col-10">
-                    <h3 class="card-title">Data Ujian Proposal</h3>
+                    <h3 class="card-title">Data Sidang Sempro</h3>
                   </div>
                   <div class="col-2">
                     <?php if(isset($registration_available)) { 
@@ -52,12 +52,12 @@
                   <div class="alert alert-warning alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                    Periode sidang proposal belum dibuka.
+                    Periode sidang sempro belum dibuka.
                   </div>
                 <?php } else if(isset($registration_available)) { ?>
                   <div class="callout callout-info">
                     <h5>Daftar Sidang Proposal</h5>
-                    <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('sempro/daftar'); ?>">Daftar</a> untuk daftar sidang proposal.</p>
+                    <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('sempro/daftar'); ?>">Daftar</a> untuk daftar sidang sempro.</p>
                   </div>
                <?php } else { ?>
                 <div class="callout callout-info">

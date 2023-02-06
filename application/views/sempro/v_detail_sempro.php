@@ -5,13 +5,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Detail Sidang Proposal</h1>
+            <h1 class="m-0">Detail Sidang Sempro</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item"><a href="<?php echo base_url('sempro'); ?>">Sidang Proposal</a></li>
-              <li class="breadcrumb-item active">Detail Sidang Proposal</li>
+              <li class="breadcrumb-item"><a href="<?php echo base_url('sempro'); ?>">Sidang Sempro</a></li>
+              <li class="breadcrumb-item active">Detail Sidang Sempro</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -27,7 +27,7 @@
             <?php // print_r($detail); ?>
             <div class=" card card-outline card-primary">
               <div class="card-header">
-                <div class="card-title">Data Sidang Proposal</div>
+                <div class="card-title">Data Sidang Sempro</div>
                 <div class="card-tools">
                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
@@ -136,13 +136,13 @@
                             <div class="user-block">
                             <img class="img-circle" src="https://my.ubaya.ac.id/img/krywn/<?php echo $detail->penguji1; ?>_l.jpg" alt="User Image">
                             <span class="username"><?php echo $detail->namapenguji1; ?></span>
-                            <span class="description">Dosen Penguji 1</span>
+                            <span class="description">Ketua</span>
                           </div>
                                   <?php        
                                   } else { ?> 
                             <div class="user-block">
                             <span class="username"><a href="#">(Belum Tersedia)</a></span>
-                            <span class="description">Dosen Penguji 1</span>
+                            <span class="description">Ketua</span>
                           </div>
                                  <?php } ?>
                         </div>
@@ -158,13 +158,13 @@
                             <div class="user-block">
                             <img class="img-circle" src="https://my.ubaya.ac.id/img/krywn/<?php echo $detail->penguji2; ?>_l.jpg" alt="User Image">
                             <span class="username"><?php echo $detail->namapenguji2; ?></span>
-                            <span class="description">Dosen Penguji 2</span>
+                            <span class="description">Sekretaris</span>
                           </div>
                                   <?php        
                                   } else { ?> 
                             <div class="user-block">
                             <span class="username"><a href="#">(Belum Tersedia)</a></span>
-                            <span class="description">Dosen Penguji 2</span>
+                            <span class="description">Sekretaris</span>
                           </div>
                                  <?php } ?>
                         </div>
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="col-4">
-                      <p class="text-sm">SKS Kum
+                      <p class="text-sm">SKS di Kartu Studi
                         <b class="d-block"><?php echo $detail->sks_ks; ?></b>
                       </p>
                     </div>
@@ -320,13 +320,13 @@
                                 </div>
 
                                 <div class="col-6">
-                                  <p class="text-sm">Penguji 1
+                                  <p class="text-sm">Ketua
                                     <b class="d-block"><?php echo $detail->namapenguji1; ?></b>
                                   </p>
                                 </div>
 
                                 <div class="col-6">
-                                  <p class="text-sm">Penguji 2
+                                  <p class="text-sm">Sekretaris
                                     <b class="d-block"><?php echo $detail->namapenguji2; ?></b>
                                   </p>
                                 </div>
@@ -390,9 +390,9 @@
                                         <div class="row">
                                           <div class="col-12">
                                             <div class="form-group">
-                                              <label for="penguji1" class="col-sm-4 col-form-label">Penguji 1</label>
+                                              <label for="penguji1" class="col-sm-4 col-form-label">Ketua</label>
                                                 <select class="form-control select2bs4" name="penguji1" id="penguji1" style="width: 100%;">
-                                                  <option selected="selected" value="0">[Pilih Penguji 1]</option>
+                                                  <option selected="selected" value="0">[Pilih Ketua]</option>
                                                   <?php foreach($dosbing as $value) { ?>
                                                     <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?> 
                                                   <option value="<?php echo $value->npk; ?>" ><?php echo $value->nama; ?></option>
@@ -403,9 +403,9 @@
 
                                           <div class="col-12">
                                             <div class="form-group">
-                                              <label for="penguji2" class="col-sm-4 col-form-label">Penguji 2</label>
+                                              <label for="penguji2" class="col-sm-4 col-form-label">Sekretaris</label>
                                                 <select class="form-control select2bs4" name="penguji2" id="penguji2" style="width: 100%;">
-                                                  <option selected="selected" value="0">[Pilih Penguji 2]</option>
+                                                  <option selected="selected" value="0">[Pilih Sekretaris]</option>
                                                   <?php foreach($dosbing as $value) { ?>
                                                     <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?><option value="<?php echo $value->npk; ?>" ><?php echo $value->nama; ?></option>
                                                   <?php } }  ?>
@@ -507,7 +507,7 @@
 
                         <!-- timeline item -->
                         <div>
-                           <?php if(!is_null($detail->hasil)) { ?>
+                           <?php if(!is_null($detail->hasil_submited_date)) { ?>
                           <i class="fas fa-check bg-green"></i>
                         <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
                           <div class="timeline-item">
@@ -521,18 +521,29 @@
                                       <?php if(is_null($detail->hasil)) { 
                                       $now = time(); // or your date as well
                                       $your_date = strtotime($detail->sidang_date);
-                                      $datediff = $now - $your_date;
 
-                                      $diff = round($datediff / (60 * 60 * 24));
-                                      if($diff > 0) {
-                                        echo ' ('.$diff.' hari sebelum sidang )';
-                                      } 
+                                      if($now > $your_date) { 
+                                        echo ' (sidang telah berakhir)';
+                                      } else {
+                                          $datediff = $now - $your_date;
+
+                                          $diff = round($datediff / (60 * 60 * 24));
+                                          if($diff > 0) {
+                                            echo ' ('.$diff.' hari sebelum sidang )';
+                                          } 
+                                      }
+                                      
                                     } ?>
                                   </p>
                                 </div>
                               <?php } ?>
 
-                              <?php if(!is_null($detail->hasil)) { ?>
+                              <?php if(!is_null($detail->hasil_submited_date)) { ?>
+                                <div class="col-12">
+                                  <p class="text-sm">Saran
+                                    <b class="d-block"><?php echo $detail->saran; ?></b>
+                                  </p>
+                                </div>  
                                 <div class="col-12">
                                   <p class="text-sm">Materi
                                     <b class="d-block"><?php echo $detail->materi; ?></b>
@@ -559,8 +570,8 @@
                                   </p>
                                 </div>  
                                 <div class="col-12">
-                                  <p class="text-sm">Hasil
-                                    <b class="d-block"><?php echo $detail->hasil; ?></b>
+                                  <p class="text-sm">Kesimpulan
+                                    <b class="d-block"><?php echo $detail->kesimpulan; ?></b>
                                   </p>
                                 </div>  
                                 <div class="col-12">
@@ -573,9 +584,15 @@
                               <?php 
 
                               if(isset($is_lecturer)) {
-                                if(is_null($detail->hasil) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
+                                if(is_null($detail->hasil_submited_date) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                  <div class="row">
+                                  <div class="col-12">
+                                       <div class="form-group">
+                                           <label for="saran">Saran</label>
+                                           <textarea type="text" class="form-control" name="saran" id="saran"></textarea>
+                                      </div>
+                                    </div>
                                     <div class="col-12">
                                        <div class="form-group">
                                            <label for="materi">Materi</label>
@@ -608,8 +625,8 @@
                                     </div>
                                     <div class="col-12">
                                        <div class="form-group">
-                                           <label for="hasil">Nilai</label>
-                                           <input type="number" class="form-control " min="0" max="100"  value=""  name="hasil" id="hasil" />
+                                           <label for="kesimpulan">Kesimpulan</label>
+                                           <textarea type="text" class="form-control" name="kesimpulan" id="kesimpulan"></textarea>
                                       </div>
                                     </div>
 
@@ -617,21 +634,15 @@
                                     <div class="col-12">
                                       <div class="form-check">
                                         <input class="form-check-input" id="cekrevisijudul" name="cekrevisijudul" value="valid" type="checkbox">
-                                        <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi judul</label>
+                                        <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi naskah</label>
                                       </div>
                                     </div>
 
 
-                                    <div class="col-12">
-                                      <div class="form-check">
-                                        <input class="form-check-input" id="ceksempro" name="ceksempro" value="valid" type="checkbox">
-                                        <label class="form-check-label" for="ceksempro">Saya telah memeriksa hasil penilaian sempro mahasiswa ini</label>
-                                      </div>
-                                    </div>
 
                                     <div class="form-group " style="margin-top: 20px;">
                                         <div class="col-sm-12 text-right">
-                                          <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmitnilai" disabled id="btndosbingsubmitnilai">Submit Hasil Sempro</button>
+                                          <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingsubmitnilai" id="btndosbingsubmitnilai">Submit Hasil Sempro</button>
                                         </div>
                                       </div>
                                   </div>
@@ -652,7 +663,7 @@
                           <div class="timeline-item">
                             
                             <div class="timeline-body">
-                              Mahasiswa - Revisi Judul<br/>
+                              Mahasiswa - Revisi Naskah<br/>
                               <?php if(!is_null($detail->revision_judul_date)) { ?>
                                   <small><i class="fas fa-clock"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail->revision_judul_date)); ?>
@@ -661,8 +672,8 @@
                               </small>
                               <?php } ?>
 
-                               <?php if(isset($is_student)) { ?>
-                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>">
+                               <?php if(isset($is_student) && is_null($detail->revision_judul_date)) { ?>
+                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                   <div class="form-group ">
                                     <label for="juduledit" class="col-sm-12 col-form-label">Judul</label>
                                     <div class="col-sm-12">
@@ -670,9 +681,23 @@
                                     </div>
                                   </div>
 
+                                  <div class="form-group ">
+                                    <label for="file_naskah_revisi" class="col-sm-12 col-form-label">File Revisi Naskah Sempro</label>
+                                    <div class="col-sm-12">
+                                      <input type="file"  name="file_naskah_revisi" class="form-control" accept="application/pdf" id="file_naskah_revisi" >
+                                    </div>
+                                  </div>
+
+                                  <div class="col-12">
+                                      <div class="form-check">
+                                        <input class="form-check-input" id="cekrevisinaskah" name="cekrevisinaskah" value="valid" type="checkbox">
+                                        <label class="form-check-label" for="cekrevisinaskah">Saya telah merevisi naskah sesuai hasil sidang sempro</label>
+                                      </div>
+                                    </div>
+
                                    <div class="form-group " style="margin-top: 20px;">
                                     <div class="col-sm-12 text-right">
-                                      <button type="submit" class="btn btn-primary" value="Submit" name="btnmhssimpanjudul" id="btnmhssimpanjudul">Simpan Judul</button>
+                                      <button type="submit" class="btn btn-primary" value="Submit" name="btnmhssimpanjudul" id="btnmhssimpanjudul" disabled>Submit Revisi</button>
                                     </div>
                                   </div>
                                 </form>
@@ -691,7 +716,7 @@
                           <div class="timeline-item">
                             
                             <div class="timeline-body">
-                              Dosbing - Validasi Revisi Judul<br/>
+                              Dosbing - Validasi Revisi Naskah<br/>
                               <?php if(!is_null($detail->dosbing_validate_date)) { ?>
                                   <small><i class="fas fa-clock"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail->dosbing_validate_date)); ?>
@@ -709,7 +734,7 @@
                                 <div class="col-12">
                                   <div class="form-check">
                                     <input class="form-check-input" id="cekjudul" name="cekjudul" value="valid" type="checkbox">
-                                    <label class="form-check-label" for="cekjudul">Saya telah memeriksa hasil revisi judul mahasiswa ini</label>
+                                    <label class="form-check-label" for="cekjudul">Saya telah memeriksa hasil revisi naskah mahasiswa ini</label>
                                   </div>
                                 </div>
                                 <div class="form-group ">

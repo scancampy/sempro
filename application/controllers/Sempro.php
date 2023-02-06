@@ -139,6 +139,12 @@ class Sempro extends CI_Controller {
 							$data['ipkkum'] = $this->Student_model->get_ipk_kum($info[0]->nrp);
 							$data['skskum'] = $this->Student_model->get_sks_kum($info[0]->nrp);
 
+							$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($info[0]->nrp);
+
+							$nilaimklulus = $this->MK_lulus_model->get("is_deleted = 0");
+							
+							
+
 
 							if($this->input->post('btnSubmit')) {
 								if($this->input->post('checkbox_setuju') != true) {
@@ -227,21 +233,27 @@ class Sempro extends CI_Controller {
 				if($this->input->post('btnmhssimpanjudul')) {
 					$newjudul = $this->input->post('revisijudul');
 
-					if($data['detail']->judul == $newjudul) {
-						$this->session->set_flashdata('notif', 'failed');
-			          	$this->session->set_flashdata('msg', 'Judul masih sama. Silahkan revisi judul anda.');
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/naskah';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'naskah_'.$id.date('Ymdhis').'.pdf';
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ( ! $this->upload->do_upload('file_naskah_revisi')) {
+			          	$this->session->set_flashdata('notif', 'error_validated');
+			          	$this->session->set_flashdata('msg', $this->upload->display_errors());
 			          	redirect('sempro/detail/'.$id);
-					} else {
-						if($this->Sempro_model->update_judul($id,$newjudul)) {
-							$this->session->set_flashdata('notif', 'success');
-				          	$this->session->set_flashdata('msg', 'Suskes merevisi judul');
-				          	redirect('sempro/detail/'.$id);
-						} else {
-							$this->session->set_flashdata('notif', 'failed');
-				          	$this->session->set_flashdata('msg', 'Gagal ubah judul');
-				          	redirect('sempro/detail/'.$id);
-						}
-					}
+			        }
+
+			        $this->Sempro_model->update_judul($id, $newjudul, $config['file_name']);
+
+					$this->session->set_flashdata('notif', 'success');
+		          	$this->session->set_flashdata('msg', 'Suskes merevisi judul');
+		          	redirect('sempro/detail/'.$id);
 				}
 
 				if($this->input->post('btnuploadnaskah')) {
@@ -284,19 +296,20 @@ class Sempro extends CI_Controller {
 				}
 
 				if($this->input->post('btndosbingsubmitnilai')) {
+					$saran = $this->input->post('saran');
 					$materi = $this->input->post('materi');
 					$rumusan = $this->input->post('rumusan');
 					$tujuan = $this->input->post('tujuan');
 					$metodologi = $this->input->post('metodologi');	
 					$analisis = $this->input->post('analisis');
-					$hasil = $this->input->post('hasil');
+					$kesimpulan = $this->input->post('kesimpulan');
 					if($this->input->post('cekrevisijudul')) {
 						$cekrevisijudul = true;
 					} else {
 						$cekrevisijudul = false;
 					}
 
-					$this->Sempro_model->submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $hasil, $cekrevisijudul);
+					$this->Sempro_model->submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $saran, $kesimpulan, $cekrevisijudul);
 					$this->session->set_flashdata('notif', 'success');
 					$this->session->set_flashdata('msg', 'Sukses submit hasil Sempro');
 					redirect('sempro/detail/'.$id);
@@ -402,12 +415,16 @@ class Sempro extends CI_Controller {
 
 		// CHECKBOX HANDLE
 		$data['js'] .= '
-			$("#ceksempro").on("click", function() {
-				if($("#ceksempro").is(":checked")) {
-						$("#btndosbingsubmitnilai").prop("disabled", false); 
+			$("#cekrevisinaskah").on("click", function() {
+				if($("#cekrevisinaskah").is(":checked")) {
+					if($("#file_naskah_revisi").get(0).files.length ===0) {
+						$("#btnmhssimpanjudul").prop("disabled", true); 
+					} else {
+						$("#btnmhssimpanjudul").prop("disabled", false); 
+					}
 				} else {
 					
-						$("#btndosbingsubmitnilai").prop("disabled", true); 
+						$("#btnmhssimpanjudul").prop("disabled", true); 
 				}
 			});';
 
@@ -548,6 +565,49 @@ class Sempro extends CI_Controller {
 
 		";
 
+		// SHOW SIDANG BUTTON
+		$data['js'] .= "
+			$('.btnplotshow').on('click', function() {
+				var tsl = $(this).attr('tanggalsidanglabel');
+				var stl = $(this).attr('sidangtimelabel');
+				var ts = $(this).attr('tanggalsidang');
+				var st = $(this).attr('sidangtimeid');
+				$('#span_tgl_sidang').html(tsl);
+				$('#txt_jam_sidang').val(stl);
+				$('#tglsidang').val(ts);
+				$('#jamsidang').val(st);
+
+				$.post('".base_url('ajaxcall/load_sidang')."', { 'tglsidang': ts, 'jamsidang': st }, function(data) { 
+					var obj = JSON.parse(data);
+					var str_table = '';
+
+					for(var i = 0; i < obj['data'].length; i++) {
+						str_table += '<tr>';
+						var item = obj['data'][i];
+						var nama = item['nama'];
+						var nrp = item['nrp'];
+						var dosbing1 = item['dosbing1'];
+						var dosbing2 = item['dosbing2'];
+						var penguji1 = item['namapenguji1'];
+						var penguji2 = item['namapenguji2'];
+						var roomlabel = item['roomlabel'];
+						var label = item['label'];
+
+						str_table += '<td>' + (i+1) + '</td>';	
+						str_table += '<td>' + nama + ' / ' + nrp + '</td>';
+						str_table += '<td>(1) ' + dosbing1 + '<br/>(2) ' + dosbing2 + '</td>';
+						str_table += '<td>(Ketua) ' + penguji1 + '<br/>(Sekretaris) ' + penguji2 + '</td>';
+						str_table += '<td><strong>' + roomlabel + '</strong></td>';
+						str_table += '<td><strong>' + label + '</strong></td>';
+						str_table += '</tr>';
+					}
+					$('#tbody-sidang').html(str_table);
+					
+				});
+			});
+
+		";
+
 		// CHECKBOX HANDLE
 		$data['js'] .= '
 			$("#cekhasilplot").on("click", function() {
@@ -618,14 +678,15 @@ class Sempro extends CI_Controller {
 				if(roomlabel == '') {
 					$('#btnsubmit').show();
 					$.post('".base_url('ajaxcall/get_available_room')."', { 'tglsidang': ts, 'jamsidang': st }, function(data) {
-						//alert(data);
+						
 						var obj = JSON.parse(data);
-						var str = '<option value=\"0\">[Pilih Ruang]</option>';
+						var str = '<select class=\"form-control\" name=\"ruang\" id=\"ruang\"><option value=\"0\">[Pilih Ruang]</option>';
 						for(var i = 0; i < obj['data'].length; i++) { 
 							var room = obj['data'][i];
 							str += '<option value=\"' + room.id + '\">' + room.label + '</option>';							
 						}
-						$('#ruang').html(str);
+						str += '</select>';
+						$('#ruangsidang').html(str);
 					});
 				} else {
 					$('#btnsubmit').hide();
@@ -660,7 +721,7 @@ class Sempro extends CI_Controller {
 
 		// CHECKBOX HANDLE
 		$data['js'] .= '
-			$("#ruang").on("change", function() {
+			$("body").on("change", "#ruang", function() {
 				if($(this).val() != 0) {
 					$("#btnsubmit").prop("disabled", false); 
 				} else {					
@@ -690,6 +751,9 @@ class Sempro extends CI_Controller {
 		echo json_encode(array('data' => $hasil, 'prasyarat' => $prasyarat));
 	}
 
+	public function loadsidang() {
+
+	}
 	
 	
 }

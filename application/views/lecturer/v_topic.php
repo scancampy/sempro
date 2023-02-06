@@ -177,7 +177,7 @@
                               <?php } ?>
 
                       <?php if($info[0]->npk == $row->lecturer_npk && $row->kalab_verified_date == null) {  ?>
-                      <button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetkuota="<?php echo $row->kuota; ?>" targetidlab="<?php echo $row->id_lab; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" periodebuka="<?php if(count($periode_topik[$k]) >0 ) { 
+                      <button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetkuota="<?php echo $row->kuota; ?>" targetaktif="<?php echo $row->is_active; ?>" targetidlab="<?php echo $row->id_lab; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" periodebuka="<?php if(count($periode_topik[$k]) >0 ) { 
                         foreach($periode_topik[$k] as $idx => $pt) {
                           if($idx != 0) { echo ', '; }
                           echo $pt->nama; 
@@ -240,7 +240,7 @@
             <div class="form-group row">
                 <label for="angkatan" class="col-sm-4 col-form-label">Status Topik</label>
                 <div class="col-sm-8">
-                  <span id="currentperiode"></span> <a class="btn btn-outline-primary btn-sm" id="ubahperiode">Ubah</a>
+                  <?php /*<span id="currentperiode"></span> <a class="btn btn-outline-primary btn-sm" id="ubahperiode">Ubah</a>*/ ?>
                   <input type="hidden" name="hidubahperiode" id="hidubahperiode" value="false"/>
                   <div id="containerperiode" style="display:none;">
                     <?php foreach($periode_edit as $row) {  ?>
@@ -250,6 +250,16 @@
                     </div>
                     <?php } ?>                      
                   </div>
+
+                  <div class="form-check">
+                      <input class="form-check-input"  type="radio" name="radioaktif" id="edit_radioaktif" value="1">
+                      <label for="edit_radioaktif"  class="form-check-label">Aktif (topik dapat dipilih oleh mahasiswa)</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="radioaktif" id="edit_radiotidakaktif" value="0">
+                      <label for="edit_radiotidakaktif" class="form-check-label">Tidak Aktif (topik tidak dapat dicari dan dipilih oleh mahasiswa)</label>
+                    </div>                      
+                
                 </div>
               </div>
             <div class="form-group row">
@@ -341,6 +351,7 @@
                 <div class="col-sm-8">
                   <input type="text" readonly class="form-control-plaintext" id="angkatanvalidasi" value="Gasal">
                 </div>
+                 
               </div>
             <div class="form-group row">
                 <label for="course_id1_validasi" class="col-sm-4 col-form-label">MK Prasyarat 1</label>

@@ -53,7 +53,7 @@
                   <tr>
                     <td><?php echo $row->nama; ?></td>
                     <td><?php if($row->is_active == 1) { echo ' <i class="green text-success nav-icon fas fa-check-square"></i>'; }  ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetactive="<?php echo $row->is_active; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/periode/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td ><button targetid="<?php echo $row->id; ?>" targettahun="<?php echo $row->tahun; ?>" targetsemester="<?php echo $row->semester; ?>" targetactive="<?php echo $row->is_active; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/periode/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>
@@ -81,11 +81,28 @@
             </button>
           </div>
           <div class="modal-body">
-           <div class="form-group row">
-              <label for="nama" class="col-sm-4 col-form-label">Nama Periode</label>
+           
+
+            <div class="form-group row">
+              <label for="tahun" class="col-sm-4 col-form-label">Tahun</label>
               <div class="col-sm-8">
-                <input type="text" name="nama" class="form-control" id="nama" >
+                <input type="text" name="tahun" class="form-control" id="tahun" >
               </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label for="semester" class="col-sm-4 col-form-label">Semester</label>
+                <div class="col-sm-8">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radio_semester" id="radio_semester_gasal" value="Gasal" checked>
+                    <label class="form-check-label" for="radio_semester_gasal">Gasal</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radio_semester" id="radio_semester_genap" value="Genap">
+                    <label class="form-check-label" for="radio_semester_genap">Genap</label>
+                  </div>
+                </div>
             </div>
             <div class="form-group row">
                 <div class="offset-sm-4 col-sm-8">
@@ -120,11 +137,25 @@
           </div>
           <div class="modal-body">
            <div class="form-group row">
-              <label for="namaedit" class="col-sm-4 col-form-label">Nama Periode</label>
+              <label for="tahunedit" class="col-sm-4 col-form-label">Tahun</label>
               <div class="col-sm-8">
-                <input type="text" name="namaedit" class="form-control" id="namaedit" >
+                <input type="text" name="tahunedit" class="form-control" id="tahunedit" >
                 <input type="hidden" name="idedit" id="idedit" >
               </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="semester" class="col-sm-4 col-form-label">Semester</label>
+                <div class="col-sm-8">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radio_edit_semester" id="radio_edit_semester_gasal" value="Gasal" checked>
+                    <label class="form-check-label" for="radio_semester_gasal">Gasal</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radio_edit_semester" id="radio_edit_semester_genap" value="Genap">
+                    <label class="form-check-label" for="radio_semester_genap">Genap</label>
+                  </div>
+                </div>
             </div>
             <div class="form-group row">
                 <div class="offset-sm-4 col-sm-8">

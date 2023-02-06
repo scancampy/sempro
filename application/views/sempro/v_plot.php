@@ -54,12 +54,12 @@
                     </p>
                   </div>
                   <div class="col-6">
-                    <p class="text-sm"><b>Penguji 1</b>
+                    <p class="text-sm"><b>Ketua</b>
                       <span class="d-block"><?php echo $penguji1[0]->nama; ?></span>
                     </p>
                   </div>
                   <div class="col-6">
-                    <p class="text-sm"><b>Penguji 2</b>
+                    <p class="text-sm"><b>Sekretaris</b>
                       <span class="d-block"><?php echo $penguji2[0]->nama; ?></span>
                     </p>
                   </div>
@@ -137,15 +137,18 @@
                            } 
                         }
 
+
+                        if(!is_null($adasidang)) { ?>
+<a data-toggle="modal" bolehplot="<?php echo $bolehplot; ?>" data-target="#modal-tampil" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>"  tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>"  tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>"  class="btn btnplotshow  bg-lightblue <?php if($jmlroom <= count($room) && $bolehplot) { echo 'col-5'; } else { echo 'btn-block'; } ?>" style="<?php if($jmlroom <= count($room) && $bolehplot) { echo 'max-width: 48%;'; }  ?>" ><i class="fa fas fa-users"></i> <?php echo $jmlroom; ?></a>
+                      <?php }
+
                         if($jmlroom <= count($room) && $bolehplot) {
                       ?>
-                        <input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" data-toggle="modal" data-target="#modal-pilih" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-primary" value="Plot" />
+                        <input type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" data-toggle="modal" data-target="#modal-pilih" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot  btn-outline-primary <?php if(!is_null($adasidang)) { echo 'col-6'; } else { echo 'btn-block'; }  ?>" style="<?php if(!is_null($adasidang)) { echo 'max-width: 49%;'; }  ?>" value="Plot" />
                     
                         <?php
                         
-                      } else { ?>
-<input type="button"  class="btn  btn-block btn-secondary" value="N/A" />
-                      <?php } ?>  
+                      } ?>  
                       </td>
                       <?php
                       $curdate = strtotime($periodeaktif->date_start.' +'.$dayidx.' day');
@@ -246,6 +249,49 @@
             <button type="submit" value="submit" name="btnsubmit" id="btnsubmit" disabled class="btn btn-primary">Simpan Hasil Plot</button>
           </div>
         </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  
+
+   <!-- /.modal -->
+  <div class="modal fade" id="modal-tampil">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          
+          <div class="modal-header">
+            <h4 class="modal-title">Jadwal Sidang</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="col-12">
+                    <p class="text-sm"><b>Tanggal Sidang</b>
+                      <span class="d-block" id="span_tgl_sidang"></span>
+                    </p>
+                  </div>
+            <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Mahasiswa</th>
+                      <th>Pembimbing</th>
+                      <th>Penguji</th>
+                      <th>Ruang</th>
+                      <th>Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-sidang">
+                  </tbody>
+                </table>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+          </div>
         </div>
         <!-- /.modal-content -->
       </div>

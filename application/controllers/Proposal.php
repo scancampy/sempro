@@ -192,7 +192,7 @@ class Proposal extends CI_Controller {
 		$data['student'] = $this->Student_model->get($data['detail'][0]->student_nrp);
 		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
             	
-	 $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
+	  $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
             	
 		$data['transcript_prasyarat'] = $this->Student_model->get_transcript($data['prasyarat'], $data['detail'][0]->student_nrp);
 

@@ -46,6 +46,7 @@
                     <th>Kode Lama 2</th>
                     <th>Kode Lama 3</th>
                     <th>Nama</th>
+                    <th>SKS</th>
                     <th>Aksi</th>
                   </tr>
                   </thead>
@@ -59,6 +60,7 @@
                     <td><?php echo $row->old_kode_mk2; ?></td>
                     <td><?php echo $row->old_kode_mk3; ?></td>
                     <td><?php echo $row->nama; ?></td>
+                    <td><?php echo $row->sks; ?></td>
                     <td ><button targetid="<?php echo $row->id; ?>"  targetkode="<?php echo $row->kode_mk; ?>" targetkode1="<?php echo $row->old_kode_mk1; ?>" targetkode2="<?php echo $row->old_kode_mk2; ?>" targetkode3="<?php echo $row->old_kode_mk3; ?>"  targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/course/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
@@ -151,6 +153,13 @@
               <label for="namaedit" class="col-sm-4 col-form-label">Nama</label>
               <div class="col-sm-8">
                 <input type="text" name="namaedit" class="form-control" id="namaedit" >
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="sksedit" class="col-sm-4 col-form-label">SKS</label>
+              <div class="col-sm-8">
+                <input type="text" name="sksedit" class="form-control" id="sksedit" >
               </div>
             </div>
           </div>

@@ -21,15 +21,37 @@ class Sempro_model extends CI_Model {
                 }
         }
 
-        public function get_student_sempro_all() {
+        public function get_student_sempro_lulus($nrp) { 
                 $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');
                 $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
                 $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
                 $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
                 $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
-                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label, student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label,  student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2"');
 
+
+                // TODO: check jika statusnya cancelled
+                $q = $this->db->get_where('sempro', array('sempro.nrp' => $nrp, 'sempro.is_failed' =>0, 'sempro.is_done' =>1, 'sempro.is_deleted' => 0));
+                //echo $this->db->last_query(); die();
+                if($q->num_rows() > 0) {
+                        return $q->result();        
+                } else {
+                        return false;
+                }
+        }
+
+        public function get_student_sempro_all($where = '') {
+                $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
+                $this->db->join('student', 'student.nrp=sempro.nrp','left');
+                $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
+                $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", sidang_time.label, student.nama, l1.nama as "dosbing1", l2.nama as "dosbing2", l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
+                if($where != '') { $this->db->where($where); }
 
                 // TODO: check jika statusnya cancelled
                 $this->db->order_by('sempro.registered_date', 'desc');
@@ -99,6 +121,55 @@ class Sempro_model extends CI_Model {
 
                 $this->db->where('sempro.periode_sidang_id='.$periode_id.' AND (sempro.penguji1 = "'.$npk.'" OR sempro.penguji2 = "'.$npk.'" OR sempro.pembimbing1 = "'.$npk.'" OR sempro.pembimbing2 = "'.$npk.'") ');
                 $q = $this->db->get('sempro');
+                if($q->num_rows() > 0) {
+                        return $q->result();        
+                } else {
+                        return false;
+                }
+        }
+
+        public function get_sempro_need_kalab_validation($idlab, $periode_id) {
+                $hitung = 0;
+                $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
+                $this->db->join('topik', 'topik.id=student_topik.topik_id','left'); 
+                
+                
+                $this->db->select('sempro.*');
+
+                $this->db->where('sempro.periode_sidang_id='.$periode_id.' AND sempro.is_deleted = 0 AND topik.id_lab = "'.$idlab.'" AND sempro.kalab_npk_verified IS null');
+                $q = $this->db->get('sempro');
+                $hitung = $q->num_rows();
+                return $hitung;
+        }
+
+        public function get_sempro_need_room_plotting($periode_id) {
+                $q = $this->db->get_where('sempro', array('periode_sidang_id' => $periode_id, 'ruang_id' => null, 'is_deleted' => 0));
+                return $q->num_rows();
+        }
+
+        public function get_sempro_schedule($periode_id, $npk = null) {
+                if($npk != null) {
+                        $this->db->where(" (sempro.penguji1 = '$npk' OR sempro.penguji2 = '$npk' OR sempro.pembimbing1 = '$npk' OR sempro.pembimbing2 = '$npk')");
+                }
+
+                $this->db->where('sempro.periode_sidang_id='.$periode_id.' ');
+
+                $this->db->join('student_topik', 'student_topik.id = sempro.student_topik_id','left');
+                $this->db->join('student', 'student.nrp=sempro.nrp','left');
+                $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
+                $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('lecturer l3', 'l3.npk = sempro.kalab_npk_verified', 'left');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+
+                 $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel", student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2"');
+                 $this->db->order_by('sempro.sidang_date', 'desc');
+                 $this->db->order_by('sempro.sidang_time', 'asc');
+                 $q = $this->db->get('sempro');
+
+                 //echo $this->db->last_query();
                 if($q->num_rows() > 0) {
                         return $q->result();        
                 } else {
@@ -263,15 +334,23 @@ class Sempro_model extends CI_Model {
                 $this->db->update('sempro', $data);
         }
 
-        public function submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $hasil, $cekrevisijudul) {
+        public function submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $saran, $kesimpulan, $cekrevisijudul) {
+                if($cekrevisijudul == false) {
+                        $is_done = true;
+                } else {
+                        $is_done = false;
+                }
+
                 $data = array(
                         'materi'                => $materi,
                         'rumusan'               => $rumusan,
                         'tujuan'                => $tujuan,
                         'metodologi'            => $metodologi,
                         'analisis'              => $analisis,
-                        'hasil'                 => $hasil,
+                        'saran'                 => $saran,
+                        'kesimpulan'            => $kesimpulan,
                         'revision_required'     => $cekrevisijudul,
+                        'is_done'               => $is_done,
                         'hasil_submited_date'   => date('Y-m-d H:i:s')
                 );
 
@@ -280,16 +359,23 @@ class Sempro_model extends CI_Model {
 
         }
 
-        public function update_judul($id, $newjudul) {
+        public function update_judul($id, $newjudul, $file_naskah) {
                 $q = $this->db->get_where('sempro', array('id' => $id));
                 if($q->num_rows() > 0) {
                         $hq = $q->row();
                         $this->db->trans_start();
-                        $data = array('judul' => $newjudul);
+                        
+                        $data = array(
+                                'judul' => $newjudul
+                        );
                         $this->db->where('id', $hq->student_topik_id);
                         $this->db->update('student_topik', $data);
 
-                        $data = array('revision_judul_date' => date('Y-m-d H:i:s'));
+                        $data = array(
+                                'revision_judul_date' => date('Y-m-d H:i:s'),  
+                                'naskah_filename' => $file_naskah, 
+                                'naskah_upload_date' => date('Y-m-d H:i:s')
+                        );
                         $this->db->where('id', $id);
                         $this->db->update('sempro', $data);
                         $this->db->trans_complete();
@@ -301,7 +387,7 @@ class Sempro_model extends CI_Model {
         }
 
         public function validate_revisi_judul($id, $npk) {
-                $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk);
+                $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk, 'is_done' => true);
                 $this->db->where('id', $id);
                 $this->db->update('sempro', $data);
         }
