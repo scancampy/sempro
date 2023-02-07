@@ -58,6 +58,7 @@
                     <th>Judul</th>
                     <th>Tanggal Daftar</th>
                     <th>Validasi Dosbing</th>
+                    <th>Validasi Admin</th>
                     <th>Validasi WD</th>
                     <th>SK Lulus</th>
                     <th>Aksi</th>
@@ -74,6 +75,9 @@
                         <td><?php if($row->dosbing_validate_date == NULL) { echo 'Belum Divalidasi'; } else {
                           echo $row->dosbing.'<br/>Tanggal: '.strftime("%d %B %Y", strtotime($row->dosbing_validate_date));
                         } ?></td> 
+                        <td><?php if($row->admin_validate_date == NULL) { echo 'Belum Divalidasi'; } else {
+                          echo 'Admin<br/>Tanggal: '.strftime("%d %B %Y", strtotime($row->admin_validate_date));
+                        } ?></td>
                         <td><?php if($row->wd_validate_date == NULL) { echo 'Belum Divalidasi'; } else {
                           echo $row->wd.'<br/>Tanggal: '.strftime("%d %B %Y", strtotime($row->wd_validate_date));
                         } ?></td>

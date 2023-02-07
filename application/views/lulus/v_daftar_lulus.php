@@ -38,6 +38,22 @@
               <!-- /.card-header -->
               <div class="card-body ">
                 <div class="row">
+                  <?php 
+                  $alasan = '';
+                  if(!$dataskripsi) { $alasan .= '<li>Nilai Skripsi belum terinput pada transkrip</li>'; }
+                  if(!$eligible_prasyarat) { $alasan .= '<li>Nilai minimum mata kuliah syarat kelulusan belum terpenuhi</li>'; } ?>
+                  
+                  <?php if(!$dataskripsi) { ?>
+                  <div class="col-12">
+                    <div class="callout callout-danger">
+                      <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                      Anda tidak dapat mengajukan pendaftaran kelulusan dengan alasan:
+                      <ol>
+                        <?php echo $alasan; ?>
+                      </ol>
+                    </div>
+                  </div>
+                  <?php } ?>
                   <div class="col-4">
                     <p class="text-sm"><strong>NRP</strong>
                       <input type="text" readonly class="form-control" disabled value="<?php echo $sempro[0]->nrp; ?>" />
@@ -108,10 +124,19 @@
                        <small id="" class="form-text text-muted">Naskah lengkap dan final yang sudah selesai revisi</small>
                     </p>
                   </div>
+
+                  <div class="col-12 ">
+                    <p class="text-sm"><strong>Upload Sertifikasi TOEFL</strong>
+                       <input type="file"  name="filetoefl" class="form-control" accept="application/pdf" id="filetoefl" >
+                    </p>
+                  </div>
+
+                  <?php if($alasan != "") { ?>
                   <div class="col-12">
                     <input type="hidden" name="hid_sempro_id" value="<?php echo $sempro[0]->student_topik_id; ?>">
                     <button type="submit" value="submit" class="btn btn-primary" name="btnajukan" id="btnajukan" >Submit Form Pendaftaran</button>
                   </div>
+                <?php } ?>
                 </div>                
               </div>
               <!-- /.card-body -->

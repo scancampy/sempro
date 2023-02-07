@@ -247,7 +247,7 @@
                 </a>
               </li>
             </ul>
-          </li>    
+          </li>       
             <?php } else if($role->roles == 'lecturer') { ?>
           <li class="nav-item">
               <a href="<?php echo base_url('lecturer/topic'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topic' || $this->uri->segment(2) == 'add_topic') { echo  'active'; } ?>">

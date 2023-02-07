@@ -50,7 +50,7 @@
                   </div>
                   <div class="col-12">
                     <p class="text-sm"><strong>Judul</strong>
-                      <input type="text" readonly class="form-control" disabled value="<?php echo strtoupper($detail[0]->judul); ?>" />
+                      <input type="text" name="txtjudul" class="form-control" value="<?php echo strtoupper($detail[0]->judul); ?>" />
                     </p>
                   </div>
                   <div class="col-3">
@@ -151,6 +151,9 @@
                     <div class="col-3">
                       <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filenaskahfinal); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span> Download Naskah Final</a>
                     </div>
+                    <div class="col-3">
+                      <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filetoefl); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span> Download Sertif TOEFL</a>
+                    </div>
 
                     <div class="col-6" style="margin-top:30px;">
                     <p class="text-sm"><strong>Validasi Dosbing</strong>
@@ -214,15 +217,21 @@
               <div class="card-footer">
                 <div class="col-12">
                     <input type="hidden" name="hid_lulus_id" value="<?php echo $detail[0]->id; ?>">
+                    <?php if($is_student && $detail[0]->dosbing_validate_date == null) { ?>
+                    <button type="submit" value="submit" name="btnsimpanjudul" id="btnsimpanjudul" onclick="return confirm('Yakin simpan judul?');"  class="btn btn-primary">Simpan Judul</button>
+                  <?php } ?>
                     
                     <?php if($is_dosbing && $detail[0]->dosbing_validate_date == null) { ?>
                     <button type="submit" value="submit" name="btnvalidasidosbing" id="btnvalidasidosbing" onclick="return confirm('Yakin memvalidasi pengajuan pendaftaran kelulusan mahasiswa ini?');"  class="btn btn-primary">Validasi Dosbing</button>
                   <?php } ?>
-                  <?php if($is_wd && $detail[0]->dosbing_validate_date != null && $detail[0]->wd_validate_date == null) { ?>
+                  <?php if($is_admin && $detail[0]->dosbing_validate_date != null && $detail[0]->admin_validate_date == null) { ?>
+            <button type="submit" value="submit" onclick="return confirm('Yakin memvalidasi pengajuan pendaftaran kelulusan mahasiswa ini?');"  name="btnvalidasiadmin" id="btnvalidasiadmin"  class="btn btn-primary">Validasi Admin</button>
+                  <?php } ?>
+                  <?php if($is_wd && $detail[0]->admin_validate_date != null && $detail[0]->wd_validate_date == null) { ?>
             <button type="submit" value="submit" onclick="return confirm('Yakin memvalidasi pengajuan pendaftaran kelulusan mahasiswa ini?');"  name="btnvalidasiwd" id="btnvalidasiwd"  class="btn btn-primary">Validasi Wakil Dekan</button>
                   <?php } ?>
 
-                  <?php if($is_admin && $detail[0]->wd_validate_date != null && $detail[0]->sk_filename == null) { ?>
+                  <?php if($is_admin_st && $detail[0]->wd_validate_date != null && $detail[0]->sk_filename == null) { ?>
             <button type="submit" value="submit" disabled name="btnuploadsklulus" id="btnuploadsklulus"  class="btn btn-primary">Upload SK Lulus</button>
                   <?php } ?>
                   </div>

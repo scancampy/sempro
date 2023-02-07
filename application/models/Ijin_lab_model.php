@@ -103,8 +103,11 @@ class Ijin_lab_model extends CI_Model {
         }
 
         public function add($nrp, $student_topik_id, $ruang_lab_id, $nama_lab, $alamat_lab) {
+                $qactiveperiode= $this->db->get_where('periode', array('is_active' => 1));
+                $row = $qactiveperiode->row();
                 $data = array(
                                 'nrp'                           => $nrp,
+                                'periode_id'                    => $row->id,
                                 'student_topik_id'              => $student_topik_id,
                                 'submit_date'                   => date('Y-m-d H:i:s'),
                                 'pembimbing_validated_npk'       => NULL,

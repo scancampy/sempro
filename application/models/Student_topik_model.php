@@ -399,6 +399,11 @@ class Student_topik_model extends CI_Model {
                 $this->db->update('student_topik', $data);
         }
 
+         public function update($id, $update) {
+                $this->db->where('id', $id);
+                $this->db->update('student_topik', $update);
+        }
+
         public function update_dosbing($id, $lecturer1_npk,$lecturer2_npk) {
                 $data = array(
                                 'lecturer_created' => date('Y-m-d H:i:s'), 

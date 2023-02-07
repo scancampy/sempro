@@ -17,7 +17,7 @@ class Lulus extends CI_Controller {
 
 		$data['roles'] = '';
 		$data['is_kalab'] = false;
-		$data['is_admin'] = false;
+		$data['is_admin_st'] = false;
 
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
@@ -31,7 +31,7 @@ class Lulus extends CI_Controller {
 				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."' OR kelulusan.dosbing_validate_date IS NOT NULL) AND student_topik.is_deleted = 0");					
 			} else if($role->roles == 'adminst') {
 				$data['roles'] = 'adminst';
-				$data['is_admin'] = true;
+				$data['is_admin_st'] = true;
 				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.wd_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
 			}
 		}
@@ -105,11 +105,21 @@ class Lulus extends CI_Controller {
 		$data['is_dosbing'] = false;
 		$data['is_wd'] = false;
 		$data['id'] = $id;
+		$data['is_admin_st'] = false;
 		$data['is_admin'] = false;
+		$data['is_student'] = false;
 
 
 		foreach($roles as $role) {
-			if($role->roles =='lecturer') {
+			if($role->roles =='student') {
+				$data['is_student'] = true;
+				if($this->input->post('btnsimpanjudul')) {
+					$this->Student_topik_model->update($data['detail'][0]->student_topik_id, array("judul" => $this->input->post("txtjudul")));
+					$this->session->set_flashdata('notif', 'success');
+					$this->session->set_flashdata('msg', 'Sukses menyimpan judul');
+					redirect('lulus/detail/'.$id);
+				}
+			} else if($role->roles =='lecturer') {
 				// cek apakah betul dosbignya
 				$data['stopik'] = $this->Student_topik_model->get('',$data['detail'][0]->student_topik_id);
 
@@ -124,8 +134,16 @@ class Lulus extends CI_Controller {
 						redirect('lulus/detail/'.$id);
 					}
 				}
-			} else if($role->roles == 'adminst') {
+			} else if($role->roles == 'admin') {
 				$data['is_admin'] = true;
+				if($this->input->post('btnvalidasiadmin')) {
+					$this->Kelulusan_model->admin_validate($this->input->post('hid_lulus_id'));
+					$this->session->set_flashdata('notif', 'success');
+					$this->session->set_flashdata('msg', 'Sukses memvalidasi pengajuan daftar kelulusan');
+					redirect('lulus/detail/'.$id);
+				}
+			} else if($role->roles == 'adminst') {
+				$data['is_admin_st'] = true;
 
 				if($this->input->post('btnuploadsklulus')) {
 					$this->load->library('upload');
@@ -239,6 +257,7 @@ class Lulus extends CI_Controller {
 		$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0");
 			
 		$data['table_prasyarat'] = $this->Student_model->generate_table_prasyarat($mkprasyarat, $info[0]->nrp);
+		$data['eligible_prasyarat'] = $this->Student_model->check_eligible_mk_prasyarat_lulus($mkprasyarat, $info[0]->nrp);
 
 		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
 		
@@ -304,7 +323,26 @@ class Lulus extends CI_Controller {
 	          	redirect('lulus/baru');
 	        }
 
-	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), $filekartuwali, $filebebaspakai, $filenaskahfinal);
+	         // file toefl
+			$this->load->library('upload');
+
+			$config['upload_path']          = './uploads/lulus';
+            $config['allowed_types']        = 'pdf';
+            $config['max_size']             = 100000;
+            $config['file_name']			= 'toefl_'.date('Ymdhis').'.pdf';
+
+            $filetoefl = $config['file_name'];
+
+          	$this->upload->initialize($config);
+          	$this->load->library('upload', $config);
+
+	        if ( ! $this->upload->do_upload('filetoefl')) {
+	          	$this->session->set_flashdata('notif', 'error_validated');
+	          	$this->session->set_flashdata('msg', $this->upload->display_errors());
+	          	redirect('lulus/baru');
+	        }
+
+	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), $filekartuwali, $filebebaspakai, $filenaskahfinal, $filetoefl);
 
 			$this->session->set_flashdata('notif', 'success');
           	$this->session->set_flashdata('msg', 'Suskes mendaftar kelulusan');

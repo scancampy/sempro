@@ -29,6 +29,15 @@ class Kelulusan_model extends CI_Model {
                 $this->db->update('kelulusan', $data);
         }
 
+        public function admin_validate($id = '') {
+                $data = array(
+                        'admin_validate_date' => date('Y-m-d H:i:s')
+                );                   
+
+                $this->db->where('id', $id);
+                $this->db->update('kelulusan', $data);
+        }
+
         public function wd_validate($id = '', $npk = '') {
                 $data = array(
                         'wd_npk'           => $npk,
@@ -50,13 +59,14 @@ class Kelulusan_model extends CI_Model {
                 $this->db->update('kelulusan', $data);
         }
 
-        public function add($nrp, $student_topik_id, $filekartuwali, $filebebaspakai, $filenaskahfinal) {
+        public function add($nrp, $student_topik_id, $filekartuwali, $filebebaspakai, $filenaskahfinal, $filetoefl) {
                 $data = array(
                         'nrp'                   => $nrp,
                         'student_topik_id'      => $student_topik_id,
                         'filekartuwali'         => $filekartuwali,
                         'filebebaspakai'        => $filebebaspakai,
                         'filenaskahfinal'       => $filenaskahfinal,
+                        'filetoefl'             => $filetoefl,
                         'submit_date'           => date('Y-m-d H:i:s')
                 );
 

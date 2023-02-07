@@ -38,6 +38,35 @@ class Student_model extends CI_Model {
 
         }
 
+        public function check_eligible_mk_prasyarat_lulus($mkprasyarat, $nrp) { 
+                $this->load->helper('text');
+                $html = '';
+
+                foreach ($mkprasyarat as $key => $value) {
+                        $kodemk = explode(',', $value->kode_mk);
+                        $where = '';
+                        foreach($kodemk as $kode) {
+                                $this->db->or_where('kode_mk = ',trim($kode));
+                        }
+                        $this->db->where('student_nrp = ', $nrp);
+                        $q = $this->db->get('student_transcript');
+
+                        if($q->num_rows() > 0) {
+                                $qrow = $q->row();
+                                if($qrow->nisbi == "D") {
+                                        return false;
+                                } else if($qrow->nisbi == "E") {
+                                        return false;
+                                }
+                        } else {
+                                return false;
+                        }
+                }
+
+                return true;
+
+        }
+
         // Hitung IPKKum
         public function get_ipk_kum($nrp) {
                 $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));
