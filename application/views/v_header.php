@@ -264,20 +264,22 @@
             </a>
           </li>
 
-          <li class="nav-item">
-                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
-                  <i class="nav-icon fas fa-flask"></i>
-                  <p>
-                    Ijin Pemakaian Lab
-                  </p>
-                </a>
-              </li>
+          
 
            <li class="nav-item">
                 <a href="<?php echo base_url('sempro'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
                   <i class="nav-icon fas fa-user"></i>
                   <p>
                     Sidang Sempro
+                  </p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-flask"></i>
+                  <p>
+                    Ijin Pemakaian Lab
                   </p>
                 </a>
               </li>
@@ -318,6 +320,15 @@
                 </a>
               </li>
 
+              <li class="nav-item">
+                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
+                  <i class="nav-icon fas fa-flask"></i>
+                  <p>
+                    Ijin Pemakaian Lab
+                  </p>
+                </a>
+              </li>
+
                <li class="nav-item">
                 <a href="<?php echo base_url('skripsi'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
                   <i class="nav-icon fas fa-user-graduate"></i>
@@ -336,14 +347,7 @@
                 </a>
               </li>
 
-               <li class="nav-item">
-                <a href="<?php echo base_url('ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'ijinlab') { echo  'active'; } ?>">
-                  <i class="nav-icon fas fa-flask"></i>
-                  <p>
-                    Ijin Pemakaian Lab
-                  </p>
-                </a>
-              </li>
+               
 
 
 

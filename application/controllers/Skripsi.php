@@ -45,6 +45,13 @@ class Skripsi extends CI_Controller {
 							}
 						}
 
+						// cek bahwa mhs harus punya ijin pakai lab tervalidasi
+						$cekijin = $this->Ijin_lab_model->get_where("student.nrp ='".$info[0]->nrp."' AND wd_validated_date IS NOT NULL");
+
+						if(!$cekijin) {
+							$verified_proposal = false;
+						}
+
 						if($verified_proposal != false) {
 							$data['registration_available'] = $verified_proposal;
 						} else {
