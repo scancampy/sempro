@@ -86,6 +86,9 @@ class Dashboard extends CI_Controller {
 
             		// notifikasi kelulusan
             		$data['needvalidateluluswd'] = $this->Kelulusan_model->get("kelulusan.dosbing_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+
+            		// notifikasi ijin lab
+            		$data['needvalidateijinlab'] = $this->Ijin_lab_model->get_where("ijin_lab.wd_validated_date IS NULL AND ijin_lab.is_deleted = 0");
             	} else {
             		// ambil topik yang butuh validasi kalab
             		$data['topic_need_validate'] = $this->Topik_model->get_need_validate($data['info'][0]->lab_id);

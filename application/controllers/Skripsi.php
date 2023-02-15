@@ -26,12 +26,14 @@ class Skripsi extends CI_Controller {
 				// cek button daftar sidang
 				$skripsidata = $this->Skripsi_model->get_student_skripsi($info[0]->nrp);
 
+
 				// cek sudah daftar sempro
 				if($skripsidata == false) {
 					// cek apakah saat ini ada periode sidang					
 					$periodeaktif = $this->Periode_model->get_periode_sidang_skripsi_aktif(); 
 
 					if($periodeaktif != false) {
+
 						$data['periode_aktif'] = $periodeaktif;
 						// cek apakah sudah lulus sempro
 						$semprodata = $this->Sempro_model->get_student_sempro($info[0]->nrp);
@@ -48,7 +50,7 @@ class Skripsi extends CI_Controller {
 						// cek bahwa mhs harus punya ijin pakai lab tervalidasi
 						$cekijin = $this->Ijin_lab_model->get_where("student.nrp ='".$info[0]->nrp."' AND wd_validated_date IS NOT NULL");
 
-						if(!$cekijin) {
+						if(!$cekijin) {							
 							$verified_proposal = false;
 						}
 

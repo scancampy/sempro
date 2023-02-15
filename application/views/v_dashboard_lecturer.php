@@ -23,6 +23,8 @@
       <div class="container-fluid">
         <!-- Timelime example  -->
          <div class="row">
+          
+          
           <?php 
              if(@$needvalidatelulus) { if(count($needvalidatelulus) >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">
@@ -32,6 +34,23 @@
 
                   <div class="info-box-content" style="line-height: 14px;">
                     <span ><strong>Pengajuan Pendaftaran Kelulusan</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } } ?>
+
+         <?php 
+             if(@$needvalidateijinlab) { if(count($needvalidateijinlab) >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('ijinlab'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info "><?php echo count($needvalidateijinlab); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Ijin Lab</strong><br/>Membutuhkan validasi anda</span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>

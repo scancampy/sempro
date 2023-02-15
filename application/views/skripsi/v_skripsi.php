@@ -46,7 +46,7 @@
                          if(isset($registration_not_eligible)) { ?>
                  <div class="callout callout-warning">
                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
-                    Anda belum memiliki surat tugas proposal
+                    Anda belum mengajukan ijin pemakaian lab
                   </div>
                 <?php } else if(!isset($registration_available) && !isset($already_registered)) { ?>
                   <div class="alert alert-warning alert-dismissible">
