@@ -43,7 +43,7 @@ class Ijin_lab_model extends CI_Model {
                 }
                 $q = $this->db->get('ijin_lab_detail');
 
-                echo $this->db->last_query();
+              //  echo $this->db->last_query();
                 
                 return $q->result();  
         }

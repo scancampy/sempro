@@ -215,20 +215,20 @@
                     <div class="col-4">
                       <p class="text-sm">SKS Kum
 
-                        <b class="d-block"><?php echo $detail->sks_kum; ?></b>
+                        <b class="d-block"><?php echo $skskum; ?></b>
                       </p>
                     </div>
 
 
                     <div class="col-4">
                       <p class="text-sm">IPK Kum
-                        <b class="d-block"><?php echo $detail->ipk_kum; ?></b>
+                        <b class="d-block"><?php echo number_format((float)$ipkkum,2,'.',''); ?></b>
                       </p>
                     </div>
 
                     <div class="col-4">
                       <p class="text-sm">SKS Kum
-                        <b class="d-block"><?php echo $detail->sks_ks; ?></b>
+                        <b class="d-block"><?php echo $sks_in_ks; ?></b>
                       </p>
                     </div>
                     <div class="col-12 text-right">

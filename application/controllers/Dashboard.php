@@ -96,7 +96,7 @@ class Dashboard extends CI_Controller {
             		$data['need_wd_final_validation'] = $this->Student_topik_model->get_proposal_need_final_wd_validation();
 
             		// notifikasi kelulusan
-            		$data['needvalidateluluswd'] = $this->Kelulusan_model->get("kelulusan.dosbing_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+            		$data['needvalidateluluswd'] = $this->Kelulusan_model->get("kelulusan.dosbing_validate_date IS  NULL AND student_topik.is_deleted = 0");
 
             		// notifikasi ijin lab
             		$data['needvalidateijinlab'] = $this->Ijin_lab_model->get_where("ijin_lab.wd_validated_date IS NULL AND ijin_lab.is_deleted = 0");

@@ -220,6 +220,10 @@ class Skripsi extends CI_Controller {
 			redirect('dashboard');
 		}
 
+		$data['ipkkum'] = $this->Student_model->get_ipk_kum($data['detail']->nrp);
+		$data['skskum'] = $this->Student_model->get_sks_kum($data['detail']->nrp);
+		$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($data['detail']->nrp);
+
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
 		$data['info'] = $info;
@@ -231,6 +235,8 @@ class Skripsi extends CI_Controller {
 				}
 
 				$data['is_student'] = true;
+
+
 
 				if($this->input->post('btnmhssimpanjudul')) {
 					$newjudul = $this->input->post('revisijudul');
@@ -602,7 +608,9 @@ class Skripsi extends CI_Controller {
 				$('#tglsidang').val(ts);
 				$('#jamsidang').val(st);
 
-				$.post('".base_url('ajaxcall/load_sidang')."', { 'tglsidang': ts, 'jamsidang': st }, function(data) { 
+				$.post('".base_url('ajaxcall/load_sidang_skripsi')."', { 'tglsidang': ts, 'jamsidang': st }, function(data) { 
+
+				console.log(data);
 					var obj = JSON.parse(data);
 					var str_table = '';
 

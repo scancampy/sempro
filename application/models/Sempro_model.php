@@ -56,7 +56,7 @@ class Sempro_model extends CI_Model {
                 // TODO: check jika statusnya cancelled
                 $this->db->order_by('sempro.registered_date', 'desc');
                 $q = $this->db->get_where('sempro', array('sempro.is_failed' =>0, 'sempro.is_deleted' => 0));
-                //echo $this->db->last_query(); die();
+                //return $this->db->last_query();
                 if($q->num_rows() > 0) {
                         return $q->result();        
                 } else {

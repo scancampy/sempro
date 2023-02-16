@@ -131,7 +131,7 @@
                     </p>
                   </div>
 
-                  <?php if($alasan != "") { ?>
+                  <?php if($alasan == "") { ?>
                   <div class="col-12">
                     <input type="hidden" name="hid_sempro_id" value="<?php echo $sempro[0]->student_topik_id; ?>">
                     <button type="submit" value="submit" class="btn btn-primary" name="btnajukan" id="btnajukan" >Submit Form Pendaftaran</button>

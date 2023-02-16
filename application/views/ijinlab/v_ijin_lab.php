@@ -63,6 +63,7 @@
                   <tbody>
                     <?php if(isset($ijinlab)) { 
                       foreach($ijinlab as $row) { 
+                        
                       ?>
                       <tr>
                         <td><?php echo '<strong>'.$row->nama.'</strong><br/>'.$row->nrp; ?></td>

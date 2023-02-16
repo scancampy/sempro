@@ -35,7 +35,7 @@ class Skripsi_model extends CI_Model {
 
                 // TODO: check jika statusnya cancelled
                 $this->db->order_by('skripsi.registered_date', 'desc');
-                $q = $this->db->get_where('skripsi', array('skripsi.is_failed' =>0, 'sempro.is_deleted' => 0));
+                $q = $this->db->get_where('skripsi', array('skripsi.is_failed' =>0, 'skripsi.is_deleted' => 0));
                 //echo $this->db->last_query(); die();
                 if($q->num_rows() > 0) {
                         return $q->result();        
@@ -44,6 +44,7 @@ class Skripsi_model extends CI_Model {
                 }
         }
 
+       
         public function get_student_skripsi_by_id($id) { 
                 $this->db->join('student_topik', 'student_topik.id=skripsi.student_topik_id', 'left');
                 $this->db->join('student', 'student.nrp=skripsi.nrp','left');

@@ -249,7 +249,7 @@ class Student_topik_model extends CI_Model {
         }
 
         public function get_proposal_need_final_wd_validation() {
-                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'is_deleted' => 0));
+                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'wd_verified_date !=' => null, 'is_deleted' => 0));
                 return $q->num_rows();
         }
 
@@ -274,7 +274,8 @@ class Student_topik_model extends CI_Model {
                                 $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
                                 
                                 $this->db->select('student_topik.*');
-                                $r = $this->db->get_where('student_topik', array('topik_id' => $value->id,'student_topik.kalab_npk_verified_judul' => null));
+                                $r = $this->db->get_where('student_topik', array('topik_id' => $value->id,'student_topik.kalab_npk_verified_judul' => null, 
+                                        'student_topik.judul != ' => null,'student_topik.kalab_npk_verified != ' => null));
 
                                 if($r->num_rows() >0){
 

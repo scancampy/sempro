@@ -103,7 +103,8 @@
                           <?php 
 
                         foreach($sempro as $smp) {
-                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) { 
+                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) { //echo $smp->sidang_date.'<br/>'.$smp->sidang_time;
+                           //echo '<br/>';
                             $adasidang = $smp; 
                             $jmlroom++;
 

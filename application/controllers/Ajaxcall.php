@@ -15,7 +15,17 @@ class Ajaxcall extends CI_Controller {
 		$jadwal_sidang = $this->Sempro_model->get_student_sempro_all("sempro.sidang_time = '".$jamsidang."' AND sempro.sidang_date = '".$tglsidang."' ");
 		
 
-		echo json_encode(array('data' => $jadwal_sidang));
+		echo json_encode(array('data' => $jadwal_sidang, 'submit' => $tglsidang, 'submit2' => $jamsidang));
+	}
+
+	public function load_sidang_skripsi() {
+		$tglsidang = $this->input->post('tglsidang');
+		$jamsidang = $this->input->post('jamsidang');
+		
+		$jadwal_sidang = $this->Skripsi_model->get_student_skripsi_all("skripsi.sidang_time = '".$jamsidang."' AND skripsi.sidang_date = '".$tglsidang."' ");
+		
+
+		echo json_encode(array('data' => $jadwal_sidang, 'submit' => $tglsidang, 'submit2' => $jamsidang));
 	}
 
 	public function load_ijin_detail() {

@@ -292,9 +292,12 @@ class Student_model extends CI_Model {
         }
 
         public function get_transcript_raw($nrp) {
-                $this->db->join('course', 'course.kode_mk = student_transcript.kode_mk','left');
+
+                $q = $this->db->query("SELECT student_transcript.*, (SELECT course.nama FROM course WHERE course.kode_mk = student_transcript.kode_mk OR course.old_kode_mk1 = student_transcript.kode_mk OR course.old_kode_mk2 = student_transcript.kode_mk OR course.old_kode_mk3 = student_transcript.kode_mk OR course.old_kode_mk4 = student_transcript.kode_mk LIMIT 1) as `namamk` FROM `student_transcript` WHERE `student_nrp` = '".$nrp."';");
+              /*  $this->db->join('course', 'course.kode_mk = student_transcript.kode_mk','left');
                 $this->db->select('student_transcript.*, course.nama as "namamk"');
-                $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));
+                $this->db->where(' course.kode_mk ')
+                $q = $this->db->get_where('student_transcript', array('student_nrp' => $nrp));*/
                 return $q->result();
         }
 
