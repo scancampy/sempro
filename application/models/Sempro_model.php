@@ -87,6 +87,31 @@ class Sempro_model extends CI_Model {
                 }
         }
 
+        public function get_student_sempro_with_where($where) { 
+                $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
+                $this->db->join('student', 'student.nrp=sempro.nrp','left');
+                $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer l4', 'l4.npk=sempro.penguji1', 'left');
+                $this->db->join('lecturer l5', 'l5.npk=sempro.penguji2', 'left');
+                $this->db->join('lecturer l6', 'l6.npk=sempro.dosbing_validate_npk', 'left');
+                $this->db->join('room', 'room.id=sempro.ruang_id', 'left');
+                $this->db->join('lecturer l3', 'l3.npk = sempro.kalab_npk_verified', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = sempro.sidang_time', 'left');
+                $this->db->where($where);
+                $this->db->select('student_topik.judul, sempro.*, room.label as "roomlabel",  student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2", l6.nama as "namadosbingvalidaterevisi"');
+
+
+                // TODO: check jika statusnya cancelled
+                $q = $this->db->get('sempro');
+                //echo $this->db->last_query();
+                if($q->num_rows() > 0) {
+                        return $q->result();        
+                } else {
+                        return false;
+                }
+        }
+
         public function get_student_sempro_by_periode($periode_id) { 
                 $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');

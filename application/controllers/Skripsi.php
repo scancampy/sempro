@@ -259,6 +259,7 @@ class Skripsi extends CI_Controller {
 				}
 
 				if($this->input->post('btnuploadnaskah')) {
+
 					// naskah skripsi
 		    	 	$this->load->library('upload');
 
@@ -272,6 +273,8 @@ class Skripsi extends CI_Controller {
 		          	$this->load->library('upload', $config);
 
 			        if ( ! $this->upload->do_upload('filekk')) {
+			        	//echo 'tes'.$this->upload->display_errors();
+			        	//die();
 			          	$this->session->set_flashdata('notif', 'error_validated');
 			          	$this->session->set_flashdata('msg', $this->upload->display_errors());
 			          	redirect('skripsi/detail/'.$id);

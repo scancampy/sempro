@@ -187,6 +187,23 @@
           </div>
         <?php } ?>
 
+
+        <?php if($need_kalab_skripsi_validation >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('skripsi'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo $need_kalab_skripsi_validation; ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Sidang Skripsi</strong><br/>Membutuhkan validasi anda</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
         <?php 
              if(isset($student_kalab)) { if(count($student_kalab) >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">

@@ -10,6 +10,120 @@ class Laporan extends CI_Controller {
         }
     }
 
+    public function sempro() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+		//print_r($info); die();
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		$data['periode'] = $this->Periode_model->get_periode_sidang();
+
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
+			$where = 'sempro.periode_sidang_id = '.$this->input->get('filtersemester').' AND sempro.sidang_date IS NOT NULL AND sempro.sidang_time IS NOT NULL AND sempro.ruang_id IS NOT NULL';
+
+			$filtertampilkan = '';
+			if($this->input->get('filtertampilkan') == 'self') {
+				$where .= " AND (sempro.pembimbing1 = '".$info[0]->npk."' OR sempro.pembimbing2 = '".$info[0]->npk."' OR sempro.penguji1 = '".$info[0]->npk."' OR sempro.penguji2 = '".$info[0]->npk."') ";
+			}
+
+
+			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
+			//print_r($data['sempro']);
+		}
+
+		
+
+		//$data['ijinlab'] = $this->Ijin_lab_model->get_detail_where("ijin_lab.wd_validated_date IS NOT NULL AND ijin_lab.is_deleted = 0".$filtersemester.$filterlokasi, "ijin_lab_detail.ruang_lab_id ASC");
+
+		
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_sidang_sempro', $data);
+		$this->load->view('v_footer', $data);
+    }
+
+    public function skripsi() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+		//print_r($info); die();
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		$data['periode'] = $this->Periode_model->get_periode_sidang_skripsi();
+
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
+			$where = 'skripsi.periode_sidang_id = '.$this->input->get('filtersemester').' AND skripsi.sidang_date IS NOT NULL AND skripsi.sidang_time IS NOT NULL AND skripsi.ruang_id IS NOT NULL';
+
+			$filtertampilkan = '';
+			if($this->input->get('filtertampilkan') == 'self') {
+				$where .= " AND (skripsi.pembimbing1 = '".$info[0]->npk."' OR skripsi.pembimbing2 = '".$info[0]->npk."' OR skripsi.penguji1 = '".$info[0]->npk."' OR skripsi.penguji2 = '".$info[0]->npk."') ";
+			}
+
+
+			$data['sempro'] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+			
+		}
+
+		
+
+		//$data['ijinlab'] = $this->Ijin_lab_model->get_detail_where("ijin_lab.wd_validated_date IS NOT NULL AND ijin_lab.is_deleted = 0".$filtersemester.$filterlokasi, "ijin_lab_detail.ruang_lab_id ASC");
+
+		
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_sidang_skripsi', $data);
+		$this->load->view('v_footer', $data);
+    }
+
     public function ijinlab() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		
@@ -22,23 +136,31 @@ class Laporan extends CI_Controller {
 		}
 
 		$data['lab'] = $this->Ruang_lab_model->get();
+		$data['periode'] = $this->Periode_model->get();
 
-		$filterlab = '';
-		if($this->input->get('filterlab') != 'all' && $this->input->get('filterlab')) {
-			$filterlab = " AND ijin_lab_detail.ruang_lab_id = '".$this->input->get('filterlab')."' ";
-		}
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != '-' && $this->input->get('filtersemester')) {
+			$filtersemester = ' AND ijin_lab.periode_id = '.$this->input->get('filtersemester').' ';
 
-		$filterlokasi = '';
-		if($this->input->get('filterlokasi') != 'all' && $this->input->get('filterlokasi')) {
-			if($this->input->get('filterlokasi') == 'internal') {
-				$filterlokasi = " AND ijin_lab_detail.alamat_lab = '' ";
-			} else {
-				$filterlokasi = " AND ijin_lab_detail.alamat_lab != '' ";
+			$filterlab = '';
+			if($this->input->get('filterlab') != 'all' && $this->input->get('filterlab')) {
+				$filterlab = " AND ijin_lab_detail.ruang_lab_id = '".$this->input->get('filterlab')."' ";
 			}
-			
+
+			$filterlokasi = '';
+			if($this->input->get('filterlokasi') != 'all' && $this->input->get('filterlokasi')) {
+				if($this->input->get('filterlokasi') == 'internal') {
+					$filterlokasi = " AND ijin_lab_detail.alamat_lab = '' ";
+				} else {
+					$filterlokasi = " AND ijin_lab_detail.alamat_lab != '' ";
+				}
+				
+			}
+
+			$data['ijinlab'] = $this->Ijin_lab_model->get_detail_where("ijin_lab.wd_validated_date IS NOT NULL AND ijin_lab.is_deleted = 0".$filterlab.$filterlokasi.$filtersemester, "ijin_lab_detail.ruang_lab_id ASC");
 		}
 
-		$data['ijinlab'] = $this->Ijin_lab_model->get_detail_where("ijin_lab.wd_validated_date IS NOT NULL AND ijin_lab.is_deleted = 0".$filterlab.$filterlokasi, "ijin_lab_detail.ruang_lab_id ASC");
+		
 
 		
 		// DATA TABLE

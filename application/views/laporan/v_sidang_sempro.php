@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Laporan Ijin Pemakaian Lab</h1>
+            <h1 class="m-0">Laporan Sidang Sempro</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item active">Laporan Ijin Pemakaian Lab</li>
+              <li class="breadcrumb-item active">Laporan Sidang Sempro</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -36,47 +36,31 @@
                 </div>
                 <div class="card-body ">
                   <div class="form-group row">
-                    <label for="nrp" class="col-sm-3 col-form-label">Semester</label>
+                    <label for="nrp" class="col-sm-3 col-form-label">Periode Sidang</label>
                     <div class="col-sm-9">
                       <select class="form-control" name="filtersemester">
-                        <option value="-">Pilih Semester</option>
+                        <option value="all">Pilih Periode</option>                        
                         <?php foreach($periode as $l) { ?>
-                          <option value="<?php echo $l->id; ?>" <?php if($this->input->get('filtersemester') == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; if($l->is_active == 1) { echo ' (Semester Aktif)'; } ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="nrp" class="col-sm-3 col-form-label">Fasilitas Lab</label>
-                    <div class="col-sm-9">
-                      <select class="form-control" name="filterlab">
-                        <option value="all">Semua Lab</option>
-                        <?php 
-                          $selectedlab = '';
-                          if($this->input->get('filterlab')) {
-                            $selectedlab = $this->input->get('filterlab');
-                          } 
-                        ?>
-                        <?php foreach($lab as $l) { ?>
-                          <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->ruang_lab; ?></option>
+                          <option value="<?php echo $l->id; ?>" <?php if($l->id == $this->input->get('filtersemester')) { echo 'selected'; } ?> ><?php echo strftime("%d %B %Y", strtotime($l->date_start)).' - '.strftime("%d %B %Y", strtotime($l->date_end)); if($l->is_active==1) { echo ' (Periode Aktif)'; } ?></option>
                         <?php } ?>
                       </select>
                     </div>
                   </div>                
                  <div class="form-group row">
-                    <label for="filterlokasi" class="col-sm-3 col-form-label">Lokasi</label>
+                    <label for="filterlokasi" class="col-sm-3 col-form-label">Tampilkan</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="filterlokasi">
-                        <option value="all">Semua lokasi</option>
-                        <option value="internal" <?php if($this->input->get('filterlokasi') == "internal") { echo 'selected'; } ?>>Internal</option>
-                        <option value="eksternal" <?php if($this->input->get('filterlokasi') == "eksternal") { echo 'selected'; } ?>>Eksternal</option>
+                      <select class="form-control" name="filtertampilkan">
+                        <?php if($is_lecturer) { ?>
+                        <option value="self" <?php if('self' == $this->input->get('filtertampilkan')) { echo 'selected'; } ?>>Diri saya</option>
+                        <?php } ?>
+                        <option value="all" <?php if('all' == $this->input->get('filtertampilkan')) { echo 'selected'; } ?>>Semua</option>
                       </select>
                     </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <a href="<?php echo base_url('laporan/ijinlab'); ?>" class="btn btn-default">Reset</a>
+                    <a href="<?php echo base_url('laporan/sempro'); ?>" class="btn btn-default">Reset</a>
                     <button type="submit" name="btncari" value="btncari" class="btn btn-primary">Cari</button>
                   </div>
               </div>
@@ -88,7 +72,7 @@
               <div class="card-header">
                 <div class="row">
                   <div class="col-12">
-                    <h3 class="card-title">Laporan Ijin Pemakaian Lab</h3>
+                    <h3 class="card-title">Laporan Sidang Sempro</h3>
                   </div>
                 </div>
               </div>
@@ -98,25 +82,28 @@
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
-                    <th>Nama Lab</th>
-                    <th>Lokasi</th>
-                    <th>Nrp</th>
-                    <th>Nama Mahasiswa</th>
-                    <th>Semester</th>
-                    <th>Tanggal Pengajuan</th>
+                    <th>Tanggal Sidang</th>
+                    <th>Ruang</th>
+                    <th>Jam</th>
+                    <th>Mahasiswa</th>
+                    <th>Dosbing</th>
+                    <th>Ketua</th>
+                    <th>Sekretaris</th>
                   </tr>
                   </thead>
                   <tbody>
-                    <?php if(@$ijinlab != '') { 
-                      foreach($ijinlab as $row) { 
+                   <?php if(@$sempro != '') {       
+                      setlocale (LC_TIME, 'id_ID');
+                      foreach($sempro as $row) { 
                       ?>
                       <tr>
-                        <td><?php echo '<strong>'.$row->nama_lab.'</strong>'; ?></td>
-                        <td><?php if($row->alamat_lab == "") { echo 'Internal'; } else { echo $row->alamat_lab; } ?></td>
-                         <td><?php  echo $row->nrp;  ?></td>
-                         <td><?php  echo $row->nama;  ?></td>
-                         <td><?php  echo $row->semester;  ?></td>
-                        <td><?php echo strftime("%d %B %Y", strtotime($row->submit_date)); ?></td>
+                        <td><?php echo strftime("%A, %d %B %Y", strtotime($row->sidang_date)); ?></td>
+                          <td><?php  echo $row->roomlabel;  ?></td>
+                         <td><?php  echo $row->label;  ?></td>
+                         <td><?php  echo $row->nama.' ('.$row->nrp.')';  ?></td>
+                         <td><?php  echo '<ol><li>'.$row->dosbing1.'</li><li>'.$row->dosbing2.'</li>';  ?></td>
+                         <td><?php  echo $row->namapenguji1;  ?></td>
+                         <td><?php  echo $row->namapenguji2;  ?></td>
                        
                       </tr>
                     <?php } }  ?>

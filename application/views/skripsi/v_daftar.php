@@ -47,7 +47,7 @@
                   <div class="row">
                     <div class="col-12">
                       <p class="text-sm">Judul
-                        <?php// print_r($registration_available); ?>
+                        <?php // print_r($registration_available); ?>
                         <b class="d-block"><?php  echo $registration_available[0]->judul; ?></b>
                       </p>
                     </div>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="col-4">
                       <p class="text-sm">MK yang sedang ditempuh (SKS)
-                        <input type="number" required  name="sksks" max="200" class="form-control" value="<?php echo $sks_in_ks; ?>" />
+                        <input type="number" required  name="sksks" max="200" class="form-control" value="<?php echo @$sks_in_ks; ?>" />
                       </p>
 
                     </div>

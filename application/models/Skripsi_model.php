@@ -67,6 +67,30 @@ class Skripsi_model extends CI_Model {
                 }
         }
 
+        public function get_student_skripsi_with_where($where) { 
+                $this->db->join('student_topik', 'student_topik.id=skripsi.student_topik_id', 'left');
+                $this->db->join('student', 'student.nrp=skripsi.nrp','left');
+                $this->db->join('lecturer l1', 'l1.npk=student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer l2', 'l2.npk=student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer l4', 'l4.npk=skripsi.penguji1', 'left');
+                $this->db->join('lecturer l5', 'l5.npk=skripsi.penguji2', 'left');
+                $this->db->join('lecturer l6', 'l6.npk=skripsi.dosbing_validate_npk', 'left');
+                $this->db->join('room', 'room.id=skripsi.ruang_id', 'left');
+                $this->db->join('lecturer l3', 'l3.npk = skripsi.kalab_npk_verified', 'left');
+                $this->db->join('sidang_time', 'sidang_time.id = skripsi.sidang_time', 'left');
+                $this->db->where($where);
+                $this->db->select('student_topik.judul, skripsi.*, room.label as "roomlabel",  student.nama, l1.npk as "lecturer1_npk", l2.npk as "lecturer2_npk", l1.nama as "dosbing1", l2.nama as "dosbing2", l3.nama as "kalabnama", sidang_time.label, l4.nama as "namapenguji1", l5.nama as "namapenguji2", l6.nama as "namadosbingvalidaterevisi"');
+
+
+                // TODO: check jika statusnya cancelled
+                $q = $this->db->get('skripsi');
+                if($q->num_rows() > 0) {
+                        return $q->result();        
+                } else {
+                        return false;
+                }
+        }
+
         public function get_student_skripsi_by_periode($periode_id) { 
                 $this->db->join('student_topik', 'student_topik.id=skripsi.student_topik_id', 'left');
                 $this->db->join('student', 'student.nrp=skripsi.nrp','left');
@@ -108,16 +132,16 @@ class Skripsi_model extends CI_Model {
                 }
         }
 
-        public function get_sempro_need_kalab_validation($idlab, $periode_id) {
+        public function get_skripsi_need_kalab_validation($idlab, $periode_id) {
                 $hitung = 0;
-                $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
+                $this->db->join('student_topik', 'student_topik.id=skripsi.student_topik_id', 'left');
                 $this->db->join('topik', 'topik.id=student_topik.topik_id','left'); 
                 
                 
-                $this->db->select('sempro.*');
+                $this->db->select('skripsi.*');
 
-                $this->db->where('sempro.periode_sidang_id='.$periode_id.' AND sempro.is_deleted = 0 AND topik.id_lab = "'.$idlab.'" AND sempro.kalab_npk_verified IS null');
-                $q = $this->db->get('sempro');
+                $this->db->where('skripsi.periode_sidang_id='.$periode_id.' AND skripsi.is_deleted = 0 AND topik.id_lab = "'.$idlab.'" AND skripsi.kalab_npk_verified IS null');
+                $q = $this->db->get('skripsi');
                 $hitung = $q->num_rows();
                 return $hitung;
         }

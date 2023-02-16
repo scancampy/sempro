@@ -364,9 +364,9 @@
           ?>
           
           <?php if($role->roles != 'student') { ?>
-           <li class="nav-item menu-open">
-            <a href="#" class="nav-link <?php //active ?>">
-              <i class="nav-icon fas fa-users"></i>
+           <li class="nav-item <?php if($this->uri->segment(1) == 'laporan') { echo  'menu-open'; } ?>">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-book-open"></i>
               <p>
                 Laporan
                 <i class="right fas fa-angle-left"></i>
@@ -377,6 +377,18 @@
               <a href="<?php echo base_url('laporan/ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'ijinlab') { echo  'active'; } ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ijin Lab</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/sempro'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'sempro') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sidang Sempro</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/skripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'skripsi') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sidang Skripsi</p>
               </a>
             </li>
           </ul>

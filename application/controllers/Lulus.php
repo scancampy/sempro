@@ -19,6 +19,8 @@ class Lulus extends CI_Controller {
 		$data['is_kalab'] = false;
 		$data['is_admin_st'] = false;
 
+		//print_r($roles);
+
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
@@ -28,11 +30,15 @@ class Lulus extends CI_Controller {
 				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."') AND student_topik.is_deleted = 0");					
 			} else if($role->roles == 'wd') {
 				$data['roles'] = 'lecturer';
-				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."' OR kelulusan.dosbing_validate_date IS NOT NULL) AND student_topik.is_deleted = 0");					
+				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."' OR kelulusan.dosbing_validate_date IS NOT NULL) AND student_topik.is_deleted = 0");	
+				//print_r($data['lulus']);
+				//die();				
 			} else if($role->roles == 'adminst') {
 				$data['roles'] = 'adminst';
 				$data['is_admin_st'] = true;
-				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.wd_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.dosbing_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+
+				//print_r($data['lulus']); die();
 			}
 		}
 
@@ -145,6 +151,14 @@ class Lulus extends CI_Controller {
 			} else if($role->roles == 'adminst') {
 				$data['is_admin_st'] = true;
 
+				$data['is_admin'] = true;
+				if($this->input->post('btnvalidasiadmin')) {
+					$this->Kelulusan_model->admin_validate($this->input->post('hid_lulus_id'));
+					$this->session->set_flashdata('notif', 'success');
+					$this->session->set_flashdata('msg', 'Sukses memvalidasi pengajuan daftar kelulusan');
+					redirect('lulus/detail/'.$id);
+				}
+
 				if($this->input->post('btnuploadsklulus')) {
 					$this->load->library('upload');
 
@@ -246,8 +260,7 @@ class Lulus extends CI_Controller {
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
 				$data['info'] = $info;
-				$data['connect'] = $this->Student_model->connect_sim($info[0]->nrp);
-		
+				//$data['connect'] = $this->Student_model->connect_sim($info[0]->nrp);
 			}
 		}
 
@@ -358,7 +371,7 @@ class Lulus extends CI_Controller {
 		$data['skskum'] = $this->Student_model->get_sks_d($info[0]->nrp);
 
 		//print_r($data['sempro']);
-		if($data['sempro'][0]->is_done != true) {
+		if($data['sempro'][0]->naskah_upload_date == null) {
 			redirect('dashboard');
 		}
 

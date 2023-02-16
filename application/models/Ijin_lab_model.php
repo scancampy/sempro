@@ -21,8 +21,9 @@ class Ijin_lab_model extends CI_Model {
                 $this->db->join('lecturer l3', 'l3.npk=ijin_lab.wd_validated_npk', 'left');
                 $this->db->join('student_topik', 'student_topik.id=ijin_lab.student_topik_id',' left');
                 $this->db->join('student', 'student.nrp=ijin_lab.nrp','left');
+                $this->db->join('periode', 'periode.id = ijin_lab.periode_id');
 
-                $this->db->select('ijin_lab.*, student.nama, student_topik.judul, l1.nama as "dosbing1", l2.nama as "kalab", l3.nama as "wd"');
+                $this->db->select('ijin_lab.*, periode.nama as `semester`, student.nama, student_topik.judul, l1.nama as "dosbing1", l2.nama as "kalab", l3.nama as "wd"');
 
                 $this->db->where($where);
 
@@ -34,12 +35,15 @@ class Ijin_lab_model extends CI_Model {
         public function get_detail_where($where, $order='') {
                 $this->db->join("ijin_lab", "ijin_lab.id=ijin_lab_detail.ijin_lab_id");
                 $this->db->join("student", "student.nrp=ijin_lab.nrp");
-                $this->db->select("ijin_lab_detail.*, student.nama, ijin_lab.nrp, ijin_lab.submit_date");
+                $this->db->join('periode', 'periode.id = ijin_lab.periode_id');
+                $this->db->select("ijin_lab_detail.*, periode.nama as `semester`, student.nama, ijin_lab.nrp, ijin_lab.submit_date");
                 $this->db->where($where);
                 if($order != '') {
                         $this->db->order_by($order);
                 }
                 $q = $this->db->get('ijin_lab_detail');
+
+                echo $this->db->last_query();
                 
                 return $q->result();  
         }

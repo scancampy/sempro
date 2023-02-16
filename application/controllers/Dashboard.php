@@ -17,52 +17,63 @@ class Dashboard extends CI_Controller {
 
         $roles = $this->session->userdata('user')->roles;
         $data['info'] = $this->session->userdata('user')->info;
+        $data['cektopik'] = false;
 
       
 		foreach($roles as $role) {
             if($role->roles == 'student') { 
-            	$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
-            	$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
-            	//print_r($skripsi);
-            	//die();
+            	// cek apakah mhs sudah punya topik
+            	$data['cektopik']  =  $this->Student_topik_model->get($data['info'][0]->nrp);
 
-            	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
-            	$data['eligible'] = $this->Student_model->cek_eligible($data['info'][0]->nrp);
-            	$data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
+            	if(!$data['cektopik']) {
+            		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
+	            	$data['connect'] = $this->Student_model->connect_sim($data['info'][0]->nrp);
+	            	//print_r($skripsi);
+	            	//die();
 
-            	$eligbile = true;
+	            	$data['cekks'] = $this->Student_model->check_mk_in_ks($data['info'][0]->nrp, $skripsi[0]->nilai);
+	            	$data['eligible'] = $this->Student_model->cek_eligible($data['info'][0]->nrp);
+	            	$data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
+
+	            	$eligbile = true;
+	            	
+	            	foreach($data['setting'] as $index => $value) { 
+	            		if($value->nama_alias == 'skripsi') { 
+	            			if(!$data['cekks']) {
+	            				$eligbile = false;
+	            			}
+	            		}
+
+	            		if($value->nama_alias == 'nilai_metpen_min') { 
+	            			if(!$data['eligible']['nilai_metpen_min']) {
+	            				$eligbile = false;
+	            			}
+	            		}
+
+	            		if($value->nama_alias == 'total_sks_tanpa_e_min') { 
+	            			if(!$data['eligible']['total_sks_tanpa_e_min']) {
+	            				$eligbile = false;
+	            			}
+	            		}
+
+	            		if($value->nama_alias == 'total_sks_nilai_d_max') { 
+	            			if(!$data['eligible']['total_sks_nilai_d_max']) {
+	            				$eligbile = false;
+	            			}
+	            		}
+	            	}
+
+	            	$data['eligible_check'] = $eligbile;
+	            	if($eligbile) {
+	            		$this->Student_model->set_eligible($data['info'][0]->nrp);
+	            		
+	            	}
+            	}
+
+            	// notifikasi upload naskah
+            	$data['need_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where('skripsi.naskah_filename IS NULL AND skripsi.nrp = "'.$data['info'][0]->nrp.'"');
             	
-            	foreach($data['setting'] as $index => $value) { 
-            		if($value->nama_alias == 'skripsi') { 
-            			if(!$data['cekks']) {
-            				$eligbile = false;
-            			}
-            		}
-
-            		if($value->nama_alias == 'nilai_metpen_min') { 
-            			if(!$data['eligible']['nilai_metpen_min']) {
-            				$eligbile = false;
-            			}
-            		}
-
-            		if($value->nama_alias == 'total_sks_tanpa_e_min') { 
-            			if(!$data['eligible']['total_sks_tanpa_e_min']) {
-            				$eligbile = false;
-            			}
-            		}
-
-            		if($value->nama_alias == 'total_sks_nilai_d_max') { 
-            			if(!$data['eligible']['total_sks_nilai_d_max']) {
-            				$eligbile = false;
-            			}
-            		}
-            	}
-
-            	$data['eligible_check'] = $eligbile;
-            	if($eligbile) {
-            		$this->Student_model->set_eligible($data['info'][0]->nrp);
-            		
-            	}
+            	
 
             	// notifikasi kelulusan
             	$data['skterbit'] = $this->Kelulusan_model->get("kelulusan.nrp ='".$data['info'][0]->nrp."' AND kelulusan.sk_filename IS NOT NULL AND kelulusan.is_deleted = 0");
@@ -105,6 +116,13 @@ class Dashboard extends CI_Controller {
 	            		//print_r($data['info'][0]);
 	            		$periodeaktif = $this->Periode_model->get_periode_sidang_aktif(); 
 	            		$data['need_kalab_sempro_validation'] = $this->Sempro_model->get_sempro_need_kalab_validation($data['info'][0]->lab_id, $periodeaktif->id);
+
+
+	            		$periodea_skripsi_aktif = $this->Periode_model->get_periode_sidang_skripsi();
+	            		//print_r($periodea_skripsi_aktif); die(); 
+	            		$data['need_kalab_skripsi_validation'] = $this->Skripsi_model->get_skripsi_need_kalab_validation($data['info'][0]->lab_id, $periodea_skripsi_aktif[0]->id);
+
+	            		
 	            	}
 
 	            	// get topik yang butuh setting dosbing
@@ -133,9 +151,11 @@ class Dashboard extends CI_Controller {
 
             	if($role->roles == 'adminst') {
             		$periodeaktif = $this->Periode_model->get_periode_sidang_aktif(); 
-	            		
+	            	$periodeaktifskripsi = $this->Periode_model->get_periode_sidang_skripsi_aktif();            		
+            	
             		$data['need_create_st'] = $this->Student_topik_model->get_proposal_need_st();
             		$data['need_room_plot'] = $this->Sempro_model->get_sempro_need_room_plotting($periodeaktif->id);
+            		$data['need_room_plot_skripsi'] = $this->Skripsi_model->get_skripsi_need_room_plotting($periodeaktifskripsi->id);
 
             		//skripsi
             		$periodeaktifskripsi = $this->Periode_model->get_periode_sidang_skripsi_aktif(); 
