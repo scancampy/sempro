@@ -42,8 +42,18 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
-                <?php if($roles == 'student') { 
-                         if(isset($registration_not_eligible)) { ?>
+                <?php if($roles == 'student') { ?>
+                      <?php if(@$lulus_sempro) { ?>
+            <div class="col-md-12">
+              <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-bullhorn"></i> Sidang Sempro Selesai</h5>
+                    Mahasiswa telah berhasil menyelesaikan sidang Sempro. Untuk selanjutnya mahasiswa diperbolehkan untuk mengurus peminjaman lab, melakukan bimbingan skripsi, mengerjakan skripsi dan mendaftar sidang skripsi.
+                  </div>
+            </div>
+            <hr/>
+          <?php } ?>
+                      <?php   if(isset($registration_not_eligible)) { ?>
                  <div class="callout callout-warning">
                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
                     Anda belum memiliki surat tugas proposal

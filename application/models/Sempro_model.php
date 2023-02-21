@@ -353,13 +353,13 @@ class Sempro_model extends CI_Model {
                 $this->db->update('sempro', $data);
         }
 
-        public function update_naskah_filename($id, $naskah_filename) {
-                $data = array('naskah_filename' => $naskah_filename, 'naskah_upload_date' => date('Y-m-d H:i:s'));
+        public function update_naskah_filename($id, $naskah_filename, $naskah_drive) {
+                $data = array('naskah_filename' => $naskah_filename, 'naskah_upload_date' => date('Y-m-d H:i:s'), 'naskah_drive' => $naskah_drive);
                 $this->db->where('id', $id);
                 $this->db->update('sempro', $data);
         }
 
-        public function submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $saran, $kesimpulan, $cekrevisijudul) {
+        public function submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $saran, $kesimpulan, $cekrevisijudul, $hasil_sempro_filename) {
                 if($cekrevisijudul == false) {
                         $is_done = true;
                 } else {
@@ -376,6 +376,7 @@ class Sempro_model extends CI_Model {
                         'kesimpulan'            => $kesimpulan,
                         'revision_required'     => $cekrevisijudul,
                         'is_done'               => $is_done,
+                        'hasil_sempro_filename' => $hasil_sempro_filename,
                         'hasil_submited_date'   => date('Y-m-d H:i:s')
                 );
 
@@ -384,7 +385,7 @@ class Sempro_model extends CI_Model {
 
         }
 
-        public function update_judul($id, $newjudul, $file_naskah) {
+        public function update_judul($id, $newjudul, $file_naskah, $naskah_drive) {
                 $q = $this->db->get_where('sempro', array('id' => $id));
                 if($q->num_rows() > 0) {
                         $hq = $q->row();
@@ -399,7 +400,8 @@ class Sempro_model extends CI_Model {
                         $data = array(
                                 'revision_judul_date' => date('Y-m-d H:i:s'),  
                                 'naskah_filename' => $file_naskah, 
-                                'naskah_upload_date' => date('Y-m-d H:i:s')
+                                'naskah_upload_date' => date('Y-m-d H:i:s'),
+                                'naskah_drive' => $naskah_drive
                         );
                         $this->db->where('id', $id);
                         $this->db->update('sempro', $data);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Sempro (v1.0)</title>
+  <title>My SIGA (v1.0)</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -18,7 +18,7 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="<?php echo current_url(); ?>" class="h1"><b>My</b>Sempro (v1.0)</a>
+      <a href="<?php echo current_url(); ?>" class="h1"><b>My</b>SIGA (v1.0)</a>
     </div>
     <div class="card-body">
       <?php if(isset($error)) { ?>

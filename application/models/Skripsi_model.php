@@ -330,12 +330,13 @@ class Skripsi_model extends CI_Model {
                 $this->db->update('skripsi', $data);
         }
 
-        public function update_naskah_filename($id, $naskah_filename, $kb_filename) {
+        public function update_naskah_filename($id, $naskah_filename, $kb_filename, $naskah_drive) {
                 $data = array(
                         'naskah_filename' => $naskah_filename, 
                         'naskah_upload_date' => date('Y-m-d H:i:s'),
                         'kartu_bimbingan_filename' => $kb_filename, 
-                        'kartu_bimbingan_upload_date' => date('Y-m-d H:i:s')
+                        'kartu_bimbingan_upload_date' => date('Y-m-d H:i:s'),
+                        'naskah_drive' => $naskah_drive
                 );
                 $this->db->where('id', $id);
                 $this->db->update('skripsi', $data);

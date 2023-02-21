@@ -49,27 +49,34 @@
                     </div>
 
                     <?php if($detail->sidang_date != null) { ?>
-                    <div class="col-3">
+                    <div class="col-2">
                       <p class="text-sm">Tanggal Sidang
                         <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
                       </p>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                       <p class="text-sm">Jam Sidang
                         <b class="d-block"><?php echo $detail->label; ?></b>
                       </p>
                     </div>
                     <?php if($detail->ruang_id != null) { ?>
-                    <div class="col-3">
+                    <div class="col-2">
                       <p class="text-sm">Ruang Sidang
                         <b class="d-block"><?php echo $detail->roomlabel; ?></b>
                       </p>
                     </div>
                   <?php } ?>
                     <?php if($detail->naskah_filename != null) { ?>
-                    <div class="col-3">
+                    <div class="col-2">
                       <p class="text-sm">Download Naskah
                         <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+                      </p>
+                    </div>
+                  <?php } ?>
+                    <?php if($detail->naskah_drive != null) { ?>
+                    <div class="col-2">
+                      <p class="text-sm">Link Drive
+                        <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
                       </p>
                     </div>
                   <?php } ?>
@@ -456,7 +463,7 @@
 
                         <!-- timeline item -->
                         <div>
-                           <?php if(!is_null($detail->naskah_filename)) { ?>
+                           <?php if(!is_null($detail->naskah_upload_date)) { ?>
                           <i class="fas fa-check bg-green"></i>
                         <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
                           <div class="timeline-item">
@@ -464,7 +471,7 @@
                             <div class="timeline-body">
                               Mahasiswa - Upload Naskah<br/>
 
-                              <?php if(isset($is_student) && is_null($detail->naskah_filename) && !is_null($detail->ruang_id)) { ?>
+                              <?php if(isset($is_student) && is_null($detail->naskah_upload_date) && !is_null($detail->ruang_id)) { ?>
                                <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                       
                                       <div class="form-group ">
@@ -482,6 +489,21 @@
                                         </div>
                                       </div>
                                       <?php } ?>
+
+                                      <div class="form-group ">
+                                        <label for="linknaskahdrive" class="col-sm-12 col-form-label">Input Link Google Drive Naskah Sempro</label>
+                                        <div class="col-sm-12">
+                                          <input type="text"  name="linknaskahdrive" class="form-control" id="linknaskahdrive" >
+                                        </div>
+                                      </div>
+                                      <?php if(!is_null($detail->naskah_drive)) { ?>
+                                        <div class="form-group ">
+                                        <label for="golinknaskahdrive" class="col-sm-12 col-form-label">Link Google Drive Naskah Sempro</label>
+                                        <div class="col-sm-12">
+                                           <a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-warning btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-web"></span></a>
+                                        </div>
+                                      </div>
+                                      <?php } ?>
                                       <div class="form-group ">
                                         <div class="col-sm-12 text-right">
                                           <button type="submit" class="btn btn-primary" value="Submit" name="btnuploadnaskah"  id="btnuploadnaskah">Simpan</button>
@@ -489,7 +511,7 @@
                                       </div>
                                     </form>
                                   <?php } else { 
-                                    if(!is_null($detail->naskah_filename)) { ?>
+                                    if(!is_null($detail->naskah_upload_date)) { ?>
 <small><i class="fas fa-clock"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail->naskah_upload_date)); ?>
                               </small><br/>
@@ -513,7 +535,7 @@
                           <div class="timeline-item">
                             
                             <div class="timeline-body">
-                              Dosbing - Input Hasil Sidang<br/>
+                              Dosbing - Input Hasil Ujian Sempro<br/>
                               <?php if(!is_null($detail->sidang_date)) { ?>
                                 <div class="col-12">
                                     <p class="text-sm">Tanggal Sidang
@@ -541,37 +563,37 @@
                               <?php if(!is_null($detail->hasil_submited_date)) { ?>
                                 <div class="col-12">
                                   <p class="text-sm">Saran
-                                    <b class="d-block"><?php echo $detail->saran; ?></b>
+                                    <b class="d-block"><?php if($detail->saran) { echo $detail->saran; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>  
                                 <div class="col-12">
                                   <p class="text-sm">Materi
-                                    <b class="d-block"><?php echo $detail->materi; ?></b>
+                                    <b class="d-block"><?php if($detail->materi) { echo $detail->materi; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>
                                 <div class="col-12">
                                   <p class="text-sm">Rumusan Permasalahan
-                                    <b class="d-block"><?php echo $detail->rumusan; ?></b>
+                                    <b class="d-block"><?php if($detail->rumusan) { echo $detail->rumusan; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>
                                 <div class="col-12">
                                   <p class="text-sm">Tujuan Penelitian
-                                    <b class="d-block"><?php echo $detail->tujuan; ?></b>
+                                    <b class="d-block"><?php if($detail->tujuan) { echo $detail->tujuan; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>
                                 <div class="col-12">
                                   <p class="text-sm">Metodologi
-                                    <b class="d-block"><?php echo $detail->metodologi; ?></b>
+                                    <b class="d-block"><?php if($detail->metodologi) { echo $detail->metodologi; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>  
                                 <div class="col-12">
                                   <p class="text-sm">Analisis Hasil
-                                    <b class="d-block"><?php echo $detail->analisis; ?></b>
+                                    <b class="d-block"><?php if($detail->analisis) { echo $detail->analisis; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>  
                                 <div class="col-12">
                                   <p class="text-sm">Kesimpulan
-                                    <b class="d-block"><?php echo $detail->kesimpulan; ?></b>
+                                    <b class="d-block"><?php if($detail->kesimpulan) { echo $detail->kesimpulan; } else { echo '-'; } ?></b>
                                   </p>
                                 </div>  
                                 <div class="col-12">
@@ -579,6 +601,14 @@
                                     <b class="d-block"><?php if($detail->revision_required)  { echo 'Diperlukan'; } else { echo 'Tidak diperlukan'; } ?></b>
                                   </p>
                                 </div>  
+
+                                <?php if($detail->hasil_sempro_filename) { ?>
+                                  <div class="col-12">
+                                    <p class="text-sm">Download Foto Hasil Sidang Sempro
+                                      <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->hasil_sempro_filename); ?>" target="_blank" class="color-red btn btn-outline-success btn-flat btn-sm"><span class="fa fa-file-image"></span></a></b>
+                                    </p>
+                                </div>
+                                <?php } ?>
                               <?php } ?>
                                   
                               <?php 
@@ -631,12 +661,21 @@
                                     </div>
 
 
+                                  <div class="col-12 ">
+                                       <div class="form-group">
+                                          <label for="file_hasil_sempro" >Upload foto form hasil ujian Sempro</label>
+                                          <input type="file"  name="file_hasil_sempro" class="form-control" accept="image/png, image/gif, image/jpeg, image/jpg" id="file_hasil_sempro" >
+                                      </div>
+                                  </div>
+
                                     <div class="col-12">
                                       <div class="form-check">
                                         <input class="form-check-input" id="cekrevisijudul" name="cekrevisijudul" value="valid" type="checkbox">
                                         <label class="form-check-label" for="cekrevisijudul">Mahasiswa perlu merevisi naskah</label>
                                       </div>
                                     </div>
+
+
 
 
 
@@ -687,6 +726,13 @@
                                       <input type="file"  name="file_naskah_revisi" class="form-control" accept="application/pdf" id="file_naskah_revisi" >
                                     </div>
                                   </div>
+
+                                   <div class="form-group ">
+                                        <label for="linkrevisinaskahdrive" class="col-sm-12 col-form-label">Input Link Google Drive Naskah Sempro</label>
+                                        <div class="col-sm-12">
+                                          <input type="text"  name="linkrevisinaskahdrive" class="form-control" id="linkrevisinaskahdrive" value="<?php echo $detail->naskah_drive; ?>">
+                                        </div>
+                                      </div>
 
                                   <div class="col-12">
                                       <div class="form-check">
@@ -752,7 +798,13 @@
 
                         </div>
                         <!-- END timeline item -->
-
+                        <?php if($detail->is_done == 1) { ?>
+                        <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-bullhorn"></i> Sidang Sempro Selesai</h5>
+                    Mahasiswa telah berhasil menyelesaikan sidang Sempro. Untuk selanjutnya mahasiswa diperbolehkan untuk mengurus peminjaman lab, melakukan bimbingan skripsi, mengerjakan skripsi dan mendaftar sidang skripsi.
+                  </div>
+                <?php } ?>
                         
                     </div>
                   </div>

@@ -33,6 +33,17 @@
               </div>
             </div>
             <hr/>
+            <?php if(@$lulus_sempro) { ?>
+            <div class="col-md-12">
+              <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-bullhorn"></i> Sidang Sempro Selesai</h5>
+                    Mahasiswa telah berhasil menyelesaikan sidang Sempro. Untuk selanjutnya mahasiswa diperbolehkan untuk mengurus peminjaman lab, melakukan bimbingan skripsi, mengerjakan skripsi dan mendaftar sidang skripsi.
+                  </div>
+            </div>
+            <hr/>
+          <?php } ?>
+
               <?php if(!$cektopik) { ?>
               <div class="col-md-12">
                   <div class="card card-outline card-primary">

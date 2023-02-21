@@ -222,7 +222,7 @@ class Skripsi extends CI_Controller {
 
 		$data['ipkkum'] = $this->Student_model->get_ipk_kum($data['detail']->nrp);
 		$data['skskum'] = $this->Student_model->get_sks_kum($data['detail']->nrp);
-		$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($data['detail']->nrp);
+		//$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($data['detail']->nrp);
 
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
@@ -278,13 +278,18 @@ class Skripsi extends CI_Controller {
 		          	$this->upload->initialize($config);
 		          	$this->load->library('upload', $config);
 
-			        if ( ! $this->upload->do_upload('filekk')) {
-			        	//echo 'tes'.$this->upload->display_errors();
-			        	//die();
+			        if ( ! $this->upload->do_upload('filekk') && !$this->input->post('linknaskahdrive')) {
+
 			          	$this->session->set_flashdata('notif', 'error_validated');
-			          	$this->session->set_flashdata('msg', $this->upload->display_errors());
+			          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
 			          	redirect('skripsi/detail/'.$id);
-			        }
+			        } else if (empty($_FILES['filekk']['name']) && !$this->input->post('linknaskahdrive')) {
+						$this->session->set_flashdata('notif', 'error_validated');
+			          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
+			          	redirect('skripsi/detail/'.$id);
+					} else if(empty($_FILES['file_naskah_revisi']['name'])) {
+						$nama_file_naskah = null;
+					}
 
 			        // kartu bimbingan
 			        $this->load->library('upload');
@@ -304,7 +309,7 @@ class Skripsi extends CI_Controller {
 			          	redirect('skripsi/detail/'.$id);
 			        }
 				            
-				  	$this->Skripsi_model->update_naskah_filename($id, $nama_file_naskah, $nama_file_kb);
+				  	$this->Skripsi_model->update_naskah_filename($id, $nama_file_naskah, $nama_file_kb, $this->input->post('linknaskahdrive'));
 		    	  	$this->session->set_flashdata('notif', 'success');
 		    	  	$this->session->set_flashdata('msg', 'Sukses upload naskah skripsi');
 				  	redirect('skripsi/detail/'.$id);
@@ -514,6 +519,15 @@ class Skripsi extends CI_Controller {
   			Toast.fire({
 		        icon: "error",
 		        title: "'.$this->session->flashdata('message').'"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'error_validated') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "error",
+		        title: "'.$this->session->flashdata('msg').'"
 		      });
   		';
   	}

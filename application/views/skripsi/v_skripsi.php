@@ -136,14 +136,10 @@
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->admin_plotting_date == null) {
                           echo '<span class="badge badge-success">Menunggu Admin TU Ploting Ruang</span>';
-                        }  else if($row->naskah_filename == null) {
+                        }  else if($row->naskah_upload_date == null) {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
-                        } else if( $row->hasil == null) {
-                          echo '<span class="badge badge-success">Menunggu Hasil Sidang</span>';
-                        } else if($row->revision_required == true && $row->revision_judul_date == null) {
-                          echo '<span class="badge badge-success">Menunggu Mahasiswa Revisi Judul</span>';
-                        }  else if($row->dosbing_validate_date == null) {
-                          echo '<span class="badge badge-success">Menunggu Dosbing Validasi Revisi Judul</span>';
+                        } else {
+                          echo '<span class="badge badge-success">Naskah telah diupload</span>';
                         } 
                       ?>
 
@@ -153,6 +149,9 @@
                       <a href="<?php echo base_url('skripsi/detail/'.$row->id); ?>" class="btn btn-primary btn-flat btn-sm">Detail</a>
                       <?php if(!is_null($row->naskah_filename)) { ?>
                       <a href="<?php echo base_url('uploads/naskahskripsi/'.$row->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
+                    <?php } ?>
+                    <?php if(!is_null($row->naskah_drive)) { ?>
+                      <a href="<?php echo $row->naskah_drive; ?>" target="_blank" class="color-red btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a>
                     <?php } ?>
                     </td>
                   </tr>

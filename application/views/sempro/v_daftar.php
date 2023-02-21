@@ -32,6 +32,8 @@
                     <?php echo $error; ?>
                   </div>
                 <?php } ?>
+
+             
             <div class=" card card-outline card-primary">
               <form method="post" action="<?php echo base_url('sempro/daftar'); ?>">
               <div class="card-header">
