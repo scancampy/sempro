@@ -10,7 +10,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item"><a href="<?php echo base_url('sempro'); ?>">Sidang Skripsi</a></li>
+              <li class="breadcrumb-item"><a href="<?php echo base_url('skripsi'); ?>">Sidang Skripsi</a></li>
               <li class="breadcrumb-item active">Detail Sidang Skripsi</li>
             </ol>
           </div><!-- /.col -->
@@ -480,7 +480,7 @@
                             <div class="timeline-body">
                               Mahasiswa - Upload Naskah<br/>
 
-                              <?php if(isset($is_student) && is_null($detail->naskah_upload_date) && !is_null($detail->ruang_id)) { ?>
+                              <?php if(isset($is_student) && is_null($detail->naskah_upload_date) ) { ?>
                                <form method="post" action="<?php echo base_url('skripsi/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                       
                                       <div class="form-group ">

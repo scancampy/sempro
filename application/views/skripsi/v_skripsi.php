@@ -32,7 +32,7 @@
                     <h3 class="card-title">Data Sidang Skripsi</h3>
                   </div>
                   <div class="col-2">
-                    <?php if(isset($registration_available)) { 
+                    <?php if(isset($registration_available) && $roles == 'student') { 
                       ?>
                     <a href="<?php echo base_url('skripsi/daftar'); ?>" class="btn btn-block btn-primary btn-sm" >Daftar</a>
                   <?php }  ?>
@@ -42,8 +42,38 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
-                <?php if($roles == 'student') { 
-                         if(isset($registration_not_eligible)) { ?>
+                <?php if($roles == 'student') { ?>
+                  <?php if(@$notif_upload_naskah_skripsi) { 
+            
+            $now = time(); // or your date as well
+            $kurang_hari = strtotime($notif_upload_naskah_skripsi[0]->sidang_date) - $now;
+
+            $kurang_hari_round =  round($kurang_hari / (60 * 60 * 24));
+
+            if($kurang_hari_round >= 0) {
+            ?>
+              <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Upload Naskah Sidang Skripsi</h5>
+                    Sidang skripsi anda sudah dijadwalkan yakni pada hari <?php echo strftime("%A, %d %B %Y", strtotime($notif_upload_naskah_skripsi[0]->sidang_date)); ?>.<br/> 
+                    <?php if($kurang_hari_round > 0) { echo '<strong>Waktu tersisa adalah '.$kurang_hari_round.' hari lagi.</strong>'; } else { echo '<strong>Batas waktu upload tersisa hanya hari ini.</strong>';  } ?><br/>
+                    Silahkan klik <a href="<?php echo base_url('skripsi/detail/'.$notif_upload_naskah_skripsi[0]->id); ?>">tautan</a> ini untuk upload berkas naskah skripsi anda.
+                  </div>
+            <hr/>
+          <?php } else { ?>
+              <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Upload Naskah Sidang Skripsi</h5>
+                    Sidang skripsi anda sudah dijadwalkan yakni pada hari <?php echo strftime("%A, %d %B %Y", strtotime($notif_upload_naskah_skripsi[0]->sidang_date)); ?>.<br/> 
+                    <strong>Anda terlambat mengupload naskah sidang skripsi. Silahkan hubungi petugas jurusan dan Kalab anda.</strong>
+                  </div>
+            <hr/>
+          <?php } ?>
+          <?php } ?>
+
+
+
+                      <?php   if(isset($registration_not_eligible)) { ?>
                  <div class="callout callout-warning">
                     <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
                     Anda belum mengajukan ijin pemakaian lab

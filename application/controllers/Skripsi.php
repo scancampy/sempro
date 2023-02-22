@@ -61,6 +61,9 @@ class Skripsi extends CI_Controller {
 						}
 					} 
 				} else {
+					// cek notifikasi upload naskah
+            		$data['notif_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_all('skripsi.nrp="'.$info[0]->nrp.'" AND skripsi.kalab_verified_date IS NOT NULL AND skripsi.naskah_upload_date IS NULL');
+            	//print_r($data['notif_upload_naskah_skripsi']);
 					$data['already_registered'] = true;
 					$data['sempro'] = $skripsidata;
 				}

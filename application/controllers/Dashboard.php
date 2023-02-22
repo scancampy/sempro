@@ -74,6 +74,10 @@ class Dashboard extends CI_Controller {
             	$data['lulus_sempro'] = $this->Sempro_model->get_student_sempro_all('sempro.nrp = "'.$data['info'][0]->nrp.'" AND sempro.is_done = 1');
             	//print_r($data['lulus_sempro']);
 
+            	// cek notifikasi upload naskah
+            	$data['notif_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_all('skripsi.nrp="'.$data['info'][0]->nrp.'" AND skripsi.kalab_verified_date IS NOT NULL AND skripsi.naskah_upload_date IS NULL');
+
+
             	// notifikasi upload naskah
             	$data['need_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where('skripsi.naskah_filename IS NULL AND skripsi.nrp = "'.$data['info'][0]->nrp.'"');
             	
