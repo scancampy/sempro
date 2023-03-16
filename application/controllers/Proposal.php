@@ -309,21 +309,38 @@ class Proposal extends CI_Controller {
 
 		// HANDLE SUBMIT DOSBING
 		$data['js'] .= '
+
+		/* else if($("#dosbing2").val() == 0) {
+						alert("Dosbing 2 harus dipilih");
+						e.preventDefault();
+					
+					} */ 
+					
 				$("#btnkalabpilihdosbingsubmit").on("click", function(e) {
 					// cek dosbing harus diisi
 					if($("#dosbing1").val() == 0) {
 						alert("Dosbing 1 harus dipilih");
 						e.preventDefault();
 					
-					} else if($("#dosbing2").val() == 0) {
-						alert("Dosbing 2 harus dipilih");
-						e.preventDefault();
-					
-					} else if($("#dosbing1").val() == $("#dosbing2").val()) {
+					}  else if($("#dosbing1").val() == $("#dosbing2").val()) {
 						alert("Dosbing 1 dan 2 harus berbeda");
 						e.preventDefault();
 					
-					} 
+					} else {
+						//cek get_kuota
+						var totb1 = ($("option:selected", $("#dosbing1")).attr("totbimbingan"));
+						if(totb1 > 8) {
+							alert("Dosbing 1 melebihi kuota bimbingan");
+							e.preventDefault();
+						}
+
+						var totb2 = ($("option:selected", $("#dosbing2")).attr("totbimbingan"));
+						if(totb2 > 8) {
+							alert("Dosbing 2 melebihi kuota bimbingan");
+							e.preventDefault();
+						}
+						
+					}
 				});
 		';
 
@@ -548,6 +565,11 @@ class Proposal extends CI_Controller {
 		$this->load->view('v_footer', $data);
 	}
 
+	public function cek() {
+		$data['topik'] = $this->Topik_model->get('', '', 0, '',1, 'sudah');
+		print_r($data['topik']);
+	}
+
 	public function pilihtopik() {
 		$data = array();
 
@@ -563,6 +585,11 @@ class Proposal extends CI_Controller {
 
 			if(count($data['active_topic']) > 0) {
 				//sudah ada topik, maka tidak boleh akses halaman ini
+				redirect('dashboard');
+			}
+
+			// cek eligible atau nggak
+			if($data['student'][0]->eligible == 0) {
 				redirect('dashboard');
 			}
 		}
@@ -600,7 +627,7 @@ class Proposal extends CI_Controller {
 		$pilihdosenpembuat = $this->input->get('pilihdosenpembuat');
 		if($pilihdosenpembuat == 'all') { $pilihdosenpembuat = ''; }
 
-		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $pilihdosenpembuat,1, true);
+		$data['topik'] = $this->Topik_model->get('', $filterlab, 0, $pilihdosenpembuat,1, 'sudah');
 
 		// GET KUOTA
 		$data['kuota'] = array();

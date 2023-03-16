@@ -123,6 +123,12 @@ class Student_model extends CI_Model {
                 $this->db->update('student', $data);
         }
 
+         public function set_not_eligible($nrp) {
+                $data = array('eligible' => 0);
+                $this->db->where('nrp', $nrp);
+                $this->db->update('student', $data);
+        }
+
 
         public function cek_eligible($nrp) {
                 $result = array();
@@ -183,7 +189,18 @@ class Student_model extends CI_Model {
                 if($rowtotalsksdmax->sks <= $totalsksdmax) {
                           $result['total_sks_nilai_d_max'] = true;
                 } else {
-                        $result['total_sks_nilai_d_max'] = false;
+                        // cek sesuai algoritma yg baru
+                        $selisih = $rowtotalskstanpae->sks -$totalskstanpae;
+                       // echo $rowtotalskstanpae->sks.'<br/>';
+                       // echo 'selisih = '.$selisih;
+                       // echo '<br/>total nilai d = '.$totalsksdmax;
+                        $nilaiDbaru = $rowtotalsksdmax->sks - $selisih;
+
+                        if($nilaiDbaru<= $totalsksdmax) {
+                                $result['total_sks_nilai_d_max'] = true;
+                        } else {
+                                $result['total_sks_nilai_d_max'] = false;
+                        }                        
                 }
  
 
@@ -267,6 +284,12 @@ class Student_model extends CI_Model {
                 return $hasileligible;
         }
 
+        public function connect_sim_raw($nrp){
+                $dbsim = $this->load->database('sim',TRUE);
+                $q = $dbsim->get_where('v_FarTranskrip', array('NRP' => $nrp));
+                print_r($q->result());
+        }
+
         public function connect_sim($nrp) {
                 $dbsim = $this->load->database('sim',TRUE);
                 $q = $dbsim->get_where('v_FarTranskrip', array('NRP' => $nrp));
@@ -278,22 +301,25 @@ class Student_model extends CI_Model {
                 $rangenilai = array('A' => 4, 'AB' => 3.5, 'B' => 3, 'BC' => 2.5, 'C' => 2, 'D' => 1, 'E' => 0,'E*' => 0);
 
                 foreach($q->result() as $value) {
-                        $data = array(
-                                'student_nrp' => $nrp,
-                                'kode_mk' => $value->KodeMK,
-                                'academic_year' => $value->ThnAkademik,
-                                'semester' => $value->Semester,
-                                'nisbi' => $value->KodeNisbi,
-                                'nisbi_value' => $rangenilai[$value->KodeNisbi],
-                                'sks' => $value->sks
-                        );
-                        $this->db->insert('student_transcript', $data);
+                        if($value->FlagHide == 'T') {
+                                $data = array(
+                                        'student_nrp' => $nrp,
+                                        'kode_mk' => $value->KodeMK,
+                                        'nama_mk' => $value->Nama, 
+                                        'academic_year' => $value->ThnAkademik,
+                                        'semester' => $value->Semester,
+                                        'nisbi' => $value->KodeNisbi,
+                                        'nisbi_value' => $rangenilai[$value->KodeNisbi],
+                                        'sks' => $value->sks
+                                );
+                                $this->db->insert('student_transcript', $data);
+                        }
                 }
         }
 
         public function get_transcript_raw($nrp) {
 
-                $q = $this->db->query("SELECT student_transcript.*, (SELECT course.nama FROM course WHERE course.kode_mk = student_transcript.kode_mk OR course.old_kode_mk1 = student_transcript.kode_mk OR course.old_kode_mk2 = student_transcript.kode_mk OR course.old_kode_mk3 = student_transcript.kode_mk OR course.old_kode_mk4 = student_transcript.kode_mk LIMIT 1) as `namamk` FROM `student_transcript` WHERE `student_nrp` = '".$nrp."';");
+                $q = $this->db->query("SELECT student_transcript.* FROM `student_transcript` WHERE `student_nrp` = '".$nrp."';");
               /*  $this->db->join('course', 'course.kode_mk = student_transcript.kode_mk','left');
                 $this->db->select('student_transcript.*, course.nama as "namamk"');
                 $this->db->where(' course.kode_mk ')
@@ -466,7 +492,7 @@ class Student_model extends CI_Model {
         }
 
         public function is_eligible_course($kode_mk, $nrp) {
-                $this->db->where('kode_mk = "'.$kode_mk.'" OR old_kode_mk1 = "'.$kode_mk.'" OR old_kode_mk2 = "'.$kode_mk.'" OR old_kode_mk3 = "'.$kode_mk.'" OR old_kode_mk4 = "'.$kode_mk.'" ');
+                $this->db->where('kode_mk = "'.$kode_mk.'" OR old_kode_mk1 = "'.$kode_mk.'" OR old_kode_mk2 = "'.$kode_mk.'" OR old_kode_mk3 = "'.$kode_mk.'" OR old_kode_mk4 = "'.$kode_mk.'" AND is_deleted = 0');
                 $a = $this->db->get('course');
                // echo $this->db->last_query();
                // die();

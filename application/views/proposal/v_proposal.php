@@ -31,7 +31,7 @@
                     <h3 class="card-title">Data Proposal</h3>
                   </div>
                   <div class="col-2">
-                    <?php if(count($active_topic) == 0) { ?>
+                    <?php if(count($active_topic) == 0 && $student[0]->eligible != 0) { ?>
                     <a href="<?php echo base_url('proposal/pilihtopik'); ?>" class="btn btn-block btn-primary btn-sm" >Pilih Topik</a>
                   <?php } ?>
                   </div>

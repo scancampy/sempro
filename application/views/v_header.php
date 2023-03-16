@@ -358,11 +358,17 @@
             </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="<?php echo base_url('laporan/ijinlab'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'ijinlab') { echo  'active'; } ?>">
+              <a href="<?php echo base_url('laporan/topik'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'topik') { echo  'active'; } ?>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Ijin Lab</p>
+                <p>Topik</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/proposal'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'proposal') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Proposal</p>
+              </a>
+            </li> 
             <li class="nav-item">
               <a href="<?php echo base_url('laporan/sempro'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'sempro') { echo  'active'; } ?>">
                 <i class="far fa-circle nav-icon"></i>
@@ -379,7 +385,7 @@
           <?php } ?>
           <li class="nav-header">SETTINGS</li>
           <li class="nav-item">
-            <a href="pages/calendar.html" class="nav-link">
+            <a href="<?php echo base_url('password'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'password') { echo  'active'; } ?>">
               <i class="nav-icon fas fa-lock"></i>
               <p>
                 Change Password

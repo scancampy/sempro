@@ -10,6 +10,148 @@ class Laporan extends CI_Controller {
         }
     }
 
+    public function proposal() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		$idlab = '';
+		if($this->input->get('filterlab') != 'all') {
+			$idlab = $this->input->get('filterlab');
+		}
+		$data['lab'] = $this->Lab_model->get();
+
+		$data['semester'] = $this->Periode_model->get();
+		$data['active_semester'] = $this->Periode_model->get_active_periode();
+		
+		if($this->input->get('filtersemester')) {
+		    $selectedsemester = $this->input->get('filtersemester');
+	    } else {
+	        $selectedsemester = $data['active_semester'];
+	    }
+
+	    $wherestr = 'student_topik.is_deleted = 0';
+	    if($selectedsemester != null) {
+	    	$selsemester = $this->Periode_model->get($selectedsemester);
+	    	if($selsemester[0]->semester == 'Genap') {
+	    		$startdate = ($selsemester[0]->tahun+1).'-02-01'; // februari
+	    	} else {
+	    		$startdate = $selsemester[0]->tahun.'-08-01'; // Agustus
+	    	}
+
+	    	if($selsemester[0]->semester == 'Genap') {
+	    		$enddate = ($selsemester[0]->tahun+1).'-07-31'; // Juli
+	    	} else {
+	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
+	    	}
+	    	
+	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
+	    }
+
+		// GET STUDENT TOPIC
+		$data['student_topic'] = $this->Student_topik_model->get_where($wherestr);
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_proposal', $data);
+		$this->load->view('v_footer', $data);
+    }
+
+    public function topik() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		$idlab = '';
+		$npkpemilik = '';
+		$validasikalab = null;
+		$statusaktif = 'all';
+		if($this->input->get('filterlab') != 'all') {
+			$idlab = $this->input->get('filterlab');
+		}
+
+		if($this->input->get('filterpemilik') != 'all') {
+			$npkpemilik = $this->input->get('filterpemilik');
+		}
+
+		if($this->input->get('filtervalidasikalab') != 'all') {
+			if($this->input->get('filtervalidasikalab') == 'validasi') {
+				$validasikalab = 'sudah';
+			} else {
+				$validasikalab = 'belum';
+			}			
+		}
+		
+		if($this->input->get('filterstatusaktif') != 'all') {
+			$statusaktif = $this->input->get('filterstatusaktif');			
+		}
+
+		$data['lab'] = $this->Lab_model->get();
+
+		$data['lecturer'] = $this->Lecturer_model->get();
+
+		$data['topik'] = $this->Topik_model->get('', $idlab,0,$npkpemilik, $statusaktif, $validasikalab);
+		$data['prasyarat'] = $this->Topik_model->get_prasyarat($data['topik']);
+		$data['kuota'] = array();
+		foreach($data['topik'] as $value) {
+			$data['kuota'][] = $this->Topik_model->get_kuota($value->id);
+		}
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_topik', $data);
+		$this->load->view('v_footer', $data);
+    }
+
     public function sempro() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		

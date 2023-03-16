@@ -34,7 +34,7 @@ class Master extends CI_Controller {
 		// RESET PASS
 		if($this->input->post('btnedit')) {
 			if(trim($this->input->post('passwordedit')) != '') {
-				$this->User_model->resetpass($this->input->post('nrpedit'), $this->input->post('passwordedit'));
+				$this->User_model->resetpass($this->input->post('hid_nrp_edit'), $this->input->post('passwordedit'));
 				$this->session->set_flashdata('notif', 'success_reset');
 				redirect('master/student');
 			}
@@ -130,6 +130,7 @@ class Master extends CI_Controller {
     			var nama = $(this).attr("targetnama");
     			$("#nrpedit").val(nrp);
     			$("#namaedit").val(nama);
+    			$("#hid_nrp_edit").val(nrp);
     		});
     	';
 
@@ -252,12 +253,14 @@ class Master extends CI_Controller {
     			var kode2 = $(this).attr("targetkode2");
     			var kode3 = $(this).attr("targetkode3");
     			var kode = $(this).attr("targetkode");
+    			var sks = $(this).attr("targetsks");
     			$("#hid_mk_id").val(id);
     			$("#namaedit").val(nama);
     			$("#kode_mk_edit").val(kode);
     			$("#kode_mk_lama1_edit").val(kode1);
     			$("#kode_mk_lama2_edit").val(kode2);
     			$("#kode_mk_lama3_edit").val(kode3);
+    			$("#sksedit").val(sks);
     		});
     	';
 
@@ -1009,9 +1012,9 @@ class Master extends CI_Controller {
 
 
     			if(semester == "Genap") {
-    				$("#radio_semester_genap").prop( "checked", true ); 
+    				$("#radio_edit_semester_genap").prop( "checked", true ); 
 				} else {
-					$("#radio_semester_gasal").prop( "checked", true ); 
+					$("#radio_edit_semester_gasal").prop( "checked", true ); 
 				}
 
     			if(isactive == 1) {

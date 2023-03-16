@@ -141,12 +141,41 @@ class Student_topik_model extends CI_Model {
                 $this->db->join('lecturer as dosbing2', 'dosbing2.npk = student_topik.lecturer2_npk', 'left');
                 $this->db->join('lecturer as pembuat', 'pembuat.npk = topik.lecturer_npk', 'left');
                  $this->db->join('staff', 'staff.username = student_topik.st_username_created', 'left');
-                $this->db->select('student_topik.*, student.nama as "studentname", topik.nama, lab.nama as "namalab", l1.nama as "l1nama", l1r.nama as "l1rnama", l2.nama as "kalabnama", l3.nama as "wdnama", l4.nama as "wdnamareject", l5.nama as "wdfinalnamareject",  l7.nama as "l7nama", l6.nama as "l6nama", dosbing1.nama as "dosbing1nama", dosbing2.nama as "dosbing2nama", pembuat.nama as "pembuat",staff.nama as "adminstnama"');
+                $this->db->select('student_topik.*, student.nama as "studentname", topik.nama, lab.nama as "namalab", lab.id as "idlab", l1.nama as "l1nama", l1r.nama as "l1rnama", l2.nama as "kalabnama", l3.nama as "wdnama", l4.nama as "wdnamareject", l5.nama as "wdfinalnamareject",  l7.nama as "l7nama", l6.nama as "l6nama", dosbing1.nama as "dosbing1nama", dosbing2.nama as "dosbing2nama", pembuat.nama as "pembuat",staff.nama as "adminstnama"');
                 $this->db->order_by('is_verified', 'desc');
                 $q = $this->db->get_where('student_topik', array('student_topik.is_deleted' => $is_deleted));
 
 //                print_r($this->db->last_query());
                // echo $this->db->last_query();
+                return $q->result();
+        }
+
+        public function get_where($where = '') {
+                
+                if($where != '') {
+                        $this->db->where($where);
+                }
+                $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
+                $this->db->join('student', 'student.nrp = student_topik.student_nrp', 'left');
+                $this->db->join('lab', 'lab.id = topik.id_lab', 'left');
+                 $this->db->join('lecturer as l1', 'l1.npk = student_topik.lecturer1_npk_verified', 'left');
+                $this->db->join('lecturer as l1r', 'l1r.npk = student_topik.lecturer1_npk_rejected', 'left');
+                $this->db->join('lecturer as l2', 'l2.npk = student_topik.kalab_npk_verified', 'left');
+                $this->db->join('lecturer as l3', 'l3.npk = student_topik.wd_npk_verified', 'left');
+                $this->db->join('lecturer as l4', 'l4.npk = student_topik.wd_npk_rejected', 'left');
+                $this->db->join('lecturer as l5', 'l5.npk = student_topik.wd_final_npk_rejected', 'left');
+                $this->db->join('lecturer as l7', 'l7.npk = student_topik.kalab_npk_rejected_judul', 'left');
+                $this->db->join('lecturer as l6', 'l6.npk = student_topik.kalab_npk_verified_judul', 'left');
+                $this->db->join('lecturer as dosbing1', 'dosbing1.npk = student_topik.lecturer1_npk', 'left');
+                $this->db->join('lecturer as dosbing2', 'dosbing2.npk = student_topik.lecturer2_npk', 'left');
+                $this->db->join('lecturer as pembuat', 'pembuat.npk = topik.lecturer_npk', 'left');
+                 $this->db->join('staff', 'staff.username = student_topik.st_username_created', 'left');
+                $this->db->select('student_topik.*, student.nama as "studentname", topik.nama, lab.nama as "namalab", lab.id as "idlab", l1.nama as "l1nama", l1r.nama as "l1rnama", l2.nama as "kalabnama", l3.nama as "wdnama", l4.nama as "wdnamareject", l5.nama as "wdfinalnamareject",  l7.nama as "l7nama", l6.nama as "l6nama", dosbing1.nama as "dosbing1nama", dosbing2.nama as "dosbing2nama", pembuat.nama as "pembuat",staff.nama as "adminstnama"');
+                $this->db->order_by('is_verified', 'desc');
+                $q = $this->db->get('student_topik');
+
+               // print_r($this->db->last_query());
+               //echo $this->db->last_query();
                 return $q->result();
         }
 
@@ -170,7 +199,8 @@ class Student_topik_model extends CI_Model {
                 $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
                 $this->db->join('student', 'student.nrp = student_topik.student_nrp', 'left');
                 $this->db->select('student_topik.*, topik.nama, student.nama as "namamhs"');
-               $p = $this->db->get_where('student_topik', array('student_topik.judul !=' => null, 'student_topik.lecturer1_validate_title !=' => null, 'student_topik.is_verified' => 0, 'student_topik.is_deleted' => 0));
+               $p = $this->db->get_where('student_topik', array('student_topik.judul !=' => null, 'student_topik.kalab_verified_date !=' => null, 'student_topik.is_verified' => 0, 'student_topik.is_deleted' => 0));
+               //echo $this->db->last_query();
                return $p->result();
         }
 
@@ -188,7 +218,7 @@ class Student_topik_model extends CI_Model {
                                 $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
                                 $this->db->join('student', 'student.nrp = student_topik.student_nrp', 'left');
                                 $this->db->select('student_topik.*, topik.nama, student.nama as "namamhs"');
-                                $r = $this->db->get_where('student_topik', array('topik_id' => $value->id,'student_topik.kalab_npk_verified' => null));
+                                $r = $this->db->get_where('student_topik', array('topik_id' => $value->id,'student_topik.kalab_npk_verified' => null, 'student_topik.lecturer1_npk_verified != ' => null));
 
                                 if($r->num_rows() >0){
 
@@ -234,10 +264,13 @@ class Student_topik_model extends CI_Model {
 
                 foreach ($q->result() as $key => $value) {
                         // query the student proposal of selected topic
-                        $qd = $this->db->get_where('student_topik', array('topik_id' => $value->id, 'lecturer1_npk_verified' => null));
+                        $qd = $this->db->get_where('student_topik', array('topik_id' => $value->id, 'lecturer1_npk_verified' => null, 'lecturer1_npk_rejected' => null));
+
 
                         if($qd->num_rows() >0) {
-                                $hitung++;
+                                // $hq = $qd->row();
+                                // echo $hq->id; echo '<br/>';
+                                $hitung += $qd->num_rows;
                         }
                 }
                 return $hitung;
@@ -249,12 +282,14 @@ class Student_topik_model extends CI_Model {
         }
 
         public function get_proposal_need_final_wd_validation() {
-                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'wd_verified_date !=' => null, 'is_deleted' => 0));
+                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'kalab_npk_verified_judul_date !=' => null, 'wd_verified_date !=' => null, 'is_deleted' => 0));
                 return $q->num_rows();
         }
 
          public function get_proposal_need_st() {
-                $q = $this->db->get_where('student_topik', array('is_st_created' => 0, 'is_deleted' => 0));
+                $q = $this->db->get_where('student_topik', array('is_verified' => 1, 
+                        'is_st_created != ' => 1, 'is_deleted' => 0));
+                //echo $this->db->last_query();
                 return $q->num_rows();
         }
 
@@ -395,7 +430,7 @@ class Student_topik_model extends CI_Model {
         }
 
         public function update_judul($id, $judul, $filename) {
-                $data = array('judul_created' => date('Y-m-d H:i:s'), 'judul' => $judul, 'kk_filename' => $filename);
+                $data = array('judul_created' => date('Y-m-d H:i:s'), 'judul' => $judul, 'kk_filename' => $filename, 'kalab_npk_rejected_judul' => null, 'kalab_rejected_judul_date' => null, 'is_rejected' => 0);
                 $this->db->where('id', $id);
                 $this->db->update('student_topik', $data);
         }
@@ -406,6 +441,10 @@ class Student_topik_model extends CI_Model {
         }
 
         public function update_dosbing($id, $lecturer1_npk,$lecturer2_npk) {
+                if($lecturer2_npk == 0) {
+                        $lecturer2_npk = null;
+                }
+
                 $data = array(
                                 'lecturer_created' => date('Y-m-d H:i:s'), 
                                 'lecturer1_npk' => $lecturer1_npk, 

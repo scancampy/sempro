@@ -89,12 +89,12 @@
                     <h5>Daftar Sidang Skripsi</h5>
                     <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('skripsi/daftar'); ?>">Daftar</a> untuk daftar sidang skripsi.</p>
                   </div>
-               <?php } else { ?>
+               <?php } else if($periodeaktif !=false) { ?>
                 <div class="callout callout-info">
                     <h5>Periode Sidang Aktif</h5>
                     <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>
                   </div><?php }  
-                } else { ?>
+                } else if($periodeaktif !=false) { ?>
                   <div class="callout callout-info">
                     <h5>Periode Sidang Aktif</h5>
                     <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>

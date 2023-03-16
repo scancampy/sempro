@@ -27,6 +27,13 @@ class Transkrip extends CI_Controller {
 			}
 		}
 
+		if($this->input->post('btnreload')) {
+			$this->Student_model->connect_sim($data['info'][0]->nrp);
+	        $this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses reload data transkrip');
+		    redirect('transkrip/student');
+		}
+
 		if($lecturer == false) {
 			$data['transkrip'] = $this->Student_model->get_transcript_raw($info[0]->nrp);
 		} else {
@@ -38,12 +45,12 @@ class Transkrip extends CI_Controller {
 		$data['totalsks'] = 0;
 		foreach($data['transkrip'] as $value) {
 			if($value->nisbi == 'D') {
-				$data['nilai_d'] += $value->sks;
+				$data['nilai_d'] += $value->sks;	
 			} else if($value->nisbi =='E' || $value->nisbi == 'E*') {
 				$data['nilai_e'] += $value->sks;
-			}
-
+			} 
 			$data['totalsks'] += $value->sks;
+						
 		}
 
 		$data['tanpa_e'] = $data['totalsks']-$data['nilai_e'];
@@ -65,6 +72,26 @@ class Transkrip extends CI_Controller {
 		            [50, 100, "All"],
 		        ],
 		    });';
+
+		     // NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+		// Success 
+		if($this->session->flashdata('notif') == 'success') {
+	  		$data['js'] .= '
+	  			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+	  		';
+	    }
 
 
 		$this->load->view('v_header', $data);

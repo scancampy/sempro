@@ -41,6 +41,26 @@ class User_model extends CI_Model {
                 $this->db->update('user', $data);
         }
 
+        public function change_password($username, $oldpass, $newpass) {
+                $query = $this->db->get_where('user', array('username' => $username));
+                $row = $query->row();
+
+                if (isset($row))
+                {
+                      $this->password = $row->password;
+                      if(password_verify($oldpass, $this->password)) {
+                        //ubah password
+                        $data = array('password' =>  password_hash($newpass, PASSWORD_DEFAULT));
+                        $this->db->where('username', $username);
+                        $this->db->update('user', $data);
+                        return true;
+                      } else {
+                        return false;
+                      }
+                }
+                return false;
+        }
+
         public function del($username) {
                 $this->db->where('username', $username);
                 $this->db->delete('user');

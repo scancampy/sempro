@@ -34,6 +34,7 @@
                   </button>
                 </div>
               </div>
+              <?php // print_r($detail); ?>
               <div class="card-body">
                 <div class="text-muted">
                   <div class="row">
@@ -47,6 +48,20 @@
                         <b class="d-block"><?php echo strftime("%d %B %Y %H:%M:%S", strtotime($detail->registered_date)); ?></b>
                       </p>
                     </div>
+                    <?php if($detail->naskah_filename != null) { ?>
+                    <div class="col-2">
+                      <p class="text-sm">Download Naskah
+                        <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+                      </p>
+                    </div>
+                  <?php } ?>
+                    <?php if($detail->naskah_drive != null) { ?>
+                    <div class="col-2">
+                      <p class="text-sm">Link Drive
+                        <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
+                      </p>
+                    </div>
+                  <?php } ?>
 
                     <?php if($detail->sidang_date != null) { ?>
                     <div class="col-2">
@@ -66,20 +81,7 @@
                       </p>
                     </div>
                   <?php } ?>
-                    <?php if($detail->naskah_filename != null) { ?>
-                    <div class="col-2">
-                      <p class="text-sm">Download Naskah
-                        <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
-                      </p>
-                    </div>
-                  <?php } ?>
-                    <?php if($detail->naskah_drive != null) { ?>
-                    <div class="col-2">
-                      <p class="text-sm">Link Drive
-                        <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
-                      </p>
-                    </div>
-                  <?php } ?>
+                    
                   <?php } ?>
                     
                   </div>
@@ -456,72 +458,6 @@
                               <small><i class="fas fa-user"></i> Admin
                               </small>
                               <?php } ?>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- END timeline item -->
-
-                        <!-- timeline item -->
-                        <div>
-                           <?php if(!is_null($detail->naskah_upload_date)) { ?>
-                          <i class="fas fa-check bg-green"></i>
-                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
-                          <div class="timeline-item">
-                            
-                            <div class="timeline-body">
-                              Mahasiswa - Upload Naskah<br/>
-
-                              <?php if(isset($is_student) && is_null($detail->naskah_upload_date) && !is_null($detail->ruang_id)) { ?>
-                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
-                                      
-                                      <div class="form-group ">
-                                        <label for="juduledit" class="col-sm-12 col-form-label">File Naskah Sempro</label>
-                                        <div class="col-sm-12">
-                                          <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
-                                        </div>
-                                      </div>
-
-                                      <?php if(!is_null($detail->naskah_filename)) { ?>
-                                        <div class="form-group ">
-                                        <label for="juduledit" class="col-sm-12 col-form-label">Download Naskah Sempro</label>
-                                        <div class="col-sm-12">
-                                          <a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>
-                                        </div>
-                                      </div>
-                                      <?php } ?>
-
-                                      <div class="form-group ">
-                                        <label for="linknaskahdrive" class="col-sm-12 col-form-label">Input Link Google Drive Naskah Sempro</label>
-                                        <div class="col-sm-12">
-                                          <input type="text"  name="linknaskahdrive" class="form-control" id="linknaskahdrive" >
-                                        </div>
-                                      </div>
-                                      <?php if(!is_null($detail->naskah_drive)) { ?>
-                                        <div class="form-group ">
-                                        <label for="golinknaskahdrive" class="col-sm-12 col-form-label">Link Google Drive Naskah Sempro</label>
-                                        <div class="col-sm-12">
-                                           <a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-warning btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-web"></span></a>
-                                        </div>
-                                      </div>
-                                      <?php } ?>
-                                      <div class="form-group ">
-                                        <div class="col-sm-12 text-right">
-                                          <button type="submit" class="btn btn-primary" value="Submit" name="btnuploadnaskah"  id="btnuploadnaskah">Simpan</button>
-                                        </div>
-                                      </div>
-                                    </form>
-                                  <?php } else { 
-                                    if(!is_null($detail->naskah_upload_date)) { ?>
-<small><i class="fas fa-clock"></i>
-                                <?php echo strftime("%d %B %Y", strtotime($detail->naskah_upload_date)); ?>
-                              </small><br/>
-                              <small><i class="fas fa-user"></i> <?php echo $detail->nama; ?>
-                              </small>
-
-                                    <?php }
-                                  }
-                                  ?>
-                              
                             </div>
                           </div>
                         </div>

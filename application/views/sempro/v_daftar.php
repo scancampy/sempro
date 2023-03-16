@@ -35,7 +35,7 @@
 
              
             <div class=" card card-outline card-primary">
-              <form method="post" action="<?php echo base_url('sempro/daftar'); ?>">
+              <form method="post" enctype="multipart/form-data" action="<?php echo base_url('sempro/daftar'); ?>">
               <div class="card-header">
                 <div class="card-title">Data Proposal</div>
                 <div class="card-tools">
@@ -130,7 +130,7 @@
             </div>
           </div>
           <div class="col-12">
-            <form method="post" action="<?php echo base_url('sempro/daftar'); ?>" >
+            <form method="post" enctype="multipart/form-data" action="<?php echo base_url('sempro/daftar'); ?>" >
             <div class=" card card-outline card-primary">
               <div class="card-header">
                 <div class="card-title">Data Mahasiswa</div>
@@ -172,20 +172,53 @@
                       </p>
 
                     </div>
+                    
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="card card-outline card-info">
+              <div class="card-header">
+                <div class="card-title">Data Naskah Sempro</div>
+              </div>
+              <div class="card-body">
+                <div class="text-muted">
+                  <div class='row'>
+                    <div class="col-12">
+                     <div class="form-group ">
+                        <label for="juduledit" class="col-sm-12 col-form-label">File Naskah Sempro</label>
+                        <div class="col-sm-12">
+                          <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group ">
+                        <label for="linknaskahdrive" class="col-sm-12 col-form-label">Input Link Google Drive Naskah Sempro</label>
+                        <div class="col-sm-12">
+                          <input type="text"  name="linknaskahdrive" class="form-control" id="linknaskahdrive" >
+                        </div>
+                      </div>
+                    </div>
                     <div class="col-12">
                       <div class="form-check">
                         <input type="checkbox" value="true" class="form-check-input" id="checkbox_setuju" name="checkbox_setuju">
                         <label class="form-check-label" for="checkbox_setuju">Saya telah memeriksa semua data pengajuan ini dengan teliti dan benar</label>
                       </div>
                     </div>
-
-                    <div class="col-12">
-                      <input type="submit" class="btn btn-primary" name="btnSubmit" value="Submit" />
-                    </div>
                   </div>
                 </div>
               </div>
-
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-12">
+                    <input type="submit" class="btn btn-primary" name="btnSubmit" value="Submit" />
+                  </div>
+                </div>
+                
+              </div>
+                
             </div>
           </form>
           </div>

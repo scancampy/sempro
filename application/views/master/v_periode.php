@@ -51,7 +51,7 @@
                       foreach($periode as $row) { 
                       ?>
                   <tr>
-                    <td><?php echo $row->nama; ?></td>
+                    <td><?php echo $row->semester.' '.$row->tahun.'/'.($row->tahun+1); ?></td>
                     <td><?php if($row->is_active == 1) { echo ' <i class="green text-success nav-icon fas fa-check-square"></i>'; }  ?></td>
                     <td ><button targetid="<?php echo $row->id; ?>" targettahun="<?php echo $row->tahun; ?>" targetsemester="<?php echo $row->semester; ?>" targetactive="<?php echo $row->is_active; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/periode/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
@@ -149,11 +149,11 @@
                 <div class="col-sm-8">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="radio_edit_semester" id="radio_edit_semester_gasal" value="Gasal" checked>
-                    <label class="form-check-label" for="radio_semester_gasal">Gasal</label>
+                    <label class="form-check-label" for="radio_edit_semester_gasal">Gasal</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="radio_edit_semester" id="radio_edit_semester_genap" value="Genap">
-                    <label class="form-check-label" for="radio_semester_genap">Genap</label>
+                    <label class="form-check-label" for="radio_edit_semester_genap">Genap</label>
                   </div>
                 </div>
             </div>

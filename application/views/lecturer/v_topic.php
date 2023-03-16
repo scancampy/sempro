@@ -136,6 +136,7 @@
                   <thead>
                   <tr>
                     <th>Topik</th>
+                    <th>MK Prasyarat</th>
                     <th>Kuota</th>
                     <th>Lab</th>   
                     <th>Validasi Kalab</th>                 
@@ -153,6 +154,8 @@
                   <tr <?php if($is_kalab && $row->id_lab == $info[0]->lab_id && $row->kalab_verified_date == null) { ?>
                      class="bg-warning color-palette"<?php } ?>>
                     <td><?php echo $row->nama; ?></td>
+                    <td><small><?php if(isset($prasyarat[$k][0])) { echo $prasyarat[$k][0]->nama.' ('.$prasyarat[$k][0]->minimum_mark.')<br/><br/>'; }
+                    if(isset($prasyarat[$k][1])) { echo $prasyarat[$k][1]->nama.' ('.$prasyarat[$k][1]->minimum_mark.')<br/>'; } ?></small></td>
                     <td><?php echo $kuota[$idx].'/'.$row->kuota; ?></td>
                     <td><?php echo $row->namalab; ?></td>
                     <td><?php if($row->kalab_verified_date == null ) { echo '<small class="badge badge-secondary">Belum Divalidasi</small>'; } else { echo '<small class="badge badge-success">Sudah Divalidasi</small><br/><small>'.$row->namakalab; echo '<br/>'.strftime("%d %B %Y", strtotime($row->kalab_verified_date)).'</small>'; } ?></td>

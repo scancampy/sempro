@@ -69,12 +69,12 @@
                     <h5>Daftar Sidang Proposal</h5>
                     <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('sempro/daftar'); ?>">Daftar</a> untuk daftar sidang sempro.</p>
                   </div>
-               <?php } else { ?>
+               <?php } else if($periodeaktif!= false) { ?>
                 <div class="callout callout-info">
                     <h5>Periode Sidang Aktif</h5>
                     <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>
                   </div><?php }  
-                } else { ?>
+                } else if($periodeaktif!= false)  { ?>
                   <div class="callout callout-info">
                     <h5>Periode Sidang Aktif</h5>
                     <p><b><?php echo 'Periode '.strftime("%d %B", strtotime($periodeaktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periodeaktif->date_end)); ?></b></p>
@@ -148,7 +148,7 @@
                           echo '<span class="badge badge-success">Menunggu Admin TU Ploting Ruang</span>';
                         }  else if($row->naskah_filename == null) {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
-                        } else if( $row->hasil == null) {
+                        } else if( $row->hasil_submited_date == null) {
                           echo '<span class="badge badge-success">Menunggu Hasil Sidang</span>';
                         } else if($row->revision_required == true && $row->revision_judul_date == null) {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Revisi Judul</span>';

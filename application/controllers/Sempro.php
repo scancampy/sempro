@@ -53,12 +53,15 @@ class Sempro extends CI_Controller {
 
 				$data['is_lecturer'] = true;
 				$data['roles'] = 'lecturer';
-				$sempro = $this->Sempro_model->get_student_sempro_by_npk($roles[0]->username, $data['periodeaktif']->id); 
+				if($data['periodeaktif'] != false) {
+					$sempro = $this->Sempro_model->get_student_sempro_by_npk($roles[0]->username, $data['periodeaktif']->id); 
+					if($sempro) {
+						$data['sempro'] = $sempro;
 
-				if($sempro) {
-					$data['sempro'] = $sempro;
-
+					}
 				}
+
+				
 			
 			} else if($role->roles == 'kalab') {
 				// cek if kalab
@@ -152,7 +155,7 @@ class Sempro extends CI_Controller {
 							if($this->input->post('btnSubmit')) {
 								if($this->input->post('checkbox_setuju') != true) {
 									$this->session->set_flashdata('notif', 'failed_daftar');
-									$this->session->set_flashdata('msg', 'Anda harus menyetujui terlebih dahulu');
+									$this->session->set_flashdata('msg', 'Anda harus mencentang terlebih dahulu');
 									redirect('sempro/daftar');
 								} else {
 									// simpan pendaftaran
@@ -164,7 +167,33 @@ class Sempro extends CI_Controller {
 									 if ($this->form_validation->run() == FALSE) {
 									 	$data['error'] = validation_errors();
 									 } else {
-									 	$this->Sempro_model->insert($verified_proposal->id, $periodeaktif->id, $verified_proposal->student_nrp, $this->input->post('skskum'), $this->input->post('ipkkum'), $this->input->post('sksks'));
+									 	$this->load->library('upload');
+
+										$config['upload_path']          = './uploads/naskah';
+							            $config['allowed_types']        = 'pdf';
+							            $config['max_size']             = 100000;
+							            $config['file_name']			= 'naskah_'.date('Ymdhis').'.pdf';
+							            $namafile = $config['file_name'];
+
+							          	$this->upload->initialize($config);
+							          	$this->load->library('upload', $config);
+
+								        if ( ! $this->upload->do_upload('filekk') && !$this->input->post('linknaskahdrive')) {
+
+								          	$this->session->set_flashdata('notif', 'error_validated');
+								          	$this->session->set_flashdata('msg', 'Silahkan upload naskah pdf atau link google drive');
+								          	redirect('sempro/daftar');
+								        } else if (empty($_FILES['filekk']['name']) && !$this->input->post('linknaskahdrive')) {
+											$this->session->set_flashdata('notif', 'error_validated');
+								          	$this->session->set_flashdata('msg', 'Silahkan upload naskah pdf atau link google drive');
+								          	redirect('sempro/daftar');
+										} else if(empty($_FILES['filekk']['name'])) {
+											$namafile = null;
+										}
+										//echo $namafile;
+										//die();
+					      
+									 	$this->Sempro_model->insert($verified_proposal->id, $periodeaktif->id, $verified_proposal->student_nrp, $this->input->post('skskum'), $this->input->post('ipkkum'), $this->input->post('sksks'), $namafile, $this->input->post('linknaskahdrive'));
 									 	$this->session->set_flashdata('notif', 'success_register');
 									 	redirect('sempro');
 									 }
@@ -203,6 +232,16 @@ class Sempro extends CI_Controller {
 		      });
   		';
     }
+
+    	// Errror validated
+		if($this->session->flashdata('notif') == 'error_validated') {
+	  		$data['js'] .= '
+	  			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+	  		';
+	    }
 
 		$this->load->view('v_header', $data);
 		$this->load->view('sempro/v_daftar', $data);
@@ -260,6 +299,8 @@ class Sempro extends CI_Controller {
 						$namafile = null;
 					}
 
+//					echo $namafile;
+//					die();
 			        $this->Sempro_model->update_judul($id, $newjudul, $config['file_name'], $this->input->post('linkrevisinaskahdrive'));
 
 					$this->session->set_flashdata('notif', 'success');

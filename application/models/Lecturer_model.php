@@ -95,8 +95,13 @@ class Lecturer_model extends CI_Model {
                         $this->npk = $npk;
                         $this->nama = $nama;
                         $this->lab_id = $lab_id;
-                        $data = array('username' => $this->npk, 'password' => password_hash("password", PASSWORD_DEFAULT), 'user_type' => 'lecturer');
-                        $this->db->insert('user', $data);
+
+                        $p =  $this->db->get_where('user', array('username' => $this->npk));
+                        if($p->num_rows() == 0) {
+                                $data = array('username' => $this->npk, 'password' => password_hash("password", PASSWORD_DEFAULT), 'user_type' => 'lecturer');
+                                $this->db->insert('user', $data);
+                        }
+
                         $this->db->insert('user_roles', array('username' => $this->npk, 'roles' => 'lecturer'));
                         $this->db->insert('lecturer', $this);
 

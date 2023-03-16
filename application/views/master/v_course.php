@@ -61,7 +61,7 @@
                     <td><?php echo $row->old_kode_mk3; ?></td>
                     <td><?php echo $row->nama; ?></td>
                     <td><?php echo $row->sks; ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>"  targetkode="<?php echo $row->kode_mk; ?>" targetkode1="<?php echo $row->old_kode_mk1; ?>" targetkode2="<?php echo $row->old_kode_mk2; ?>" targetkode3="<?php echo $row->old_kode_mk3; ?>"  targetnama="<?php echo $row->nama; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/course/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td ><button targetid="<?php echo $row->id; ?>"  targetkode="<?php echo $row->kode_mk; ?>" targetkode1="<?php echo $row->old_kode_mk1; ?>" targetkode2="<?php echo $row->old_kode_mk2; ?>" targetkode3="<?php echo $row->old_kode_mk3; ?>"  targetnama="<?php echo $row->nama; ?>" targetsks="<?php echo $row->sks; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/course/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>

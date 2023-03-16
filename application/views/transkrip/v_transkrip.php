@@ -38,24 +38,22 @@
               <div class="card-body table-responsive">
                 <div class="col-12">
                   <dl class="row">
-                    <dt class="col-sm-4 text-right">Jumlah SKS dengan nilai D:</dt>
-                    <dd class="col-sm-8"><?php echo $nilai_d; ?> sks</dd>
-                  </dl>
-                  <dl class="row">
-                    <dt class="col-sm-4 text-right">Jumlah SKS dengan nilai E:</dt>
-                    <dd class="col-sm-8"><?php echo $nilai_e; ?> sks</dd>
-                  </dl>
-                  <dl class="row">
-                    <dt class="col-sm-4 text-right">Jumlah SKS tanpa nilai E:</dt>
-                    <dd class="col-sm-8"><?php echo $tanpa_e; ?> sks</dd>
+                    <dt class="col-sm-3 ">Jumlah SKS dengan nilai D:</dt>
+                    <dd class="col-sm-12"><?php echo $nilai_d; ?> sks</dd>
                   </dl>
                    <dl class="row">
-                    <dt class="col-sm-4 text-right">Total SKS:</dt>
-                    <dd class="col-sm-8"><?php echo $totalsks; ?> sks</dd>
+                    <dt class="col-sm-3 ">Total SKS:</dt>
+                    <dd class="col-sm-12"><?php echo $tanpa_e; ?> sks</dd>
                   </dl>
                 </div>
+                <div class="col-12 text-right">
+                  <form method="post" action="<?php echo current_url(); ?>">
+                    <input type="submit" name="btnreload" value="Reload Data Transkrip" class="btn btn-primary">
+                  </form>
+                </div>
+                <br/>
 
-                <table id="example2" class="table table-bordered table-hover" style="width:100%;">
+                <table id="example2" class="table table-bordered table-hover" style="width:100%; margin-top: 30px;">
                   <thead>
                   <tr>
                     <th>Kode MK</th>
@@ -67,16 +65,16 @@
                   </thead>
                   <tbody>
                     <?php if(isset($transkrip)) { 
-                      foreach($transkrip as $row) { 
+                      foreach($transkrip as $row) { if($row->nisbi != 'E') {
                       ?>
                       <tr>
                         <td><?php echo $row->kode_mk; ?></td>
-                        <td><?php echo $row->namamk; ?></td>
+                        <td><?php echo $row->nama_mk; ?></td>
                         <td><?php echo $row->semester.' '.$row->academic_year; ?></td>                    
                         <td><?php echo $row->sks; ?></td>
                         <td><?php echo $row->nisbi; ?></td>
                       </tr>
-                    <?php } }  ?>
+                    <?php } } }  ?>
                   </tfoot>
                 </table>
               </div>

@@ -39,6 +39,22 @@
           </div>
         <?php } ?>
 
+        <?php if(@$needvalidasikelulusan && $needvalidasikelulusan >0) { ?>
+            <div class="col-md-4 col-sm-6 col-12">
+              <a href="<?php echo base_url('lulus'); ?>">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info"><?php echo count($needvalidasikelulusan); ?></span>
+
+                  <div class="info-box-content" style="line-height: 14px;">
+                    <span ><strong>Pengajuan Pendaftaran Kelulusan</strong><br/>Perlu Divalidasi</span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+              </a>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
+
         <?php if(@$needcreatestkelulusan && $needcreatestkelulusan >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">
               <a href="<?php echo base_url('lulus'); ?>">

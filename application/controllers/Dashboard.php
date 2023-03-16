@@ -9,6 +9,12 @@ class Dashboard extends CI_Controller {
         	redirect('');
         }
     }
+
+    public function ceksim() {
+    	$data = array();
+    	 $data['info'] = $this->session->userdata('user')->info;
+    	$this->Student_model->connect_sim_raw($data['info'][0]->nrp);
+    }
 	
 	public function index()
 	{
@@ -40,6 +46,7 @@ class Dashboard extends CI_Controller {
 	            	foreach($data['setting'] as $index => $value) { 
 	            		if($value->nama_alias == 'skripsi') { 
 	            			if(!$data['cekks']) {
+	            				//die();
 	            				$eligbile = false;
 	            			}
 	            		}
@@ -65,8 +72,9 @@ class Dashboard extends CI_Controller {
 
 	            	$data['eligible_check'] = $eligbile;
 	            	if($eligbile) {
-	            		$this->Student_model->set_eligible($data['info'][0]->nrp);
-	            		
+	            		$this->Student_model->set_eligible($data['info'][0]->nrp);	            		
+	            	} else {
+	            		$this->Student_model->set_not_eligible($data['info'][0]->nrp);
 	            	}
             	}
 
@@ -79,7 +87,7 @@ class Dashboard extends CI_Controller {
 
 
             	// notifikasi upload naskah
-            	$data['need_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where('skripsi.naskah_filename IS NULL AND skripsi.nrp = "'.$data['info'][0]->nrp.'"');
+            	$data['need_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where('(skripsi.naskah_filename IS NULL AND skripsi.naskah_drive IS NULL) AND skripsi.nrp = "'.$data['info'][0]->nrp.'"');
             	
             	
 
@@ -100,11 +108,11 @@ class Dashboard extends CI_Controller {
             	$data['wd'] = $this->Roles_model->is_role_wd($data['info'][0]->npk);
             	if($data['wd']) {
             		$data['wd_topic'] = $this->Student_topik_model->get_wd_topic();
-            		$data['need_wd_validation'] = $this->Student_topik_model->get_proposal_need_wd_validation();
+            		//$data['need_wd_validation'] = $this->Student_topik_model->get_proposal_need_wd_validation();
             		$data['need_wd_final_validation'] = $this->Student_topik_model->get_proposal_need_final_wd_validation();
 
             		// notifikasi kelulusan
-            		$data['needvalidateluluswd'] = $this->Kelulusan_model->get("kelulusan.dosbing_validate_date IS  NULL AND student_topik.is_deleted = 0");
+            		$data['needvalidateluluswd'] = $this->Kelulusan_model->get("kelulusan.admin_validate_date IS  NOT NULL AND kelulusan.wd_validate_date IS NULL AND kelulusan.is_deleted = 0");
 
             		// notifikasi ijin lab
             		$data['needvalidateijinlab'] = $this->Ijin_lab_model->get_where("ijin_lab.wd_validated_date IS NULL AND ijin_lab.is_deleted = 0");
@@ -118,17 +126,22 @@ class Dashboard extends CI_Controller {
 
 	            	if($data['iskalab']) {
 	            		$data['student_kalab'] = $this->Student_topik_model->get_kalab_topic($data['info'][0]->npk);
+	            		//print_r($data['student_kalab']);
 	            		$data['need_kalab_title_validation'] = $this->Student_topik_model->get_proposal_title_need_kalab_validation($data['info'][0]->npk);
 
 	            		// sempro
 	            		//print_r($data['info'][0]);
 	            		$periodeaktif = $this->Periode_model->get_periode_sidang_aktif(); 
-	            		$data['need_kalab_sempro_validation'] = $this->Sempro_model->get_sempro_need_kalab_validation($data['info'][0]->lab_id, $periodeaktif->id);
+	            		if($periodeaktif) {      
+	            			$data['need_kalab_sempro_validation'] = $this->Sempro_model->get_sempro_need_kalab_validation($data['info'][0]->lab_id, $periodeaktif->id);
+						}	            		
 
 
 	            		$periodea_skripsi_aktif = $this->Periode_model->get_periode_sidang_skripsi();
 	            		//print_r($periodea_skripsi_aktif); die(); 
-	            		$data['need_kalab_skripsi_validation'] = $this->Skripsi_model->get_skripsi_need_kalab_validation($data['info'][0]->lab_id, $periodea_skripsi_aktif[0]->id);
+	            		if($periodea_skripsi_aktif) {      
+	            			$data['need_kalab_skripsi_validation'] = $this->Skripsi_model->get_skripsi_need_kalab_validation($data['info'][0]->lab_id, $periodea_skripsi_aktif[0]->id);
+	            		}
 
 	            		
 	            	}
@@ -138,12 +151,25 @@ class Dashboard extends CI_Controller {
 
 	            	// get topik yang butuh validasi dosbing 1
 	            	$data['need_dosbing1_validation'] = $this->Student_topik_model->get_proposal_need_dosbing_validation($data['info'][0]->npk);
+
+
+
 	            	
             	}
             	
             	// ambil jadwal sempro
-            	$periodeaktif = $this->Periode_model->get_periode_sidang_aktif();            		
-            	$data['my_sempro_schedule'] = $this->Sempro_model->get_sempro_schedule($periodeaktif->id, $data['info'][0]->npk);
+            	$periodeaktif = $this->Periode_model->get_periode_sidang_aktif();      
+            	if($periodeaktif) {      		
+	            	$data['my_sempro_schedule'] = $this->Sempro_model->get_sempro_schedule($periodeaktif->id, $data['info'][0]->npk);
+	            	// get sempro yang butuh dinilai
+	            	$data['need_dosbing_nilai'] = $this->Sempro_model->get_student_sempro_with_where('sempro.hasil_submited_date IS NULL AND (sempro.pembimbing1 = "'.$data['info'][0]->npk.'" OR sempro.pembimbing1 = "'.$data['info'][0]->npk.'") AND sempro.ruang_id IS NOT NULL AND sempro.sidang_date IS NOT NULL AND sempro.sidang_time IS NOT NULL AND sempro.is_deleted = 0 AND sempro.periode_sidang_id = '.$periodeaktif->id);
+
+	            	// get sempro yang butuh divalidasi revisinya
+	            	$data['need_dosbing_validasi_revisi'] = $this->Sempro_model->get_student_sempro_with_where('sempro.dosbing_validate_date IS NULL AND (sempro.pembimbing1 = "'.$data['info'][0]->npk.'" OR sempro.pembimbing1 = "'.$data['info'][0]->npk.'") AND sempro.revision_required = 1 AND sempro.is_deleted = 0 AND sempro.periode_sidang_id = '.$periodeaktif->id);
+
+	            	//print_r($data['need_dosbing_validasi_revisi']);
+	            	//die();
+	            }
 
             	// ambil jadwal skripsi
             	$periodeaktifskripsi = $this->Periode_model->get_periode_sidang_skripsi_aktif();            		
@@ -162,8 +188,12 @@ class Dashboard extends CI_Controller {
 	            	$periodeaktifskripsi = $this->Periode_model->get_periode_sidang_skripsi_aktif();            		
             	
             		$data['need_create_st'] = $this->Student_topik_model->get_proposal_need_st();
-            		$data['need_room_plot'] = $this->Sempro_model->get_sempro_need_room_plotting($periodeaktif->id);
-            		$data['need_room_plot_skripsi'] = $this->Skripsi_model->get_skripsi_need_room_plotting($periodeaktifskripsi->id);
+            		if($periodeaktif) {
+            			$data['need_room_plot'] = $this->Sempro_model->get_sempro_need_room_plotting($periodeaktif->id);
+            		}
+            		if($periodeaktifskripsi) {
+            			$data['need_room_plot_skripsi'] = $this->Skripsi_model->get_skripsi_need_room_plotting($periodeaktifskripsi->id);
+            		}
 
             		//skripsi
             		$periodeaktifskripsi = $this->Periode_model->get_periode_sidang_skripsi_aktif(); 
@@ -173,8 +203,11 @@ class Dashboard extends CI_Controller {
 	            		$data['need_room_plot_skripsi'] = $this->Skripsi_model->get_skripsi_need_room_plotting($periodeaktifskripsi->id);
 	            	}
 
+	            	// notifikasi kelulusan validasi
+	            	$data['needvalidasikelulusan'] = $this->Kelulusan_model->get("kelulusan.admin_validate_date IS NULL AND kelulusan.dosbing_validate_date IS NOT NULL AND kelulusan.is_deleted = 0");
+
 	            	// notifikasi kelulusan
-            		$data['needcreatestkelulusan'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.wd_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+            		$data['needcreatestkelulusan'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.wd_validate_date IS NOT NULL AND kelulusan.is_deleted = 0");
             	}
             	$this->load->view('v_dashboard', $data);
             	break;

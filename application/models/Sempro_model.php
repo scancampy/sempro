@@ -21,6 +21,8 @@ class Sempro_model extends CI_Model {
                 }
         }
 
+
+
         public function get_student_sempro_lulus($nrp) { 
                 $this->db->join('student_topik', 'student_topik.id=sempro.student_topik_id', 'left');
                 $this->db->join('student', 'student.nrp=sempro.nrp','left');
@@ -105,6 +107,7 @@ class Sempro_model extends CI_Model {
                 // TODO: check jika statusnya cancelled
                 $q = $this->db->get('sempro');
                 //echo $this->db->last_query();
+                //die();
                 if($q->num_rows() > 0) {
                         return $q->result();        
                 } else {
@@ -241,7 +244,7 @@ class Sempro_model extends CI_Model {
                return $array;
         }
 
-        public function insert($student_topik_id, $periode_sidang_id, $nrp, $sks_kum, $ipk_kum, $sks_ks) {
+        public function insert($student_topik_id, $periode_sidang_id, $nrp, $sks_kum, $ipk_kum, $sks_ks, $file_naskah, $naskah_drive) {
                 $data = array(
                         'student_topik_id'      => $student_topik_id,
                         'periode_sidang_id'     => $periode_sidang_id,
@@ -249,7 +252,11 @@ class Sempro_model extends CI_Model {
                         'nrp'                   => $nrp,
                         'sks_kum'               => $sks_kum,
                         'ipk_kum'               => $ipk_kum,
-                        'sks_ks'                => $sks_ks
+                        'sks_ks'                => $sks_ks,
+                        'naskah_filename'       => $file_naskah, 
+                        'naskah_upload_date'    => date('Y-m-d H:i:s'),
+                        'naskah_drive'          => $naskah_drive
+
                 );
 
                 $this->db->insert('sempro', $data);

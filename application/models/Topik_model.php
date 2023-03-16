@@ -85,6 +85,7 @@ class Topik_model extends CI_Model {
 
         public function get_need_validate($idlab) {
                 $this->db->where('kalab_verified_date', NULL);
+                $this->db->where('is_deleted', 0);
                 $this->db->where('id_lab', $idlab);
 
                 $q = $this->db->get('topik');
@@ -108,7 +109,9 @@ class Topik_model extends CI_Model {
                         $this->db->where('topik.lecturer_npk', $lecturer_npk);
                 }
 
-                if($kalab_npk_verified != null) {
+                if($kalab_npk_verified == 'belum') {
+                        $this->db->where('topik.kalab_verified_date IS NULL');
+                } else if($kalab_npk_verified === 'sudah') {
                         $this->db->where('topik.kalab_verified_date IS NOT NULL');
                 }
 
@@ -184,7 +187,7 @@ class Topik_model extends CI_Model {
 
                                                                 return 'req_not_valid';
                                                         }
-                                                        
+                                                        return 'valid';                                                        
                                                 } 
                                         }
 
@@ -193,10 +196,13 @@ class Topik_model extends CI_Model {
                                                 if($l->num_rows() > 0) {
                                                         $resl = $l->row();
                                                         if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
-                                                                
+                                                                 //echo $hasil->old_kode_mk1.'<br/>';
+                                                                 //echo $resl->nisbi_value;
+
+                                                                 //die();
                                                                 return 'req_not_valid';
                                                         }
-                                                        
+                                                        return 'valid';
                                                 } 
                                         }
 
@@ -207,7 +213,7 @@ class Topik_model extends CI_Model {
                                                         if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
                                                                 return 'req_not_valid';
                                                         }
-                                                        
+                                                        return 'valid';
                                                 } 
                                         }
 
@@ -218,7 +224,7 @@ class Topik_model extends CI_Model {
                                                         if($resl->nisbi_value < $rangenilai[$value->minimum_mark]) {
                                                                 return 'req_not_valid';
                                                         }
-                                                        
+                                                        return 'valid';
                                                 } 
                                         }
 

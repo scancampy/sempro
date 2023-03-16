@@ -37,6 +37,12 @@ class Lecturer extends CI_Controller {
 
 			foreach($topiks as $i => $topik) {
 				if($topik != '') {
+					// cek harus ada minimal 1 prasayarat
+					if($courseid1[$i] == '' && $courseid2[$i] == '') {
+						$this->session->set_flashdata('notif', 'prasyarat_error');			
+						redirect('lecturer/add_topic');
+					}
+
 					$is_active = $this->input->post('radioaktif'.($i+1));
 					$lastid = $this->Topik_model->add($topik, $idlab, $kuota[$i],'', $npk, $is_active); 
 
@@ -79,6 +85,15 @@ class Lecturer extends CI_Controller {
     		';
     	}
 
+    	if($this->session->flashdata('notif') == 'prasyarat_error') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "Topik harus memiliki minimal sebuah MK prasyarat"
+			      });
+    		';
+    	}
+
 		// SELECT 2
 		$data['js'] .= '
 			//Initialize Select2 Elements
@@ -87,6 +102,7 @@ class Lecturer extends CI_Controller {
 		      theme: "bootstrap4"
 		    });
 		';
+
 
 		$this->load->view('v_header', $data);
 		$this->load->view('lecturer/v_add_topic', $data);
@@ -383,6 +399,12 @@ class Lecturer extends CI_Controller {
 				$data['is_kalab'] = true;
 			}
 		}
+
+		$idlab = '';
+		if($this->input->get('filterlab') != 'all') {
+			$idlab = $this->input->get('filterlab');
+		}
+		$data['lab'] = $this->Lab_model->get();
 	
 		// GET STUDENT TOPIC
 		$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '');

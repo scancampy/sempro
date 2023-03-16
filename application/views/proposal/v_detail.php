@@ -42,7 +42,16 @@
                         <b class="d-block"><?php echo $detail[0]->judul; ?></b>
                       </p>
                     </div>
+                    
                     <div class="col-12">
+                      <p class="text-sm">Download File Kerangka Kerja Konseptual
+                        <b class="d-block">
+                  <?php if($detail[0]->kk_filename != null) { ?>
+                          <a href="<?php echo base_url('uploads/kk/'.$detail[0]->kk_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a>                          
+                  <?php } else { echo 'Belum tersedia'; } ?> 
+                        </b>
+                      </p>
+                    </div>                   <div class="col-12">
                       <p class="text-sm">Tanggal Pengajuan
                         <b class="d-block"><?php echo strftime("%d %B %Y %H:%M:%S", strtotime($detail[0]->created_date)); ?></b>
                       </p>
@@ -377,7 +386,7 @@
                               <?php } ?>
                               <?php
                               if(isset($kalab)) {
-                                  if($kalab && is_null($detail[0]->kalab_npk_verified)) { ?>
+                                  if($kalab && !is_null($detail[0]->lecturer1_npk_verified_date) && is_null($detail[0]->kalab_npk_verified)) { ?>
                                     <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>">
                                       <div class="form-group">
                                         <label for="ceksyaratkalab" class="col-sm-4 col-form-label">Cek Syarat</label>
@@ -510,7 +519,7 @@
                                           <select class="form-control select2bs4" name="dosbing1" id="dosbing1" style="width: 100%;">
                                             <option selected="selected" value="0">[Pilih Dosbing 1]</option>
                                             <?php foreach($dosbing as $value) { ?>
-                                            <option value="<?php echo $value->npk; ?>" <?php if(!is_null($detail[0]->lecturer1_npk)) { if($detail[0]->lecturer1_npk == $value->npk) { echo 'selected'; } } else if($topik[0]->lecturer_npk == $value->npk) { echo 'selected'; } ?> ><?php echo $value->nama.' (Total bimbingan: '.($value->beban1+$value->beban2).')'; ?></option>
+                                            <option totbimbingan="<?php echo ($value->beban1+$value->beban2); ?>" value="<?php echo $value->npk; ?>" <?php if(!is_null($detail[0]->lecturer1_npk)) { if($detail[0]->lecturer1_npk == $value->npk) { echo 'selected'; } } else if($topik[0]->lecturer_npk == $value->npk) { echo 'selected'; } ?> ><?php echo $value->nama.' (Total bimbingan: '.($value->beban1+$value->beban2).')'; ?></option>
                                             <?php } ?>
                                           </select>
                                         </div>
@@ -520,9 +529,9 @@
                                         <label for="ceksyaratwd" class="col-sm-4 col-form-label">Dosbing 2</label>
                                         <div class="col-12">
                                           <select class="form-control select2bs4"  name="dosbing2" id="dosbing2" style="width: 100%;">
-                                            <option selected="selected" value="0">[Pilih Dosbing 2]</option>
+                                            <option selected="selected" totbimbingan="0" value="0">[Pilih Dosbing 2]</option>
                                             <?php foreach($dosbing as $value) { ?>
-                                            <option value="<?php echo $value->npk; ?>" <?php if(!is_null($detail[0]->lecturer2_npk)) { if($detail[0]->lecturer2_npk == $value->npk) { echo 'selected'; } } ?> ><?php echo $value->nama.' (Total bimbingan: '.($value->beban1+$value->beban2).')'; ?></option>
+                                            <option totbimbingan="<?php echo ($value->beban1+$value->beban2); ?>" value="<?php echo $value->npk; ?>" <?php if(!is_null($detail[0]->lecturer2_npk)) { if($detail[0]->lecturer2_npk == $value->npk) { echo 'selected'; } } ?> ><?php echo $value->nama.' (Total bimbingan: '.($value->beban1+$value->beban2).')'; ?></option>
                                             <?php } ?>
                                           </select>
                                         </div>
@@ -542,7 +551,7 @@
                         </div>
 
                          <div>
-                        <?php if(!is_null($detail[0]->judul)) { ?>
+                        <?php if(!is_null($detail[0]->judul) && is_null($detail[0]->kalab_rejected_judul_date)) { ?>
                           <i class="fas fa-check bg-green"></i>
                         <?php }  else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
 
@@ -555,6 +564,13 @@
                               if(isset($is_student)) {
                                   if($is_student && !is_null($detail[0]->lecturer1_npk)) { ?>
                                     <form method="post" action="<?php echo base_url('proposal/detail/'.$detail[0]->id); ?>" enctype="multipart/form-data">
+                                      <?php if(!is_null($detail[0]->kalab_rejected_judul_date)) { ?>
+                                        <div class="callout callout-danger">
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Kalab Menolak Judul &amp; Kerangka Konseptual</h5>
+                   Perhatikan alasan penolakan judul dari Kalab dan silahkan lakukan revisi yang dibutuhkan.
+                  </div>
+                                        
+                                      <?php } ?>
                                       <div class="form-group ">
                                         <label for="juduledit" class="col-sm-2 col-form-label">Judul</label>
                                         <div class="col-sm-12">
@@ -594,13 +610,13 @@
 
                          <?php if(!is_null($detail[0]->judul) && !is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                           <i class="fas fa-check bg-green"></i>
-                        <?php } else if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
+                        <?php } else if(!is_null($detail[0]->kalab_rejected_judul_date) && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?><i class="fas fa-times bg-red"></i><?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
                         
 
                             <div class="timeline-item">
                             
                               <div class="timeline-body">
-                                Kalab - <?php if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { echo "Menolak ";  } else { echo "Memvalidasi "; } ?>  Judul
+                                Kalab - <?php if(!is_null($detail[0]->kalab_rejected_judul_date) && is_null($detail[0]->kalab_npk_verified_judul_date)) { echo "Menolak ";  } else { echo "Memvalidasi "; } ?>  Judul
 
                                <?php if(!isset($is_kalab)) { ?>
                                  <?php if(!is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
@@ -610,7 +626,7 @@
                               <small><i class="fas fa-user"></i>
                                 <?php echo $detail[0]->l6nama; ?>
                               </small>
-                              <?php } else if($detail[0]->is_rejected == 1 && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
+                              <?php } else if(!is_null($detail[0]->kalab_rejected_judul_date) && is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                                 <br/><small><i class="fas fa-times"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail[0]->kalab_rejected_judul_date)); ?>
                               </small><br/>
@@ -656,6 +672,9 @@
                                                 <input class="form-check-input" <?php if($detail[0]->is_rejected ==1) { echo 'checked'; } ?> value="ditolak" type="radio" name="radiovalidasijudulkalab" id="radioditolakjudulkalab" >
                                                 <label class="form-check-label"  for="radioditolakjudulkalab">Ditolak</label>
                                               </div>
+                                              <?php if(!is_null($detail[0]->kalab_reason_reject_judul)) { ?>
+                                              <small id="emailHelp" class="form-text text-muted">Catatan:<br/>Anda pernah menolak judul ini dengan alasan <strong><?php echo $detail[0]->kalab_reason_reject_judul; ?></strong></small>
+                                            <?php } ?>
                                             </div>
 
                                             <div class="form-group" <?php if($detail[0]->is_rejected == 0) { ?>style="display: none;"<?php } ?> id="container_alasan_kalab">
@@ -719,7 +738,7 @@
 
                               <?php  
                                 if(isset($wd)) {
-                                  if($wd && !is_null($detail[0]->lecturer1_npk)) { ?>
+                                  if($wd && !is_null($detail[0]->kalab_npk_verified_judul_date)) { ?>
                                     <div class="row">
                     <div class="col-12">
                       <p class="text-sm"><b>Judul</b>

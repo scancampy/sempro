@@ -221,12 +221,17 @@ class Skripsi_model extends CI_Model {
                return $array;
         }
 
-        public function insert($student_topik_id, $periode_sidang_id, $nrp) {
+        public function insert($student_topik_id, $periode_sidang_id, $nrp, $naskah_filename, $kb_filename, $naskah_drive) {
                 $data = array(
-                        'student_topik_id'      => $student_topik_id,
-                        'periode_sidang_id'     => $periode_sidang_id,
-                        'registered_date'       => date('Y-m-d H:i:s'),
-                        'nrp'                   => $nrp
+                        'student_topik_id'              => $student_topik_id,
+                        'periode_sidang_id'             => $periode_sidang_id,
+                        'registered_date'               => date('Y-m-d H:i:s'),
+                        'nrp'                           => $nrp,
+                        'naskah_filename'               => $naskah_filename, 
+                        'naskah_upload_date'            => date('Y-m-d H:i:s'),
+                        'kartu_bimbingan_filename'      => $kb_filename, 
+                        'kartu_bimbingan_upload_date'   => date('Y-m-d H:i:s'),
+                        'naskah_drive'                  => $naskah_drive
                 );
 
                 $this->db->insert('skripsi', $data);

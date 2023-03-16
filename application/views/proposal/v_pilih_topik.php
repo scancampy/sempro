@@ -110,8 +110,11 @@
                   </thead>
                   <tbody>
                     <?php if(isset($topik)) { 
+                      //print_r($topik);
                       foreach($topik as $idx => $row) { 
                         $eligiblepilih = true;
+
+                       
                       ?>
                   <tr>
                     <td><?php echo $row->nama; ?></td>
@@ -129,13 +132,13 @@
                     <td><?php echo $row->pembuat; ?></td>
                     <td><?php echo $kuota[$idx].'/'.$row->kuota; ?></td>
                     <td>
-                      <?php if($eligiblepilih) { ?>
+                      <?php if($eligiblepilih && $kuota[$idx] < $row->kuota) { ?>
                       <button name="btnpilih" onclick="return confirm('Yakin pilih topik ini?');" value="<?php echo $row->id; ?>" class="btn btn-primary">Pilih</button>
-                    <?php }?>
+                    <?php } else { echo 'Tidak eligible'; if($kuota[$idx] >= $row->kuota) { echo '. Kuota penuh.'; } }?>
                     </td>
                   </tr>
 
-                    <?php } }  ?>
+                    <?php  } }  ?>
                   </tfoot>
                 </table>
               </form>

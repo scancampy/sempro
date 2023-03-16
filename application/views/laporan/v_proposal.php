@@ -5,13 +5,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Proposal</h1>
+            <h1 class="m-0">Laporan Proposal</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard'); ?>">Dashboard</a></li>
-              <li class="breadcrumb-item active">Dosen</li>
-              <li class="breadcrumb-item active"><a href="<?php echo base_url('lecturer/proposal'); ?>">Proposal</a></li>
+              <li class="breadcrumb-item active">Laporan</li>
+              <li class="breadcrumb-item active"><a href="<?php echo base_url('laporan/proposal'); ?>">Proposal</a></li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -37,26 +37,53 @@
                 </div>
                 <div class="card-body ">
                   <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                       <div class="form-group ">
-                        <label for="pilihtopik" class="col-sm-4 col-form-label">Tampilkan</label>
-                        <div class="col-sm-6">
-                          <div class="form-check">
-                            <input class="form-check-input" <?php if($this->input->get('topiksaya')) { echo 'checked'; } ?> id="topiksaya" name="topiksaya" value="true" type="checkbox">
-                            <label class="form-check-label" for="topiksaya">Topik Saya</label>
-                          </div>
+                        <label for="filtersemester" class="col-sm-4 col-form-label">Semester</label>
+                        <div class="col-sm-12">
+                           <?php 
+                              $aktif_str = '';
+                              $selectedsemester = '';
+                              if($this->input->get('filtersemester')) {
 
-                          <div class="form-check">
-                            <input class="form-check-input" <?php if($this->input->get('bimbingansaya')) { echo 'checked'; } ?> id="bimbingansaya" name="bimbingansaya" value="valid" type="checkbox">
-                            <label class="form-check-label" for="bimbingansaya">Bimbingan Saya</label>
-                          </div>
+                                $selectedsemester = $this->input->get('filtersemester');
+                              } else {
+                                $selectedsemester = $active_semester; 
+                                 
+                              }
+                            ?>
+                          <select class="form-control" name="filtersemester">
+                            <?php foreach($semester as $l) { ?>
+                              <option value="<?php echo $l->id; ?>" <?php if($selectedsemester == $l->id) { echo 'selected'; $aktif_str = ' (aktif)'; } else { $aktif_str = ''; } ?>><?php echo $l->nama.'/'.($l->tahun+1).$aktif_str; ?></option>
+                            <?php } ?>
+                          </select>
                         </div>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
+                      <div class="form-group ">
+                        <label for="filterlab" class="col-sm-4 col-form-label">Lab</label>
+                        <div class="col-sm-12">
+                          <select class="form-control" name="filterlab">
+                            <option value="all">Semua Lab</option>
+                            <?php 
+                              $selectedlab = '';
+                              if($this->input->get('filterlab')) {
+
+                                $selectedlab = $this->input->get('filterlab');
+                              } 
+                            ?>
+                            <?php foreach($lab as $l) { ?>
+                              <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4">
                       <div class="form-group ">
                         <label for="pilihtopik" class="col-sm-4 col-form-label">Status</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                            <select class="form-control" id="selectstatus" name="selectstatus">
                               <option value="all" <?php if($this->input->get('selectstatus') == 'all') { echo 'selected'; } ?>>Semua Status</option>
                               <option value="validasilecturer1" <?php if($this->input->get('selectstatus') == 'validasilecturer1') { echo 'selected'; } ?>>Menunggu Validasi Dosbing</option>
@@ -73,39 +100,19 @@
                         </div>
                       </div>
                     </div>
-
-                    <div class="col-6">
-                      <div class="form-group ">
-                        <label for="filterlab" class="col-sm-4 col-form-label">Filter Lab</label>
-                        <div class="col-sm-10">
-                          <select class="form-control" name="filterlab">
-                            <option value="all">Semua Lab</option>
-                            <?php 
-                              $selectedlab = '';
-                              if($this->input->get('filterlab')) {
-
-                                $selectedlab = $this->input->get('filterlab');
-                              } 
-                            ?>
-                            <?php foreach($lab as $l) { ?>
-                              <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; ?></option>
-                            <?php } ?>
-                          </select>
-                        </div>
-                    </div>
-                  </div>
-                </div>
+                   </div>
                 <!-- /.card-body -->
+                
+                </div>
                 <div class="card-footer">
                    <button type="submit" name="btncari" value="btncari" class="btn btn-primary">Cari</button>
-                   <a href="<?php echo base_url('lecturer/proposal'); ?>"  class="btn btn-info">Reset</a>
-                  </div>
-              </div>
+                   <a href="<?php echo base_url('laporan/proposal'); ?>"  class="btn btn-info">Reset</a>
+                </div>
             </form>
           </div> 
-          
-             <div class="col-12">
-            <div class="card">
+          </div>
+          <div class="col-12">
+            <div class="card card-primary">
               <div class="card-header">
                 <div class="row">
                   <div class="col-12">
@@ -117,17 +124,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
-                <?php  
-                $notif = 0;
-                if(isset($student_topic)) {
-                  foreach($student_topic as $idx => $row) { 
-                    if($is_wd && $row->wd_npk_verified == null && $row->kalab_verified_date != null) { $notif++; }
-
-                    if($is_kalab && $row->lecturer1_npk == null && $row->wd_npk_verified != null) { $notif++; }
-                  }
-
-
-                } ?>
+                
 
 
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
@@ -138,6 +135,7 @@
                     <th>Pembuat</th>
                     <th>Tgl. Pengajuan</th>
                     <th>Mahasiswa</th>
+                    <th>Dosbing</th>
                     <th>Status</th>
                     <th>Aksi</th>
                   </tr>
@@ -161,9 +159,9 @@
                             $datashown = true;
                           } else if($this->input->get('selectstatus') == 'validasijudulkalab' && $row->judul != null && $row->judul_created != null && $row->kalab_npk_verified_judul_date == null  && $row->is_rejected == 0) {
                             $datashown = true;
-                          } else if($this->input->get('selectstatus') == 'validasidosbingwd' &&  $row->lecturer1_npk != null && $row->is_verified == 0  && $row->is_rejected == 0) {
+                          } else if($this->input->get('selectstatus') == 'validasidosbingwd' &&  $row->kalab_npk_verified_judul_date != null && $row->wd_final_verified_date == null && $row->is_verified == 0  && $row->is_rejected == 0) {
                             $datashown = true;
-                          }  else if($this->input->get('selectstatus') == 'stwaiting' &&  $row->lecturer1_validate_date != null  && $row->is_st_created == 0  && $row->is_rejected == 0) {
+                          }  else if($this->input->get('selectstatus') == 'stwaiting' &&  $row->wd_final_verified_date != null  && $row->is_st_created == 0  && $row->is_rejected == 0) {
                             $datashown = true;
                           } else if($this->input->get('selectstatus') == 'stterbuat'  && $row->is_st_created == 1  && $row->is_rejected == 0) {
                             $datashown = true;
@@ -191,6 +189,7 @@
                     <td><?php echo $row->pembuat; ?></td>
                     <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
                     <td><?php echo $row->studentname.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
+                    <td><small><?php if($row->dosbing1nama != '') { echo '(1) '.$row->dosbing1nama.'<br/>'; } if($row->dosbing2nama != '') { echo '(2) '.$row->dosbing2nama; } ?></small></td>
                     <td class="text-center" >
                        <?php
                         if($row->is_rejected == 1) {

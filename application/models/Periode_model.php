@@ -6,6 +6,15 @@ class Periode_model extends CI_Model {
         public $is_active = 0;
         public $is_deleted = 0;
 
+        public function get_active_periode(){ 
+                $q = $this->db->get_where('periode', array('is_active' =>1, 'is_deleted' => 0));
+                if($q->num_rows() > 0) {
+                        $hq = $q->row();
+                        return $hq->id;
+                } else {
+                        return null;
+                }
+        }
 
         public function get($id = '', $is_deleted = 0, $where = '', $orderby ='', $ordertype='') {
                 $this->db->trans_start();
