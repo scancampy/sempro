@@ -249,7 +249,7 @@
         <?php } ?>
         <?php if(@$need_wd_final_validation) { ?>
             <div class="col-md-4 col-sm-6 col-12">
-              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+              <a href="<?php echo base_url('lecturer/proposal?selectstatus=validasidosbingwd&filterlab=all&btncari=btncari'); ?>">
                 <div class="info-box">
                   <span class="info-box-icon bg-info"><?php echo $need_wd_final_validation; ?></span>
 

@@ -32,8 +32,115 @@
                 </div>
               </div>
             </div>
+
             <hr/>
-            <?php if(@$lulus_sempro) { ?>
+            <?php if(@$proposal) { ?>
+            <div class="col-md-12">
+              <div class="card card-outline card-secondary">
+                <div class="card-header">
+                  <h4 class="card-title"><strong>JUDUL: <?php if(empty($proposal[0]->judul)) { echo '-'; } else { echo $proposal[0]->judul; } ?></strong><br/>
+                    <small>Status Proposal: 
+                      <?php
+                        if($proposal[0]->is_rejected == 1) {
+                          echo '<span class="badge badge-danger">Proposal Ditolak</span>';
+                        } else if($proposal[0]->lecturer1_npk_verified_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Dosbing</span>';
+                        } else if($proposal[0]->kalab_verified_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
+                        } else if($proposal[0]->wd_verified_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Validasi WD</span>';
+                        } else if($proposal[0]->lecturer1_npk == null) {
+                          echo '<span class="badge badge-success">Menunggu Kalab Pilih Dosbing</span>';
+                        }  else if($proposal[0]->judul == '') {
+                          echo '<span class="badge badge-success">Menunggu Mahasiswa Input Judul</span>';
+                        } else if($proposal[0]->judul != '' && $proposal[0]->kalab_npk_verified_judul_date == null) {
+                          echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
+                        } else if($proposal[0]->is_verified == 0) {
+                          echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
+                        }  else if($proposal[0]->is_verified == 1 && $proposal[0]->is_st_created==0) {
+                          echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
+                       } else if($proposal[0]->is_st_created == 1) {
+                          echo '<span class="badge badge-success">ST Sudah Terbit</span>';
+                        }
+                      ?>
+                    </small>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+
+            <?php if(@$jadwal_sempro) { ?>
+               <div class="col-md-12">
+                  <div class="card card-outline card-secondary">
+                    <div class="card-header">
+                      <h4 class="card-title">
+                        <strong>Jadwal Sidang Sempro</strong>
+                      </h4>
+                    </div>
+                    <div class="card-body">
+                      <table class="table table-bordered table-striped">
+                        <tr>
+                          <td><i class="fas fa-calendar"></i> Tanggal Sidang</td>
+                          <td><i class="fas fa-clock"></i> Jam Sidang</td>
+                          <td><i class="fas fa-door-open"></i> Ruang Sidang</td>
+                        </tr>
+                        <tr>
+                          <td><strong><?php echo strftime("%d %B %Y", strtotime($jadwal_sempro[0]->sidang_date)); ?></strong></td>
+                          <td><strong><?php echo $jadwal_sempro[0]->label; ?></strong></td>
+                          <td><strong><?php echo $jadwal_sempro[0]->roomlabel; ?></strong></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+            <?php } ?>
+
+            <?php if(@$jadwal_skripsi) { ?>
+               <div class="col-md-12">
+                  <div class="card card-outline card-secondary">
+                    <div class="card-header">
+                      <h4 class="card-title">
+                        <strong>Jadwal Sidang Skripsi</strong>
+                      </h4>
+                    </div>
+                    <div class="card-body">
+                      <table class="table table-bordered table-striped">
+                        <tr>
+                          <td><i class="fas fa-calendar"></i> Tanggal Sidang</td>
+                          <td><i class="fas fa-clock"></i> Jam Sidang</td>
+                          <td><i class="fas fa-door-open"></i> Ruang Sidang</td>
+                        </tr>
+                        <tr>
+                          <td><strong><?php echo strftime("%d %B %Y", strtotime($jadwal_skripsi[0]->sidang_date)); ?></strong></td>
+                          <td><strong><?php echo $jadwal_skripsi[0]->label; ?></strong></td>
+                          <td><strong><?php echo $jadwal_skripsi[0]->roomlabel; ?></strong></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+            <?php } ?>
+
+            <?php if(@$sempro_need_revision) { ?>
+              <div class="col-md-12">                     
+                  <div class="col-md-4 col-sm-6 col-12">
+                    <a href="<?php echo base_url('sempro/detail/'.$sempro_need_revision[0]->id); ?>">
+                      <div class="info-box">
+                        <span class="info-box-icon bg-info"><?php echo count($sempro_need_revision); ?></span>
+
+                        <div class="info-box-content" style="line-height: 14px;">
+                          <span ><strong>Hasil Sidang Sempro</strong><br/>Belum Direvisi</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                      </div>
+                    </a>
+                  <!-- /.info-box -->
+                </div>
+              </div>
+            <?php } ?>
+
+            <?php if(@$lulus_sempro && empty(@$jadwal_skripsi)) { ?>
             <div class="col-md-12">
               <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

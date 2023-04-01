@@ -117,6 +117,9 @@
                 <div class="row">
                   <div class="col-12">
                     <h3 class="card-title">Data Proposal</h3>
+                    <div class="" style="text-align:right;">Export to: 
+                      <a target="_blank" href="<?php echo base_url('laporan/excelproposal?'.$_SERVER['QUERY_STRING']); ?>" class="btn btn-tool"><i class="fas fa-file-excel"></i></a>
+                    </div>
                   </div>
                   
                 </div>
@@ -208,7 +211,7 @@
                           echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
-                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
+                        }  else if($row->is_verified == 1 && $row->is_st_created==0) {
                           echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
                         } else if($row->is_st_created) { echo '<span class="badge badge-success">ST Telah Terbit</span>'; }
                       ?>

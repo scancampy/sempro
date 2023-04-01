@@ -122,7 +122,7 @@
             <div class="form-group row">
               <label for="npkedit" class="col-sm-4 col-form-label">NPK</label>
               <div class="col-sm-8">
-                <input type="text" name="npkedit" disabled class="form-control" id="npkedit" >
+                <input type="text" name="npkedit" readonly class="form-control" id="npkedit" >
               </div>
             </div>
            <div class="form-group row">

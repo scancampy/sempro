@@ -88,20 +88,42 @@
 
                             <td  style="text-align:center;">
                         <?php
+                        $simpan ='';
+                        $jml = 0;
+                        $needplotting = false;
                         foreach($sempro as $smp) {
                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) {
-                            $adasidang = $smp; ?>
-                          <input data-toggle="modal" data-target="#modal-pilih" type="button" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" 
-                          judul="<?php echo $adasidang->judul; ?>" nrp="<?php echo $adasidang->nrp; ?>" nama="<?php echo $adasidang->nama; ?>" dosbing1="<?php echo $adasidang->dosbing1; ?>"  dosbing2="<?php echo $adasidang->dosbing2; ?>" namapenguji1="<?php echo $adasidang->namapenguji1; ?>"  namapenguji2="<?php echo $adasidang->namapenguji2; ?>" sempro_id="<?php echo $adasidang->id; ?>" ruanglabel="<?php echo $adasidang->roomlabel; ?>"
-                          tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-<?php if($adasidang->roomlabel != '') { echo 'info'; } else { echo 'primary'; } ?>" value="<?php echo character_limiter($adasidang->nama, 10,'...'); if($adasidang->roomlabel != '') { echo ' ('.$adasidang->roomlabel.')'; } ?>" />     
-                            <?php 
+                            $adasidang = $smp; 
+                            $jml++;
+
+                           $simpan .= '
+                          <input data-toggle="modal" data-target="#modal-pilih" type="button" tanggalsidang="'.strftime("%Y-%m-%d", $curdate).'" 
+                          judul="'.$adasidang->judul.'" nrp="'.$adasidang->nrp.'" nama="'.$adasidang->nama.'" dosbing1="'.$adasidang->dosbing1.'"  dosbing2="'.$adasidang->dosbing2.'" namapenguji1="'.$adasidang->namapenguji1.'"  namapenguji2="'.$adasidang->namapenguji2.'" sempro_id="'.$adasidang->id.'" ruanglabel="'.$adasidang->roomlabel.'"
+                          tanggalsidanglabel="'.strftime("%d-%m-%Y", $curdate).'" sidangtimeid="'.$st->id.'" sidangtimelabel="'.$st->label.'" class=" dropdown-item btnplot  btn-';
+                           if($adasidang->roomlabel != '') { $simpan .= 'info"'; } else { $simpan .= 'primary bg-danger"'; $needplotting = true; }
+
+                           $simpan .= ' value="'.character_limiter($adasidang->nama, 10,'...'); 
+                           if($adasidang->roomlabel != '') { $simpan .= ' ('.$adasidang->roomlabel.')'; } 
+                           $simpan .= '"/>'; 
                           }
                         }
 
                         if($adasidang == null) { 
                        ?><input type="button" data-toggle="modal" data-target="#modal-pilih" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-secondary disabled" disabled value="-" />
                         <?php
-                      }  
+                        } else { ?>
+<div class="dropdown" >
+  <button class="btn btn-secondary dropdown-toggle <?php if($needplotting) { echo 'btn-danger'; } ?> " style="width:100%;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <?php echo $jml; ?>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <?php echo $simpan; ?>
+  </div>
+</div>
+                        <?php
+                          
+                        } 
+
                         $curdate = strtotime($periodeaktif->date_start.' +'.$dayidx.' day');
                         $dayidx++;
                         ?> </td>

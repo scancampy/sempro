@@ -36,6 +36,7 @@ class User_model extends CI_Model {
         }
 
         public function resetpass($username, $newpass) {
+               // echo $username; die();
                 $data = array('password' =>  password_hash($newpass, PASSWORD_DEFAULT));
                 $this->db->where('username', $username);
                 $this->db->update('user', $data);

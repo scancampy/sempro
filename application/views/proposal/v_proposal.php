@@ -89,7 +89,7 @@
                           echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
-                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
+                        }  else if($row->is_verified == 1 && $row->is_st_created==0) {
                           echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
                        } else if($row->is_st_created == 1) {
                           echo '<span class="badge badge-success">ST Sudah Terbit</span>';

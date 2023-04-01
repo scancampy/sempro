@@ -37,61 +37,59 @@
               <div class="card-body">
                 <div class="text-muted">
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-md-12">
                       <p class="text-sm">Judul
                         <b class="d-block"><?php echo $detail->judul; ?></b>
                       </p>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                       <p class="text-sm">Tanggal Pendaftaran
                         <b class="d-block"><?php echo strftime("%d %B %Y %H:%M:%S", strtotime($detail->registered_date)); ?></b>
                       </p>
                     </div>
 
                     <?php if($detail->naskah_filename != null) { ?>
-                    <div class="col-3">
+                    <div class="col-md-3 col-sm-12">
                       <p class="text-sm">Download Naskah
                         <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
                       </p>
                     </div>
                   <?php } ?>
                     <?php if($detail->naskah_drive != null) { ?>
-                    <div class="col-3">
+                    <div class="col-md-3 col-sm-12">
                       <p class="text-sm">Link Drive
                         <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
                       </p>
                     </div>
                   <?php } ?>
                   <?php if($detail->kartu_bimbingan_filename != null) { ?>
-                    <div class="col-3">
+                    <div class="col-md-3 col-sm-12">
                       <p class="text-sm">Download Kartu Bimbingan
                         <b class="d-block"><a href="<?php echo base_url('uploads/kartubimbingan/'.$detail->kartu_bimbingan_filename); ?>" target="_blank" class="color-red btn btn-outline-primary btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
                       </p>
                     </div>
                   <?php } ?>
 
-                    <?php if($detail->sidang_date != null) { ?>
-                    <div class="col-3">
-                      <p class="text-sm">Tanggal Sidang
-                        <b class="d-block"><?php echo strftime("%d %B %Y", strtotime($detail->sidang_date)); ?></b>
-                      </p>
-                    </div>
-                    <div class="col-3">
-                      <p class="text-sm">Jam Sidang
-                        <b class="d-block"><?php echo $detail->label; ?></b>
-                      </p>
-                    </div>
-                    <?php if($detail->ruang_id != null) { ?>
-                    <div class="col-3">
-                      <p class="text-sm">Ruang Sidang
-                        <b class="d-block"><?php echo $detail->roomlabel; ?></b>
-                      </p>
-                    </div>
-                  <?php } ?>
-                  <?php } ?>
                     
                   </div>
                   <hr/>
+                  <div class="row">
+                    <div class="col-12"><h5>Jadwal Sidang</h5></div>
+                    <div class="col-md-12">
+                      <table class="table table-bordered table-striped">
+                        <tr>
+                          <td><i class="fas fa-calendar"></i> Tanggal Sidang</td>
+                          <td><i class="fas fa-clock"></i> Jam Sidang</td>
+                          <td><i class="fas fa-door-open"></i> Ruang Sidang</td>
+                        </tr>
+                        <tr>
+                          <td><strong> <?php if($detail->sidang_date != null) {  echo strftime("%d %B %Y", strtotime($detail->sidang_date)); } else { echo 'Belum ditentukan'; } ?></strong></td>
+                          <td><strong><?php if($detail->sidang_date != null) { echo $detail->label; } else { echo 'Belum ditentukan'; } ?></strong></td>
+                          <td><strong><?php if($detail->ruang_id != null) {  echo $detail->roomlabel; } else { echo 'Belum ditentukan';  } ?></strong></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
                   <div class="row">
                     <div class="col-12"><h5>Dosen Pembimbing</h5></div>
                     <div class="col-md-6">
@@ -400,7 +398,8 @@
                                           <div class="col-12">
                                              <div class="form-group">
                                                  <label>Dosen Pembimbing 2</label>
-                                                 <input type="text" class="form-control" readonly value="<?php echo $detail->dosbing2; ?> / <?php echo $detail->lecturer2_npk; ?>" />
+
+                                                 <input type="text" class="form-control" readonly value="<?php if(empty($detail->lecturer2_npk)) { echo '-'; } else { echo $detail->dosbing2.' / '.$detail->lecturer2_npk; } ?>" />
                                             </div>
                                           </div>
                                         </div>

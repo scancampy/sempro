@@ -232,7 +232,7 @@ class Sempro_model extends CI_Model {
         }
 
         public function get_uses_room($tanggal_sidang, $jam_sidang) {
-               $q =  $this->db->get_where('sempro', array('sidang_date' => $tanggal_sidang, 'sidang_time' => $jam_sidang));
+               $q =  $this->db->get_where('sempro', array('ruang_id !=' => null, 'sidang_date' => $tanggal_sidang, 'sidang_time' => $jam_sidang));
        
                $array = array();
                if($q->num_rows() > 0) {

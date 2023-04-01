@@ -41,6 +41,7 @@ class Ajaxcall extends CI_Controller {
 		$jamsidang = $this->input->post('jamsidang');
 		
 		$ruang_terpakai = $this->Sempro_model->get_uses_room($tglsidang, $jamsidang);
+		//print_r($ruang_terpakai);
 		$ruang_available = $this->Room_model->get_available($ruang_terpakai);
 
 		echo json_encode(array('data' => $ruang_available));

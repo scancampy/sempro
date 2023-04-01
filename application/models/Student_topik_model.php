@@ -199,7 +199,7 @@ class Student_topik_model extends CI_Model {
                 $this->db->join('topik', 'topik.id = student_topik.topik_id', 'left');
                 $this->db->join('student', 'student.nrp = student_topik.student_nrp', 'left');
                 $this->db->select('student_topik.*, topik.nama, student.nama as "namamhs"');
-               $p = $this->db->get_where('student_topik', array('student_topik.judul !=' => null, 'student_topik.kalab_verified_date !=' => null, 'student_topik.is_verified' => 0, 'student_topik.is_deleted' => 0));
+               $p = $this->db->get_where('student_topik', array('student_topik.kalab_verified_date !=' => null, 'student_topik.wd_verified_date' => null,'student_topik.is_rejected' => 0, 'student_topik.is_deleted' => 0));
                //echo $this->db->last_query();
                return $p->result();
         }

@@ -83,7 +83,24 @@
                             </tr>
                             <tr>
                               <td>Nilai Transkrip</td>
-                              <td><?php if(isset($transcript_prasyarat[0])) { echo $transcript_prasyarat[0]->nisbi; } else { echo 'Mahasiswa belum lulus MK ini'; } ?></td>
+                              <td><?php 
+                              $prasyarat1 = false;
+                              foreach($transcript_prasyarat as $value) {
+                                if($value->kode_mk == $prasyarat[0]->kode_mk) {
+                                  echo $value->nisbi; $prasyarat1 = true;
+                                }
+                              }
+
+                              if($prasyarat1 == false) {
+                                if(isset($transcript_prasyarat[0])) { 
+                                  echo $transcript_prasyarat[0]->nisbi; 
+                                } else {
+                                  echo 'Mahasiswa belum lulus MK ini'; 
+                                }
+                              }
+                             // if(isset($transcript_prasyarat[0])) { echo $transcript_prasyarat[0]->nisbi; } else //{ echo 'Mahasiswa belum lulus MK ini'; } 
+
+                            ?></td>
                             </tr>
                           </table>
                         <?php } ?>
@@ -103,7 +120,23 @@
                             </tr>
                             <tr>
                               <td>Nilai Transkrip</td>
-                              <td><?php if(isset($transcript_prasyarat[1])) { echo $transcript_prasyarat[1]->nisbi; } else { echo 'Mahasiswa belum lulus MK ini'; } ?></td>
+                              <td><?php 
+                              $prasyarat2 = false;
+                              foreach($transcript_prasyarat as $value) {
+                                if($value->kode_mk == $prasyarat[1]->kode_mk) {
+                                  echo $value->nisbi; $prasyarat2 = true;
+                                }
+                              }
+
+                              if($prasyarat2 == false) {
+                                if(isset($transcript_prasyarat[1])) { 
+                                  echo $transcript_prasyarat[1]->nisbi; 
+                                } else {
+                                  echo 'Mahasiswa belum lulus MK ini'; 
+                                }
+                              }
+
+                              //if(isset($transcript_prasyarat[1])) { echo $transcript_prasyarat[1]->nisbi; } else { echo 'Mahasiswa belum lulus MK ini'; } ?></td>
                             </tr>
                           </table>
                         <?php } ?>

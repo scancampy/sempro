@@ -78,12 +78,24 @@ class Dashboard extends CI_Controller {
 	            	}
             	}
 
+            	// cek apakah mhs sudah ada proposal
+            	$data['proposal'] = $this->Student_topik_model->get($data['info'][0]->nrp,'',0,0);
+
             	// cek apakah sudah lulus sempro
             	$data['lulus_sempro'] = $this->Sempro_model->get_student_sempro_all('sempro.nrp = "'.$data['info'][0]->nrp.'" AND sempro.is_done = 1');
             	//print_r($data['lulus_sempro']);
 
+            	// cek ambil jadwal sidang sempro
+            	$data['jadwal_sempro'] = $this->Sempro_model->get_student_sempro_all('sempro.nrp = "'.$data['info'][0]->nrp.'" AND sempro.is_done IS NULL AND sempro.ruang_id IS NOT NULL AND sempro.sidang_date IS NOT NULL AND sempro.sidang_time IS NOT NULL');
+
+            	// cek apakah ada revisi sempro
+            	$data['sempro_need_revision'] = $this->Sempro_model->get_student_sempro_all('sempro.nrp = "'.$data['info'][0]->nrp.'" AND sempro.revision_judul_date IS NULL AND sempro.revision_required = 1');
+
             	// cek notifikasi upload naskah
             	$data['notif_upload_naskah_skripsi'] = $this->Skripsi_model->get_student_skripsi_all('skripsi.nrp="'.$data['info'][0]->nrp.'" AND skripsi.kalab_verified_date IS NOT NULL AND skripsi.naskah_upload_date IS NULL');
+
+            	// cek ambil jadwal sidang skripsi
+            	$data['jadwal_skripsi'] = $this->Skripsi_model->get_student_skripsi_all('skripsi.nrp = "'.$data['info'][0]->nrp.'" AND skripsi.is_done IS NULL AND skripsi.ruang_id IS NOT NULL AND skripsi.sidang_date IS NOT NULL AND skripsi.sidang_time IS NOT NULL');
 
 
             	// notifikasi upload naskah

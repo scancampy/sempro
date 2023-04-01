@@ -161,7 +161,7 @@
                             $datashown = true;
                           } else if($this->input->get('selectstatus') == 'validasijudulkalab' && $row->judul != null && $row->judul_created != null && $row->kalab_npk_verified_judul_date == null  && $row->is_rejected == 0) {
                             $datashown = true;
-                          } else if($this->input->get('selectstatus') == 'validasidosbingwd' &&  $row->lecturer1_npk != null && $row->is_verified == 0  && $row->is_rejected == 0) {
+                          } else if($this->input->get('selectstatus') == 'validasidosbingwd' &&  $row->kalab_npk_verified_judul_date != null && $row->is_verified == 0  && $row->is_rejected == 0) {
                             $datashown = true;
                           }  else if($this->input->get('selectstatus') == 'stwaiting' &&  $row->lecturer1_validate_date != null  && $row->is_st_created == 0  && $row->is_rejected == 0) {
                             $datashown = true;
@@ -209,7 +209,7 @@
                           echo '<span class="badge badge-success">Menunggu Kalab Validasi Judul</span>';
                         } else if($row->is_verified == 0) {
                           echo '<span class="badge badge-success">Menunggu Validasi Final WD</span>';
-                        }  else if($row->lecturer1_validate_date != null && $row->is_st_created==0) {
+                        }  else if($row->is_verified == 1 && $row->is_st_created==0) {
                           echo '<span class="badge badge-success">Menunggu Pembuatan ST</span>';
                         } else if($row->is_st_created) { echo '<span class="badge badge-success">ST Telah Terbit</span>'; }
                       ?>

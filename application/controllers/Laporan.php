@@ -10,6 +10,70 @@ class Laporan extends CI_Controller {
         }
     }
 
+    public function excelproposal() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		$idlab = '';
+		if($this->input->get('filterlab') != 'all') {
+			$idlab = $this->input->get('filterlab');
+		}
+		$data['lab'] = $this->Lab_model->get();
+
+		$data['semester'] = $this->Periode_model->get();
+		$data['active_semester'] = $this->Periode_model->get_active_periode();
+		
+		if($this->input->get('filtersemester')) {
+		    $selectedsemester = $this->input->get('filtersemester');
+	    } else {
+	        $selectedsemester = $data['active_semester'];
+	    }
+
+	    $wherestr = 'student_topik.is_deleted = 0';
+	    if($selectedsemester != null) {
+	    	$selsemester = $this->Periode_model->get($selectedsemester);
+	    	$data['selsemester'] = $selsemester;
+	    	if($selsemester[0]->semester == 'Genap') {
+	    		$startdate = ($selsemester[0]->tahun+1).'-02-01'; // februari
+	    	} else {
+	    		$startdate = $selsemester[0]->tahun.'-08-01'; // Agustus
+	    	}
+
+	    	if($selsemester[0]->semester == 'Genap') {
+	    		$enddate = ($selsemester[0]->tahun+1).'-07-31'; // Juli
+	    	} else {
+	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
+	    	}
+	    	
+	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
+	    } else {
+	    	$data['selsemester'] = $this->Periode_model->get($data['active_semester']);
+	    }
+
+		// GET STUDENT TOPIC
+		$data['student_topic'] = $this->Student_topik_model->get_where($wherestr);
+
+
+		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: private",false);
+		header("Content-Disposition: attachment; filename=Laporan Proposal ".date('Y-m-d his').".xls");
+
+		$this->load->view('laporan/v_proposal_excel', $data);
+
+    }
+
     public function proposal() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		

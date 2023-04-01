@@ -20,6 +20,7 @@ class Transkrip extends CI_Controller {
 		$info = $this->session->userdata('user')->info;		
 		$roles = $this->session->userdata('user')->roles;
 
+
 		$lecturer = false;
 		foreach($roles as $value) {
 			if($value->roles =='lecturer') {
@@ -27,17 +28,25 @@ class Transkrip extends CI_Controller {
 			}
 		}
 
-		if($this->input->post('btnreload')) {
-			$this->Student_model->connect_sim($data['info'][0]->nrp);
-	        $this->session->set_flashdata('notif', 'success');
-			$this->session->set_flashdata('message', 'Sukses reload data transkrip');
-		    redirect('transkrip/student');
-		}
+		
 
 		if($lecturer == false) {
 			$data['transkrip'] = $this->Student_model->get_transcript_raw($info[0]->nrp);
+			if($this->input->post('btnreload')) {
+
+				$this->Student_model->connect_sim($info[0]->nrp);
+			    $this->session->set_flashdata('notif', 'success');
+				$this->session->set_flashdata('message', 'Sukses reload data transkrip');
+			    redirect('transkrip/student/'.$info[0]->nrp);
+			}
 		} else {
 			$data['transkrip'] = $this->Student_model->get_transcript_raw($nrp);
+			if($this->input->post('btnreload')) {
+				$this->Student_model->connect_sim($nrp);
+				$this->session->set_flashdata('notif', 'success');
+				$this->session->set_flashdata('message', 'Sukses reload data transkrip');
+			    redirect('transkrip/student/'.$nrp);
+			}
 		}
 
 		$data['nilai_d'] = 0;

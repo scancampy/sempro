@@ -25,11 +25,14 @@ class Room_model extends CI_Model {
         }
 
         public function get_available($used_room) {
-                if(empty($used_room) != '') {
+                if(!empty($used_room)) {
+                        //echo "SELECT * FROM room WHERE is_deleted = 0 AND id NOT IN (".implode(", ", $used_room).")";
                         $q =  $this->db->query("SELECT * FROM room WHERE is_deleted = 0 AND id NOT IN (".implode(", ", $used_room).")");
                 } else {
                         $q = $this->db->get_where('room', array('is_deleted' => 0));
-                }               
+                }              
+
+
 
                return $q->result();
         }

@@ -370,21 +370,25 @@ class Sempro extends CI_Controller {
 						$cekrevisijudul = false;
 					}
 
-					$this->load->library('upload');
+		          	if($_FILES['file_hasil_sempro']['size'] > 0) {
+		          		$this->load->library('upload');
 
-					$config['upload_path']          = './uploads/naskah';
-		            $config['allowed_types']        = 'gif|jpg|png|jpeg';
-		            $config['max_size']             = 100000;
-		            $config['file_name']			= 'hasil_sempro_'.$id.date('Ymdhis').'.jpg';
-		            $namafilehasil = $config['file_name'];
+						$config['upload_path']          = './uploads/naskah';
+			            $config['allowed_types']        = 'gif|jpg|png|jpeg';
+			            $config['max_size']             = 100000;
+			            $config['file_name']			= 'hasil_sempro_'.$id.date('Ymdhis').'.jpg';
+			            $namafilehasil = $config['file_name'];
 
-		          	$this->upload->initialize($config);
-		          	$this->load->library('upload', $config);
-
-			        if ( ! $this->upload->do_upload('file_hasil_sempro')) {
-			          	$notifupload .= " namun gagal upload foto hasil sempro";
-			          	$namafilehasil = null;
-			        }
+			          	$this->upload->initialize($config);
+			          	$this->load->library('upload', $config);
+				        if ( ! $this->upload->do_upload('file_hasil_sempro')) {
+				          	$notifupload .= " namun gagal upload foto hasil sempro";
+				          	$namafilehasil = null;
+				          	$this->session->set_flashdata('notif', 'failed');
+							$this->session->set_flashdata('msg', 'Gagal upload foto hasil sempro');
+							redirect('sempro/detail/'.$id);
+				        }
+				    }
 				     
 
 					$this->Sempro_model->submit_hasil_sempro($id, $materi, $rumusan, $tujuan, $metodologi, $analisis, $saran, $kesimpulan, $cekrevisijudul, $namafilehasil);
@@ -674,7 +678,11 @@ class Sempro extends CI_Controller {
 						var nama = item['nama'];
 						var nrp = item['nrp'];
 						var dosbing1 = item['dosbing1'];
+
 						var dosbing2 = item['dosbing2'];
+						if(item['dosbing2'] == null) {
+							dosbing2 = '-';
+						}
 						var penguji1 = item['namapenguji1'];
 						var penguji2 = item['namapenguji2'];
 						var roomlabel = item['roomlabel'];

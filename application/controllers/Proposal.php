@@ -196,6 +196,10 @@ class Proposal extends CI_Controller {
             	
 		$data['transcript_prasyarat'] = $this->Student_model->get_transcript($data['prasyarat'], $data['detail'][0]->student_nrp);
 
+		//print_r($data['transcript_prasyarat']);
+		//echo '<br/><br/>';
+		// print_r($data['prasyarat']);
+
 		$data['eligible'] = $this->Student_model->cek_eligible($data['detail'][0]->student_nrp);
         $data['setting'] = $this->Eligibility_model->get(' displayed_to_student = 1');
 
@@ -256,7 +260,7 @@ class Proposal extends CI_Controller {
         }
 
 
-        if(!is_null($data['detail'][0]->lecturer1_npk) && !is_null($data['detail'][0]->lecturer2_npk)){
+        if(!is_null($data['detail'][0]->lecturer1_npk)) {
 						$info = $this->session->userdata('user');
 	          if($info->user_type == 'lecturer') {
 		          $data['wd'] = $this->Roles_model->is_role_wd($info->info[0]->npk);
