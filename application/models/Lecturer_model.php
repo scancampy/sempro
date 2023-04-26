@@ -74,6 +74,24 @@ class Lecturer_model extends CI_Model {
                 return $q->result();
         }
 
+        public function get_with_beban_total($idlab = '') {
+                $whereidlab = '';
+                if($idlab != '') {
+                        $whereidlab = ' WHERE lecturer.lab_id = '.$idlab;
+                }
+                $q = $this->db->query('SELECT lecturer.*, lab.nama as "namalab", 
+(SELECT COUNT(student_topik.lecturer1_npk) FROM student_topik WHERE student_topik.lecturer1_npk = lecturer.npk AND student_topik.is_deleted = 0 AND student_topik.id NOT IN (SELECT kelulusan.student_topik_id FROM kelulusan WHERE kelulusan.student_topik_id = student_topik.id AND kelulusan.sk_created_date IS NOT NULL)) as "beban1",
+(SELECT COUNT(student_topik.lecturer2_npk) FROM student_topik WHERE student_topik.lecturer2_npk = lecturer.npk AND student_topik.is_deleted = 0 AND student_topik.id NOT IN (SELECT kelulusan.student_topik_id FROM kelulusan WHERE kelulusan.student_topik_id = student_topik.id AND kelulusan.sk_created_date IS NOT NULL)) as "beban2",
+(SELECT COUNT(sempro.penguji1) FROM sempro WHERE sempro.penguji1 = lecturer.npk AND sempro.is_done IS NULL) as "sempro1",
+(SELECT COUNT(sempro.penguji2) FROM sempro WHERE sempro.penguji2 = lecturer.npk AND sempro.is_done IS NULL) as "sempro2",
+(SELECT COUNT(skripsi.penguji1) FROM skripsi WHERE skripsi.penguji1 = lecturer.npk AND skripsi.student_topik_id NOT IN (SELECT kelulusan.student_topik_id FROM kelulusan WHERE kelulusan.student_topik_id = skripsi.student_topik_id AND kelulusan.sk_created_date IS NOT NULL)) as "skripsi1",
+(SELECT COUNT(skripsi.penguji2) FROM skripsi WHERE skripsi.penguji2 = lecturer.npk AND skripsi.student_topik_id NOT IN (SELECT kelulusan.student_topik_id FROM kelulusan WHERE kelulusan.student_topik_id = skripsi.student_topik_id AND kelulusan.sk_created_date IS NOT NULL)) as "skripsi2"
+FROM lecturer 
+LEFT JOIN lab ON lab.id = lecturer.lab_id  '.$whereidlab.'
+ORDER BY lecturer.nama DESC;');
+                return $q->result();       
+        }
+
         public function update_data($npk, $nama, $lab_id) {
                 $this->db->trans_start();
                 $data = array('nama' => $nama, 'lab_id' => $lab_id);

@@ -41,7 +41,7 @@
                       <select class="form-control" name="filtersemester">
                         <option value="all">Pilih Periode</option>                        
                         <?php foreach($periode as $l) { ?>
-                          <option value="<?php echo $l->id; ?>" <?php if($l->id == $this->input->get('filtersemester')) { echo 'selected'; } ?> ><?php echo strftime("%d %B %Y", strtotime($l->date_start)).' - '.strftime("%d %B %Y", strtotime($l->date_end)); if($l->is_active==1) { echo ' (Periode Aktif)'; } ?></option>
+                          <option value="<?php echo $l->id; ?>" <?php if($l->id == $this->input->get('filtersemester')) { echo 'selected'; } else if(empty($this->input->get('filtersemester')) && $l->is_active == 1) { echo 'selected';  } ?> ><?php echo strftime("%d %B %Y", strtotime($l->date_start)).' - '.strftime("%d %B %Y", strtotime($l->date_end)); if($l->is_active==1) { echo ' (Periode Aktif)'; } ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -53,7 +53,7 @@
                         <?php if($is_lecturer) { ?>
                         <option value="self" <?php if('self' == $this->input->get('filtertampilkan')) { echo 'selected'; } ?>>Diri saya</option>
                         <?php } ?>
-                        <option value="all" <?php if('all' == $this->input->get('filtertampilkan')) { echo 'selected'; } ?>>Semua</option>
+                        <option value="all" <?php if('all' == $this->input->get('filtertampilkan')) { echo 'selected'; } else if(empty($this->input->get('filtertampilkan'))) { echo 'selected'; } ?>>Semua</option>
                       </select>
                     </div>
                   </div>
@@ -68,11 +68,14 @@
           </div>
           
              <div class="col-12">
-            <div class="card">
+            <div class="card card-primary">
               <div class="card-header">
                 <div class="row">
                   <div class="col-12">
                     <h3 class="card-title">Laporan Sidang Sempro</h3>
+                    <div class="" style="text-align:right;">Export to: 
+                      <a target="_blank" href="<?php echo base_url('laporan/excelsempro?'.$_SERVER['QUERY_STRING']); ?>" class="btn btn-tool"><i class="fas fa-file-excel"></i></a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,7 +100,7 @@
                       foreach($sempro as $row) { 
                       ?>
                       <tr>
-                        <td><?php echo strftime("%A, %d %B %Y", strtotime($row->sidang_date)); ?></td>
+                        <td><?php if($row->sidang_date != null) { echo strftime("%A, %d %B %Y", strtotime($row->sidang_date)); } else { echo '-'; } ?></td>
                           <td><?php  echo $row->roomlabel;  ?></td>
                          <td><?php  echo $row->label;  ?></td>
                          <td><?php  echo $row->nama.' ('.$row->nrp.')';  ?></td>

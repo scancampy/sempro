@@ -1,316 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Laporan extends CI_Controller {
+class Penyesuaian extends CI_Controller {
 	public function __construct()
     {
         parent::__construct();
         if(!$this->session->userdata('user')) {
         	redirect('');
         }
+
+        $roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+		$allowed_entry = false;
+		foreach($roles as $role) {
+			if($role->roles == 'admin') {
+				$allowed_entry = true;
+			}
+		}
+
+		if(!$allowed_entry) {
+			redirect('dashboard');
+		}
     }
 
-    public function excelproposal() {
+ 
+    public function statussempro() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		
 		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
-		$idlab = '';
-		if($this->input->get('filterlab') != 'all') {
-			$idlab = $this->input->get('filterlab');
-		}
-		$data['lab'] = $this->Lab_model->get();
-
-		$data['semester'] = $this->Periode_model->get();
-		$data['active_semester'] = $this->Periode_model->get_active_periode();
 		
-		if($this->input->get('filtersemester')) {
-		    $selectedsemester = $this->input->get('filtersemester');
-	    } else {
-	        $selectedsemester = $data['active_semester'];
-	    }
-
-	    $wherestr = 'student_topik.is_deleted = 0';
-	    if($selectedsemester != null) {
-	    	$selsemester = $this->Periode_model->get($selectedsemester);
-	    	$data['selsemester'] = $selsemester;
-	    	if($selsemester[0]->semester == 'Genap') {
-	    		$startdate = ($selsemester[0]->tahun+1).'-02-01'; // februari
-	    	} else {
-	    		$startdate = $selsemester[0]->tahun.'-08-01'; // Agustus
-	    	}
-
-	    	if($selsemester[0]->semester == 'Genap') {
-	    		$enddate = ($selsemester[0]->tahun+1).'-07-31'; // Juli
-	    	} else {
-	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
-	    	}
-	    	
-	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
-	    } else {
-	    	$data['selsemester'] = $this->Periode_model->get($data['active_semester']);
-	    }
-
-		// GET STUDENT TOPIC
-		$data['student_topic'] = $this->Student_topik_model->get_where($wherestr);
-
-
-		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-		header("Cache-Control: private",false);
-		header("Content-Disposition: attachment; filename=Laporan Proposal ".date('Y-m-d his').".xls");
-
-		$this->load->view('laporan/v_proposal_excel', $data);
-
-    }
-
-    public function proposal() {
-    	$data = array();
-		$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
-		$idlab = '';
-		if($this->input->get('filterlab') != 'all') {
-			$idlab = $this->input->get('filterlab');
-		}
-		$data['lab'] = $this->Lab_model->get();
-
-		$data['semester'] = $this->Periode_model->get();
-		$data['active_semester'] = $this->Periode_model->get_active_periode();
-		
-		if($this->input->get('filtersemester')) {
-		    $selectedsemester = $this->input->get('filtersemester');
-	    } else {
-	        $selectedsemester = $data['active_semester'];
-	    }
-
-	    $wherestr = 'student_topik.is_deleted = 0';
-	    if($selectedsemester != null) {
-	    	$selsemester = $this->Periode_model->get($selectedsemester);
-	    	if($selsemester[0]->semester == 'Genap') {
-	    		$startdate = ($selsemester[0]->tahun+1).'-02-01'; // februari
-	    	} else {
-	    		$startdate = $selsemester[0]->tahun.'-08-01'; // Agustus
-	    	}
-
-	    	if($selsemester[0]->semester == 'Genap') {
-	    		$enddate = ($selsemester[0]->tahun+1).'-07-31'; // Juli
-	    	} else {
-	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
-	    	}
-	    	
-	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
-	    }
-
-		// GET STUDENT TOPIC
-		$data['student_topic'] = $this->Student_topik_model->get_where($wherestr);
-		
-
-		// DATA TABLE
-		$data['js'] = '
-			$("#example2").DataTable({
-		      "paging": true,
-		      "lengthChange": false,
-		      "searching": true,
-		      "ordering": true,
-		      "info": true,
-		      "autoWidth": true,
-		      "responsive": true,
-		       lengthMenu: [
-		            [50, 100, -1],
-		            [50, 100, "All"],
-		        ],
-		    });';
-
-		$this->load->view('v_header', $data);
-		$this->load->view('laporan/v_proposal', $data);
-		$this->load->view('v_footer', $data);
-    }
-
-    public function excelbeban() {
-
-    	$data = array();
-		$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
-		$idlab = '';
-		if($this->input->get('filterlab') != 'all') {
-			$idlab = $this->input->get('filterlab');
-		}
-		
-		$data['lab'] = $this->Lab_model->get();
-
-		// GET BEBAN DOSEN
-		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab);
-
-		
-		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-		header("Cache-Control: private",false);
-		header("Content-Disposition: attachment; filename=Laporan Beban Dosen ".date('Y-m-d his').".xls");
-
-		$this->load->view('laporan/v_beban_excel', $data);
-
-    }
-
-    public function bebandosen() {
-    	$data = array();
-    	$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
-		$idlab = '';
-		if($this->input->get('filterlab') != 'all') {
-			$idlab = $this->input->get('filterlab');
-		}
-		
-		$data['lab'] = $this->Lab_model->get();
-
-		// GET BEBAN DOSEN
-		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab);
-
-		// DATA TABLE
-		$data['js'] = '
-			$("#example2").DataTable({
-		      "paging": true,
-		      "lengthChange": false,
-		      "searching": true,
-		      "ordering": true,
-		      "info": true,
-		      "autoWidth": true,
-		      "responsive": true,
-		       lengthMenu: [
-		            [20, 50, 100, -1],
-		            [20, 50, 100, "All"],
-		        ],
-		    });';
-
-		$this->load->view('v_header', $data);
-		$this->load->view('laporan/v_beban_dosen', $data);
-		$this->load->view('v_footer', $data);		
-    }
-
-    public function topik() {
-    	$data = array();
-		$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
-		$idlab = '';
-		$npkpemilik = '';
-		$validasikalab = null;
-		$statusaktif = 'all';
-		if($this->input->get('filterlab') != 'all') {
-			$idlab = $this->input->get('filterlab');
-		}
-
-		if($this->input->get('filterpemilik') != 'all') {
-			$npkpemilik = $this->input->get('filterpemilik');
-		}
-
-		if($this->input->get('filtervalidasikalab') != 'all') {
-			if($this->input->get('filtervalidasikalab') == 'validasi') {
-				$validasikalab = 'sudah';
-			} else {
-				$validasikalab = 'belum';
-			}			
-		}
-		
-		if($this->input->get('filterstatusaktif') != 'all') {
-			$statusaktif = $this->input->get('filterstatusaktif');			
-		}
-
-		$data['lab'] = $this->Lab_model->get();
-
-		$data['lecturer'] = $this->Lecturer_model->get();
-
-		$data['topik'] = $this->Topik_model->get('', $idlab,0,$npkpemilik, $statusaktif, $validasikalab);
-		$data['prasyarat'] = $this->Topik_model->get_prasyarat($data['topik']);
-		$data['kuota'] = array();
-		foreach($data['topik'] as $value) {
-			$data['kuota'][] = $this->Topik_model->get_kuota($value->id);
-		}
-
-		// DATA TABLE
-		$data['js'] = '
-			$("#example2").DataTable({
-		      "paging": true,
-		      "lengthChange": false,
-		      "searching": true,
-		      "ordering": true,
-		      "info": true,
-		      "autoWidth": true,
-		      "responsive": true,
-		       lengthMenu: [
-		            [50, 100, -1],
-		            [50, 100, "All"],
-		        ],
-		    });';
-
-		$this->load->view('v_header', $data);
-		$this->load->view('laporan/v_topik', $data);
-		$this->load->view('v_footer', $data);
-    }
-
-    public function excelsempro() {
-    	$data = array();
-		$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
-		}
-
 		$data['periode'] = $this->Periode_model->get_periode_sidang();
 
 		$filtersemester = '';
@@ -335,54 +53,54 @@ class Laporan extends CI_Controller {
 			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
 		}
 
-
-		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-		header("Cache-Control: private",false);
-		header("Content-Disposition: attachment; filename=Laporan Sempro ".date('Y-m-d his').".xls");
-
-		$this->load->view('laporan/v_sempro_excel', $data);
-
-    }
-
-    public function sempro() {
-    	$data = array();
-		$info = $this->session->userdata('user')->info;		
-		$roles = $this->session->userdata('user')->roles;
-		$data['is_lecturer'] = false;
-		//print_r($info); die();
-
-		foreach($roles as $role) {
-			if($role->roles == 'student') {
-				redirect('dashboard');
-			} else if($role->roles == 'lecturer') {
-				$data['is_lecturer'] = true;
-			}
+		// HAPUS SEMPRO
+		if($this->input->post('btn_hapus_sempro')) {
+			$this->Sempro_model->hapus_sempro($this->input->post('hid_sempro_id'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses menghapus pendaftaran sempro');
+			redirect('penyesuaian/statussempro');
 		}
 
-		$data['periode'] = $this->Periode_model->get_periode_sidang();
+		// BATAL STATUS
+		if($this->input->post('btn_batal_validasi_kalab')) {
 
-		$filtersemester = '';
-		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
-			$where = 'sempro.periode_sidang_id = '.$this->input->get('filtersemester').' ';
+			$this->Sempro_model->batal_validasi($this->input->post('hid_sempro_id'));
 
-			$filtertampilkan = '';
-			if($this->input->get('filtertampilkan') == 'self') {
-				$where .= " AND (sempro.pembimbing1 = '".$info[0]->npk."' OR sempro.pembimbing2 = '".$info[0]->npk."' OR sempro.penguji1 = '".$info[0]->npk."' OR sempro.penguji2 = '".$info[0]->npk."') ";
-			}
-
-
-			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
-			//print_r($data['sempro']);
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi kalab');
+			redirect('penyesuaian/statussempro');
 		}
 
-		if(empty($this->input->get('filtersemester'))) {
-			$activeid = $this->Periode_model->get_periode_sidang_aktif();
-			
-			$where = 'sempro.periode_sidang_id = '.$activeid->id.' ';
+		if($this->input->post('btn_batal_admin_plot_ruang')) {
+			$this->Sempro_model->batal_plot_ruang($this->input->post('hid_sempro_id'));
 
-			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan admin plot ruang');
+			redirect('penyesuaian/statussempro');
+		}
+
+		if($this->input->post('btn_batal_dosbing_input_hasil')) {
+			$this->Sempro_model->batal_input_hasil_ujian($this->input->post('hid_sempro_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan dosbing input hasil ujian');
+			redirect('penyesuaian/statussempro');
+		}
+
+		if($this->input->post('btn_batal_revisi_naskah')) {
+			$this->Sempro_model->batal_revisi_naskah($this->input->post('hid_sempro_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan mahasiswa revisi naskah');
+			redirect('penyesuaian/statussempro');
+		}
+
+		if($this->input->post('btn_batal_validasi_revisi_naskah')) {
+			$this->Sempro_model->batal_validasi_revisi_naskah($this->input->post('hid_sempro_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi dosbing revisi naskah');
+			redirect('penyesuaian/statussempro');
 		}
 
 		
@@ -406,8 +124,220 @@ class Laporan extends CI_Controller {
 		        ],
 		    });';
 
+		// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    	if($this->session->flashdata('notif') == 'success') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+		// TOMBOL PENYESUAIAN
+		$data['js'] .= "
+			function dateformat( d) {
+				return ( ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1)))  + '/' + d.getFullYear());
+			}
+
+			$('body').on('click', '.btnubahpenguji', function() {
+				$('#judul_ubah_penguji').html('');
+				$('#nrp_ubah_penguji').html('');
+				$('#namamhs_ubah_penguji').html('');
+				$('#ruang_ubah_penguji').html('');
+				$('#sidangdate_ubah_penguji').html('');
+				$('#dosbing2_ubah_penguji').html('');
+				$('#dosbing1_ubah_penguji').html('');
+
+				var semproid = $(this).attr('semproid');
+				$.post('".base_url('ajaxcall/load_sidang_by_id')."', {id:semproid}, function(data) {
+					var json = JSON.parse(data);
+					console.log(json);
+					$('#judul_ubah_penguji').html(json['data'].judul);
+					$('#nrp_ubah_penguji').html(json['data'].nrp);
+					$('#namamhs_ubah_penguji').html(json['data'].nama);
+					$('#hid_sempro_ubah_penguji_id').val(semproid);
+
+					if(json['data'].sidang_date != null) {
+						$('#sidangdate_ubah_penguji').html(dateformat(new Date(json['data'].sidang_date)));
+					} else { $('#sidangdate_ubah_penguji').html('-'); }
+					
+					
+					if(json['data'].roomlabel != null) {
+						$('#ruang_ubah_penguji').html(json['data'].roomlabel);
+					} else { $('#ruang_ubah_penguji').html('-'); }
+
+					if(json['data'].dosbing1 != null) {
+						$('#dosbing1_ubah_penguji').html(json['data'].dosbing1);
+					} else { $('#dosbing1_ubah_penguji').html('-'); }
+					
+					if(json['data'].dosbing2 != null) {
+						$('#dosbing2_ubah_penguji').html(json['data'].dosbing2);
+					} else { $('#dosbing2_ubah_penguji').html('-'); }
+
+					var penguji1 = json['data'].penguji1;
+					var penguji2 = json['data'].penguji2;
+
+					// load available dosen
+					$.post('".base_url('ajaxcall/load_eligible_dosen')."', {exclude_sempro_id:semproid, tglsidang: json['data'].sidang_date, jamsidang: json['data'].sidang_time}, function(data) {
+
+						
+						var json = JSON.parse(data);
+						
+						var cbostr = '';
+						for(var i=0; i<json['data'].length;i++) {
+							var selected = '';
+							if(json['data'][i].npk == penguji1) { selected=' selected=\"selected\" '; }
+							cbostr += '<option '+ selected +' value=\"' + json['data'][i].npk + '\">'+ json['data'][i].nama + '</option>';
+						}
+
+						$('#cbo_penguji1_ubah_penguji').html(cbostr);
+
+						var cbostr = '';
+						for(var i=0; i<json['data'].length;i++) {
+							var selected = '';
+							if(json['data'][i].npk == penguji2) { selected=' selected=\"selected\" '; }
+							cbostr += '<option '+ selected +' value=\"' + json['data'][i].npk + '\">'+ json['data'][i].nama + '</option>';
+						}
+
+						$('#cbo_penguji2_ubah_penguji').html(cbostr);
+					});
+				});
+			});
+
+			$('body').on('click', '.btnpenyesuaian', function() {
+				$('#judul').html('');
+				$('#nrp').html('');
+				$('#namamhs').html('');
+
+				var semproid = $(this).attr('semproid');
+				$.post('".base_url('ajaxcall/load_sidang_by_id')."', {id:semproid}, function(data) {
+					var json = JSON.parse(data);
+					console.log(json);
+					$('#judul').html(json['data'].judul);
+					$('#nrp').html(json['data'].nrp);
+					$('#namamhs').html(json['data'].nama);
+					$('#hid_sempro_id').val(semproid);
+					
+					if(json['data'].sidang_date != null) {
+						$('#sidangdate').html(dateformat(new Date(json['data'].sidang_date)));
+					} else { $('#sidangdate').html('-'); }
+					
+					
+					if(json['data'].roomlabel != null) {
+						$('#ruang').html(json['data'].roomlabel);
+					} else { $('#ruang').html('-'); }
+
+					if(json['data'].dosbing1 != null) {
+						$('#dosbing1').html(json['data'].dosbing1);
+					} else { $('#dosbing1').html('-'); }
+					
+					if(json['data'].dosbing2 != null) {
+						$('#dosbing2').html(json['data'].dosbing2);
+					} else { $('#dosbing2').html('-'); }
+					$('#penguji1').html(json['data'].namapenguji1);
+					$('#penguji2').html(json['data'].namapenguji2);
+
+					$('#tgldaftarsidang').html(dateformat(new Date(json['data'].registered_date)));
+
+					$('#validasikalabclock').removeAttr('class');
+
+					if(json['data'].kalab_npk_verified == null) {
+						$('#validasikalabclock').addClass('fas fa-clock bg-gray');
+						$('#div_validasi_kalab_content').hide();
+						$('#btn_batal_validasi_kalab').hide();
+						$('#tglvalidasikalab').html('');
+					} else {
+						$('#validasikalabclock').addClass('fas fa-check bg-green');
+						$('#div_validasi_kalab_content').show();
+						$('#tglvalidasikalab').html(dateformat(new Date(json['data'].kalab_verified_date)));
+						$('#btn_batal_validasi_kalab').show();
+					}
+
+
+					$('#adminplotruangclock').removeAttr('class');
+					if(json['data'].ruang_id == null) {
+						$('#adminplotruangclock').addClass('fas fa-clock bg-gray');
+						$('#div_admin_plot_ruang_content').hide();
+						$('#btn_batal_admin_plot_ruang').hide();
+						$('#tgladminplotruang').html('');
+					} else {
+						$('#adminplotruangclock').addClass('fas fa-check bg-green');
+						$('#div_admin_plot_ruang_content').show();
+						$('#tgladminplotruang').html(dateformat(new Date(json['data'].admin_plotting_date)));
+						$('#btn_batal_admin_plot_ruang').show();
+					}
+
+					$('#dosbinginputhasilclock').removeAttr('class');
+					if(json['data'].hasil_submited_date == null) {
+						$('#dosbinginputhasilclock').addClass('fas fa-clock bg-gray');
+						$('#div_dosbing_input_hasil_content').hide();
+						$('#btn_batal_dosbing_input_hasil').hide();
+						$('#tglinputhasil').html('');
+					} else {
+						$('#dosbinginputhasilclock').addClass('fas fa-check bg-green');
+						$('#div_dosbing_input_hasil_content').show();
+						$('#tglinputhasil').html(dateformat(new Date(json['data'].hasil_submited_date)));
+						$('#btn_batal_dosbing_input_hasil').show();
+					}
+
+					if(json['data'].revision_required == true) {						$('#top_div_mhs_revisi_naskah').show();
+						$('#top_div_dosen_validasi_revisi_naskah').show();
+						$('#mhsrevisinaskahclock').removeAttr('class');
+						if(json['data'].revision_judul_date == null) {
+							$('#mhsrevisinaskahclock').addClass('fas fa-clock bg-gray');
+							$('#div_mhs_revisi_naskah_content').hide();
+							$('#btn_batal_revisi_naskah').hide();
+							$('#tglrevisinaskah').html('');
+						} else {
+							$('#mhsrevisinaskahclock').addClass('fas fa-check bg-green');
+							$('#div_mhs_revisi_naskah_content').show();
+							$('#tglrevisinaskah').html(dateformat(new Date(json['data'].revision_judul_date)));
+							$('#btn_batal_revisi_naskah').show();
+						}
+
+						$('#dosenvalidasirevisinaskahclock').removeAttr('class');
+						if(json['data'].dosbing_validate_date == null) {
+							console.log('here');
+							$('#dosenvalidasirevisinaskahclock').addClass('fas fa-clock bg-gray');
+							$('#div_dosen_validasi_revisi_naskah_content').hide();
+							$('#btn_batal_validasi_revisi_naskah').hide();
+							$('#tglvalidasirevisinaskah').html('');
+						} else {
+							$('#dosenvalidasirevisinaskahclock').addClass('fas fa-check bg-green');
+							$('#div_dosen_validasi_revisi_naskah_content').show();
+							$('#tglvalidasirevisinaskah').html(dateformat(new Date(json['data'].dosbing_validate_date)));
+							$('#btn_batal_validasi_revisi_naskah').show();
+						}
+					} else {
+						$('#top_div_mhs_revisi_naskah').hide();
+						$('#top_div_dosen_validasi_revisi_naskah').hide();
+					}
+				});
+			});
+		";
+		
+
 		$this->load->view('v_header', $data);
-		$this->load->view('laporan/v_sidang_sempro', $data);
+		$this->load->view('penyesuaian/v_penyesuaian_sempro', $data);
 		$this->load->view('v_footer', $data);
     }
 

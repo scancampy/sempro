@@ -91,6 +91,7 @@
                         $simpan ='';
                         $jml = 0;
                         $needplotting = false;
+                        if(!empty($sempro)) {
                         foreach($sempro as $smp) {
                           if($smp->sidang_date == strftime("%Y-%m-%d", $curdate) && $smp->sidang_time == $st->id) {
                             $adasidang = $smp; 
@@ -107,6 +108,7 @@
                            $simpan .= '"/>'; 
                           }
                         }
+                      }
 
                         if($adasidang == null) { 
                        ?><input type="button" data-toggle="modal" data-target="#modal-pilih" tanggalsidang="<?php echo strftime("%Y-%m-%d", $curdate); ?>" tanggalsidanglabel="<?php echo strftime("%d-%m-%Y", $curdate); ?>" sidangtimeid="<?php echo $st->id; ?>" sidangtimelabel="<?php echo $st->label; ?>" class="btn btnplot btn-block btn-outline-secondary disabled" disabled value="-" />

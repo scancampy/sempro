@@ -99,7 +99,7 @@
                         $adasidang = null;
                         $bolehplot = true;
                         $jmlroom = 0;  ?>
-                        <td style="text-align:center; vertical-align: top;">
+                        <td style="text-align:center; vertical-align: top; border: 1px solid lightgray;">
                           <?php 
 
                         foreach($sempro as $smp) {
@@ -124,8 +124,10 @@
                               $bolehplot = false; break;
                             }
 
-                            if($detail->lecturer2_npk == $smp->pembimbing1 || $detail->lecturer2_npk == $smp->pembimbing2 || $detail->lecturer2_npk == $smp->penguji1 || $detail->lecturer2_npk == $smp->penguji2) {
-                              $bolehplot = false; break;
+                            if(!empty($detail->lecturer2_npk)) {
+                              if($detail->lecturer2_npk == $smp->pembimbing1 || $detail->lecturer2_npk == $smp->pembimbing2 || $detail->lecturer2_npk == $smp->penguji1 || $detail->lecturer2_npk == $smp->penguji2) {
+                                $bolehplot = false; break;
+                              }
                             }
 
                             if($penguji1[0]->npk == $smp->pembimbing1 || $penguji1[0]->npk == $smp->pembimbing2 || $penguji1[0]->npk == $smp->penguji1 || $penguji1[0]->npk == $smp->penguji2) {
@@ -137,6 +139,16 @@
                             }
                            } 
                         }
+
+                        // ada pengecekan boleh plot setelah H+7
+                        $now = time(); 
+                        $datediff = $now - $curdate;
+
+                        if(round($datediff / (60 * 60 * 24)) >= -4 && $curdate < strtotime($periodeaktif->date_end.' 00:00:00')) {
+                          $bolehplot = false;
+                        }
+
+                        
 
 
                         if(!is_null($adasidang)) { ?>

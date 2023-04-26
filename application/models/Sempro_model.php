@@ -421,8 +421,100 @@ class Sempro_model extends CI_Model {
         }
 
         public function validate_revisi_judul($id, $npk) {
-                $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk, 'is_done' => true);
+                $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk);
                 $this->db->where('id', $id);
+                $this->db->update('sempro', $data);
+        }
+
+        // GET AVAILABLE DOSEN YG BISA SIDANG SEMPRO
+        // UNTUK AJAX CALL
+        public function get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang) {
+            $q = $this->db->query(
+                "SELECT lecturer.npk, lecturer.nama FROM lecturer WHERE lecturer.npk NOT IN 
+                (SELECT sempro.penguji1 FROM sempro WHERE sempro.id != ".$exclude_sempro_id." 
+                        AND sempro.sidang_time = ".$tglsidang." 
+                        AND sempro.sidang_time= ".$jamsidang.") AND 
+                lecturer.npk NOT IN 
+                (SELECT sempro.penguji2 FROM sempro WHERE sempro.id != ".$exclude_sempro_id."  AND sempro.sidang_time = ".$tglsidang." AND sempro.sidang_time= ".$jamsidang.") AND lecturer.npk NOT IN 
+                (SELECT sempro.pembimbing1 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.") AND lecturer.npk NOT IN (SELECT sempro.pembimbing2 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.")
+                ;");
+
+            return $q->result();
+        }
+
+
+        // HAPUS SEMPRO
+        public function hapus_sempro($id) {
+                $this->db->where('id', $id);
+                $this->db->delete('sempro');
+        }
+
+        // BATAL STATUS        
+        // kalab 
+        public function batal_validasi($idsempro) {
+                $data = array( 'sidang_time'    => null,
+                        'sidang_date'           => null,
+                        'penguji1'              => null,
+                        'penguji2'              => null,
+                        'pembimbing1'           => null,
+                        'pembimbing2'           => null,
+                        'kalab_verified_date'   => null,
+                        'kalab_npk_verified'    => null);
+                $this->db->where('id', $idsempro);
+                $this->db->update('sempro', $data);
+
+
+                $this->batal_plot_ruang($idsempro);
+                $this->batal_input_hasil_ujian($idsempro);
+                $this->batal_revisi_naskah($idsempro);
+                $this->batal_validasi_revisi_naskah($idsempro);
+        }
+
+        // admin
+        public function batal_plot_ruang($idsempro) {
+                $data = array('ruang_id' => null, 'admin_plotting_date' => null, 'admin_plotting_username' => null);
+                $this->db->where('id', $idsempro);
+                $this->db->update('sempro', $data);
+
+                $this->batal_input_hasil_ujian($idsempro);
+                $this->batal_revisi_naskah($idsempro);
+                $this->batal_validasi_revisi_naskah($idsempro);
+        }
+
+        // dosbing
+        public function batal_input_hasil_ujian($idsempro) {
+                $data = array('materi'          => null,
+                        'rumusan'               => null,
+                        'tujuan'                => null,
+                        'metodologi'            => null,
+                        'analisis'              => null,
+                        'saran'                 => null,
+                        'kesimpulan'            => null,
+                        'revision_required'     => null,
+                        'is_done'               => null,
+                        'hasil_sempro_filename' => null,
+                        'hasil_submited_date'   => null);
+                $this->db->where('id', $idsempro);
+                $this->db->update('sempro', $data);
+                
+
+                $this->batal_revisi_naskah($idsempro);
+                $this->batal_validasi_revisi_naskah($idsempro);
+        }
+
+        // mhs
+        public function batal_revisi_naskah($idsempro) {
+                $data = array('revision_judul_date' => null);
+                $this->db->where('id', $idsempro);
+                $this->db->update('sempro', $data);
+
+                $this->batal_validasi_revisi_naskah($idsempro);
+        }
+
+        // dosbing
+        public function batal_validasi_revisi_naskah($idsempro) {
+                $data = array('is_done' => null, 'dosbing_validate_date' => null, 'dosbing_validate_npk' => null);
+                $this->db->where('id', $idsempro);
                 $this->db->update('sempro', $data);
         }
 }

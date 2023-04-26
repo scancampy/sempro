@@ -9,7 +9,9 @@
 		<th>Semester</th>
 		<th>Lab</th>
 		<th>Pembuat Topik</th>
+		<th>NPK Dosbing 1</th>
 		<th>Dosbing 1</th>
+		<th>NPK Dosbing 2</th>
 		<th>Dosbing 2</th>
 		<th>Status</th>
 
@@ -22,12 +24,14 @@
 		<td><?php echo $row->studentname; ?></td>
 		<td><?php echo strtoupper($row->nama); ?></td>
 		<td><?php echo strtoupper($row->judul); ?></td>
-		<td><?php echo strftime("%d/%m/%Y", strtotime($row->created_date));  ?></td>
+		<td><?php if($row->created_date != null) { echo strftime("%d/%m/%Y", strtotime($row->created_date)); } else { echo '-'; } ?></td>
 		<td><?php //print_r($selsemester); 
 		 echo $selsemester[0]->nama.'/'.($selsemester[0]->tahun+1);  ?></td>
 		<td><?php echo $row->namalab; ?></td>
 		<td><?php echo $row->pembuat; ?></td>
+		<td><?php echo $row->lecturer1_npk; ?></td>
 		<td><?php if($row->dosbing1nama != '') { echo $row->dosbing1nama; }  ?></td>
+		<td><?php echo $row->lecturer2_npk; ?></td>
 		<td><?php if($row->dosbing2nama != '') { echo $row->dosbing2nama; }  ?></td>
 		<td><?php
                         if($row->is_rejected == 1) {

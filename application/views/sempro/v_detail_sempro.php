@@ -266,6 +266,47 @@
                               <small><i class="fas fa-clock"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail->registered_date)); ?>
                               </small>
+
+                              <?php if(@$is_student) { ?>
+
+                              <form method="post" action="<?php echo current_url(); ?>" enctype="multipart/form-data">
+                              <div class="row" style="margin-top: 20px;">
+                                <?php if($detail->naskah_filename != null) { ?>
+                                <div class="col-md-12 col-sm-12">
+                                  <p class="text-sm">Download Naskah Sempro
+                                    <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+                                  </p>
+                                </div>
+                              <?php } ?>
+
+                                <div class="col-md-12 col-sm-12">
+                                  <p class="text-sm">Upload Ulang Naskah Sempro
+                                    <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
+                                  </p>
+                                </div>
+
+
+                                <?php if($detail->naskah_drive != null) { ?>
+                    <div class="col-md-2 col-sm-12">
+                      <p class="text-sm">Link Drive
+                        <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
+                      </p>
+                    </div>
+                  <?php } ?>
+
+                              <div class="col-md-12 col-sm-12">
+                                  <p class="text-sm">Input Link Google Drive Naskah Sempro
+                                    <input type="text"  name="linknaskahdrive" class="form-control" id="linknaskahdrive" value="<?php echo $detail->naskah_drive; ?>">
+                                  </p>
+                                </div>
+
+                                <div class="col-12">
+                    <input type="submit" class="btn btn-primary" name="btnSubmitNaskahSempro" value="Submit" />
+                  </div>
+                </form>
+                              </div>
+                              
+              <?php } ?>
                             </div>
                           </div>
                         </div>
@@ -493,7 +534,7 @@
                                 </div>
                               <?php } ?>
 
-                              <?php if(!is_null($detail->hasil_submited_date)) { ?>
+                              <?php if(!is_null($detail->hasil_submited_date) ) { ?>
                                 <div class="col-12">
                                   <p class="text-sm">Saran
                                     <b class="d-block"><?php if($detail->saran) { echo $detail->saran; } else { echo '-'; } ?></b>
@@ -547,7 +588,7 @@
                               <?php 
 
                               if(isset($is_lecturer)) {
-                                if(is_null($detail->hasil_submited_date) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
+                                if(is_null($detail->hasil_submited_date) && !is_null($detail->ruang_id) && ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
                               <form method="post" action="<?php echo base_url('sempro/detail/'.$detail->id); ?>" enctype="multipart/form-data">
                                  <div class="row">
                                   <div class="col-12">

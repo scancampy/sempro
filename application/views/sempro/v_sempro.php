@@ -146,9 +146,7 @@
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->admin_plotting_date == null) {
                           echo '<span class="badge badge-success">Menunggu Admin TU Ploting Ruang</span>';
-                        }  else if($row->naskah_filename == null) {
-                          echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
-                        } else if( $row->hasil_submited_date == null) {
+                        }  else if( $row->hasil_submited_date == null) {
                           echo '<span class="badge badge-success">Menunggu Hasil Sidang</span>';
                         } else if($row->revision_required == true && $row->revision_judul_date == null) {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Revisi Judul</span>';

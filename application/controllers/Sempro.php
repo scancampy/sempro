@@ -272,6 +272,39 @@ class Sempro extends CI_Controller {
 
 				$data['is_student'] = true;
 
+				if($this->input->post('btnSubmitNaskahSempro')) {
+				
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/naskah';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'naskah_'.date('Ymdhis').'.pdf';
+		            $namafile = $config['file_name'];
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ( ! $this->upload->do_upload('filekk') && !$this->input->post('linknaskahdrive')) {
+			        	$this->session->set_flashdata('notif', 'failed');				 	
+				 		$this->session->set_flashdata('msg', 'Silahkan upload naskah pdf atau link google drive');
+			          	redirect('sempro/detail/'.$id);
+			        } else if (empty($_FILES['filekk']['name']) && !$this->input->post('linknaskahdrive')) {
+						$this->session->set_flashdata('notif', 'failed');				 	
+				 		$this->session->set_flashdata('msg', 'Silahkan upload naskah pdf atau link google drive');
+			          	redirect('sempro/detail/'.$id);
+					} else if(empty($_FILES['filekk']['name'])) {
+
+						$namafile = $data['detail']->naskah_filename;
+					}
+
+					$this->Sempro_model->update_naskah_filename($id, $namafile, $this->input->post('linknaskahdrive'));
+      
+				 	$this->session->set_flashdata('notif', 'success');				 	
+				 	$this->session->set_flashdata('msg', 'Sukses update naskah sempro');
+				 	redirect('sempro/detail/'.$id);
+				}
+
 				if($this->input->post('btnmhssimpanjudul')) {
 					$newjudul = $this->input->post('revisijudul');
 

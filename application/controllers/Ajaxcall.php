@@ -18,6 +18,14 @@ class Ajaxcall extends CI_Controller {
 		echo json_encode(array('data' => $jadwal_sidang, 'submit' => $tglsidang, 'submit2' => $jamsidang));
 	}
 
+	public function load_sidang_by_id() {
+		$id = $this->input->post('id');
+		$sempro = $this->Sempro_model->get_student_sempro_by_id($id);
+		
+
+		echo json_encode(array('data' => $sempro));
+	}
+
 	public function load_sidang_skripsi() {
 		$tglsidang = $this->input->post('tglsidang');
 		$jamsidang = $this->input->post('jamsidang');
@@ -34,6 +42,16 @@ class Ajaxcall extends CI_Controller {
 		$detailijin = $this->Ijin_lab_model->get_detail($ijinlab[0]->id);
 
 		echo json_encode(array('data' => $ijinlab, 'detail' => $detailijin));
+	}
+
+	public function load_eligible_dosen() {
+		$exclude_sempro_id = $this->input->post('exclude_sempro_id');
+		$tglsidang = $this->input->post('tglsidang');
+		$jamsidang = $this->input->post('jamsidang');
+
+		$dosenavailable = $this->Sempro_model->get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang);
+
+		echo json_encode(array('data' => $dosenavailable));
 	}
 
 	public function get_available_room() {

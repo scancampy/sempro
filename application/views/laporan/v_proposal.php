@@ -145,6 +145,7 @@
                   </thead>
                   <tbody>
                     <?php if(isset($student_topic)) { 
+                      
                       foreach($student_topic as $row) {
 //print_r($row);
 
@@ -190,7 +191,7 @@
                     <td><?php echo $row->nama; ?></td>
                     <td><?php echo $row->namalab; ?></td>
                     <td><?php echo $row->pembuat; ?></td>
-                    <td><?php echo strftime("%d %B %Y", strtotime($row->created_date)); ?></td>
+                    <td><?php if($row->created_date != null) { echo strftime("%d %B %Y", strtotime($row->created_date)); } else { echo '-'; } ?></td>
                     <td><?php echo $row->studentname.'<br/><small>'.$row->student_nrp.'</small>'; ?></td>
                     <td><small><?php if($row->dosbing1nama != '') { echo '(1) '.$row->dosbing1nama.'<br/>'; } if($row->dosbing2nama != '') { echo '(2) '.$row->dosbing2nama; } ?></small></td>
                     <td class="text-center" >

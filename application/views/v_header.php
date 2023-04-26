@@ -110,7 +110,7 @@
           $roles = $this->session->userdata('user')->roles;
           foreach($roles as $role) {
             if($role->roles == 'admin') { ?>
-              <li class="nav-item menu-open">
+              <li class="nav-item ">
             <a href="#" class="nav-link <?php //active ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -202,6 +202,24 @@
                 <a href="<?php echo base_url('master/admintu'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'admintu') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Admin Tata Usaha</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item <?php if($this->uri->segment(1) == 'penyesuaian') { echo 'menu-open'; } ?>">
+            <a href="#" class="nav-link <?php if($this->uri->segment(1) == 'penyesuaian') { echo 'active'; } ?> ">
+              <i class="nav-icon fas fa-exclamation-triangle"></i>
+              <p>
+                Penyesuaian Manual
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo base_url('penyesuaian/statussempro'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'statussempro' && $this->uri->segment(1) == 'penyesuaian' ) { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Status Sempro</p>
                 </a>
               </li>
             </ul>
@@ -379,6 +397,13 @@
               <a href="<?php echo base_url('laporan/skripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'skripsi') { echo  'active'; } ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Sidang Skripsi</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/bebandosen'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'bebandosen') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Beban Dosen</p>
               </a>
             </li>
           </ul>
