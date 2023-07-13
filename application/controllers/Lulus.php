@@ -24,6 +24,7 @@ class Lulus extends CI_Controller {
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
+				$data['skripsi'] = $this->Skripsi_model->get_student_skripsi($info[0]->nrp);
 				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.nrp = '".$info[0]->nrp."' AND kelulusan.is_deleted = 0");
 			} else if($role->roles == 'lecturer') {
 				$data['roles'] = 'lecturer';
@@ -276,7 +277,13 @@ class Lulus extends CI_Controller {
 		
 		$data['dataskripsi'] = $this->Student_model->get_transcript_from_array(explode(',',$skripsi[0]->nilai), $info[0]->nrp);
 
-			
+		// cek apakah mhs sudah lulus skripsi
+		$data['sempro'] = $this->Skripsi_model->get_student_skripsi($info[0]->nrp);
+		//print_r($data['sempro']);
+		//die();
+		if($data['sempro'][0]->naskah_upload_date == null) {
+			redirect('dashboard');
+		}
 
 		if($this->input->post('btnajukan')) {
 			// filekartuwali
@@ -355,6 +362,9 @@ class Lulus extends CI_Controller {
 	          	redirect('lulus/baru');
 	        }
 
+	        // update judul
+	        $this->Skripsi_model->update_judul_in_student_topic($data['sempro'][0]->student_topik_id, $this->input->post('judul'));
+
 	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), $filekartuwali, $filebebaspakai, $filenaskahfinal, $filetoefl);
 
 			$this->session->set_flashdata('notif', 'success');
@@ -362,18 +372,14 @@ class Lulus extends CI_Controller {
           	redirect('lulus');
 		}
 
-		// cek apakah mhs sudah lulus skripsi
-		$data['sempro'] = $this->Skripsi_model->get_student_skripsi($info[0]->nrp);
+		
 		//print_r($data['sempro']);
 
 		// hitung sks kum, dan ipk kum
 		$data['ipkkum'] = $this->Student_model->get_ipk_kum($info[0]->nrp);
 		$data['skskum'] = $this->Student_model->get_sks_d($info[0]->nrp);
 
-		//print_r($data['sempro']);
-		if($data['sempro'][0]->naskah_upload_date == null) {
-			redirect('dashboard');
-		}
+		
 
 		// INIT ARRAY
 		$data['js'] = '

@@ -26,6 +26,14 @@ class Ajaxcall extends CI_Controller {
 		echo json_encode(array('data' => $sempro));
 	}
 
+	public function load_sidang_skripsi_by_id() {
+		$id = $this->input->post('id');
+		$sempro = $this->Skripsi_model->get_student_skripsi_by_id($id);
+		
+
+		echo json_encode(array('data' => $sempro));
+	}
+
 	public function load_sidang_skripsi() {
 		$tglsidang = $this->input->post('tglsidang');
 		$jamsidang = $this->input->post('jamsidang');
@@ -50,6 +58,16 @@ class Ajaxcall extends CI_Controller {
 		$jamsidang = $this->input->post('jamsidang');
 
 		$dosenavailable = $this->Sempro_model->get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang);
+
+		echo json_encode(array('data' => $dosenavailable));
+	}
+
+	public function load_eligible_dosen_skripsi() {
+		$exclude_sempro_id = $this->input->post('exclude_sempro_id');
+		$tglsidang = $this->input->post('tglsidang');
+		$jamsidang = $this->input->post('jamsidang');
+
+		$dosenavailable = $this->Skripsi_model->get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang);
 
 		echo json_encode(array('data' => $dosenavailable));
 	}

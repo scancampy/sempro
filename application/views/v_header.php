@@ -222,6 +222,12 @@
                   <p>Status Sempro</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('penyesuaian/statusskripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'statusskripsi' && $this->uri->segment(1) == 'penyesuaian' ) { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Status Skripsi</p>
+                </a>
+              </li>
             </ul>
           </li>
             <?php } else if($role->roles == 'adminst') { ?>

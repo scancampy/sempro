@@ -517,6 +517,20 @@ class Sempro_model extends CI_Model {
                 $this->db->where('id', $idsempro);
                 $this->db->update('sempro', $data);
         }
+
+        // ubah dosbing
+        public function update_dosbing($semproid, $penguji1 = null, $penguji2 = null) {
+                $data = array();
+                if(!empty($penguji1)) { 
+                        $data['penguji1'] = $penguji1;
+                }
+                if(!empty($penguji2)) { 
+                        $data['penguji2'] = $penguji2;
+                }
+
+                $this->db->where('id', $semproid);
+                $this->db->update('sempro', $data);
+        }
 }
 
 ?>

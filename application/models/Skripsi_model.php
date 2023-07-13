@@ -372,7 +372,15 @@ class Skripsi_model extends CI_Model {
 
         }
 
-        public function update_judul($id, $newjudul, $file_naskah) {
+        public function update_judul_in_student_topic($student_topik_id, $judul) {
+                $data = array(
+                        'judul' => $judul
+                );
+                $this->db->where('id', $student_topik_id);
+                $this->db->update('student_topik', $data);
+        }
+
+        public function update_judul($id, $newjudul, $file_naskah=null) {
                 $q = $this->db->get_where('skripsi', array('id' => $id));
                 if($q->num_rows() > 0) {
                         $hq = $q->row();
@@ -384,13 +392,15 @@ class Skripsi_model extends CI_Model {
                         $this->db->where('id', $hq->student_topik_id);
                         $this->db->update('student_topik', $data);
 
-                        $data = array(
-                                'revision_judul_date' => date('Y-m-d H:i:s'),  
-                                'naskah_filename' => $file_naskah, 
-                                'naskah_upload_date' => date('Y-m-d H:i:s')
-                        );
-                        $this->db->where('id', $id);
-                        $this->db->update('skripsi', $data);
+                        if($file_naskah != null) {
+                                $data = array(
+                                        'revision_judul_date' => date('Y-m-d H:i:s'),  
+                                        'naskah_filename' => $file_naskah, 
+                                        'naskah_upload_date' => date('Y-m-d H:i:s')
+                                );
+                                $this->db->where('id', $id);
+                                $this->db->update('skripsi', $data);
+                        }
                         $this->db->trans_complete();
 
                         return true;
@@ -402,6 +412,50 @@ class Skripsi_model extends CI_Model {
         public function validate_revisi_judul($id, $npk) {
                 $data = array('is_done' => true, 'dosbing_validate_date' => date('Y-m-d H:i:s'), 'dosbing_validate_npk' => $npk, 'is_done' => true);
                 $this->db->where('id', $id);
+                $this->db->update('skripsi', $data);
+        }
+
+        // HAPUS SEMPRO
+        public function hapus_skripsi($id) {
+                $this->db->where('id', $id);
+                $this->db->delete('skripsi');
+        }
+
+         // ubah dosbing
+        public function update_dosbing($skripsiid, $penguji1 = null, $penguji2 = null) {
+                $data = array();
+                if(!empty($penguji1)) { 
+                        $data['penguji1'] = $penguji1;
+                }
+                if(!empty($penguji2)) { 
+                        $data['penguji2'] = $penguji2;
+                }
+
+                $this->db->where('id', $skripsiid);
+                $this->db->update('skripsi', $data);
+        }
+
+        // kalab 
+        public function batal_validasi($idsempro) {
+                $data = array( 'sidang_time'    => null,
+                        'sidang_date'           => null,
+                        'penguji1'              => null,
+                        'penguji2'              => null,
+                        'pembimbing1'           => null,
+                        'pembimbing2'           => null,
+                        'kalab_verified_date'   => null,
+                        'kalab_npk_verified'    => null);
+                $this->db->where('id', $idsempro);
+                $this->db->update('skripsi', $data);
+
+
+                $this->batal_plot_ruang($idsempro);
+        }
+
+        // admin
+        public function batal_plot_ruang($idsempro) {
+                $data = array('ruang_id' => null, 'admin_plotting_date' => null, 'admin_plotting_username' => null);
+                $this->db->where('id', $idsempro);
                 $this->db->update('skripsi', $data);
         }
 }

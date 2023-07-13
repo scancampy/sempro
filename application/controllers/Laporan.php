@@ -169,7 +169,19 @@ class Laporan extends CI_Controller {
 		$data['lab'] = $this->Lab_model->get();
 
 		// GET BEBAN DOSEN
-		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab);
+		$periodeaktif = $this->Periode_model->get_active_periode();
+		$data['semester'] = $this->Periode_model->get();
+		
+		if($this->input->get('filtersemester')) {
+		    $selectedsemester = $this->input->get('filtersemester');
+	    } else {
+	        $selectedsemester = $periodeaktif;
+	    } 
+
+
+		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab, $selectedsemester);
+		$data['periode'] = $this->Periode_model->get($selectedsemester);
+		$data['active_semester'] = $selectedsemester;
 
 		
 		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -200,11 +212,25 @@ class Laporan extends CI_Controller {
 		if($this->input->get('filterlab') != 'all') {
 			$idlab = $this->input->get('filterlab');
 		}
+
+
 		
 		$data['lab'] = $this->Lab_model->get();
 
 		// GET BEBAN DOSEN
-		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab);
+		$periodeaktif = $this->Periode_model->get_active_periode();
+		$data['semester'] = $this->Periode_model->get();
+		
+		if($this->input->get('filtersemester')) {
+		    $selectedsemester = $this->input->get('filtersemester');
+	    } else {
+	        $selectedsemester = $periodeaktif;
+	    } 
+
+
+		$data['beban'] = $this->Lecturer_model->get_with_beban_total($idlab, $selectedsemester);
+		$data['periode'] = $this->Periode_model->get($selectedsemester);
+		$data['active_semester'] = $selectedsemester;
 
 		// DATA TABLE
 		$data['js'] = '

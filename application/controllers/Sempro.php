@@ -18,6 +18,8 @@ class Sempro extends CI_Controller {
 		$info = $this->session->userdata('user')->info;
 		//print_r($roles); die();
 		$data['periodeaktif'] = $this->Periode_model->get_periode_sidang_aktif(); 
+		$data['periode'] = $this->Periode_model->get();
+		
 
 		foreach($roles as $role) {
 			if($role->roles == 'student') {

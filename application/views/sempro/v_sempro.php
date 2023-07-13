@@ -23,7 +23,95 @@
       <div class="container-fluid">
         <div class="row">
 
-          
+           <div class="col-12">
+            <form class="form-horizontal" method="get" action="<?php echo current_url(); ?>">
+              <div class="card card-primary ">
+                <div class="card-header"> 
+                  <h3 class="card-title">Filter Data</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body ">
+                  <div class="form-group row">
+                    <label for="nrp" class="col-sm-3 col-form-label">Semester</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" name="filtersemester">
+                        <option value="all">Pilih Periode</option>                        
+                        <?php foreach($periode as $l) { ?>
+                          <option value="<?php echo $l->id; ?>" <?php if($l->id == $this->input->get('filtersemester')) { echo 'selected'; } else if(empty($this->input->get('filtersemester')) && $l->is_active == 1) { echo 'selected';  } ?> ><?php echo $l->nama.'/'.($l->tahun+1); if($l->is_active==1) { echo ' (Semester Aktif)'; } ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>           
+                  <div class="form-group row">
+                    <label for="nrp" class="col-sm-3 col-form-label">Lab</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" name="filterlab">
+                        <option value="all">Semua Lab</option>
+                        <?php 
+                          $selectedlab = '';
+                          if($this->input->get('filterlab')) {
+                            $selectedlab = $this->input->get('filterlab');
+                          } else {
+                            $selectedlab = $info[0]->lab_id;
+                          }
+                        ?>
+                        <?php foreach($lab as $l) { ?>
+                          <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                 <div class="form-group row">
+                    <label for="pilihdosenpembuat" class="col-sm-3 col-form-label">Dosen Pembuat </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" name="pilihdosenpembuat">
+                        <option value="all" <?php if($this->input->get('pilihdosenpembuat') == 'all') { echo 'selected'; } ?>>Semua dosen</option>
+                        <option value="self" <?php if($this->input->get('pilihdosenpembuat') == 'self') { echo 'selected'; } ?>>Diri sendiri</option>
+                        
+                      </select>
+                    </div>
+                 </div>
+                 <div class="form-group row">
+                    <label for="nama" class="col-sm-3 col-form-label">Kuota</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" name="pilihkuota">
+                        <option value="all">Semua kuota</option>
+                        <option value="sedia">Kuota tersedia</option>
+                        <option value="habis">Kuota habis</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pilihsemestersedia" class="col-sm-3 col-form-label">Status Topik</label>
+                    <div class="col-sm-9">
+                        <div class="form-check">
+                          <input class="form-check-input" <?php if($this->input->get('radioaktif') == 'all') { echo 'checked'; }  ?> <?php if(is_null($this->input->get('radioaktif'))) { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radioaktif" value="all">
+                          <label for="radioaktif"  class="form-check-label">Semua Status</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" <?php if($this->input->get('radioaktif') == "1") { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radioaktif" value="1">
+                          <label for="radioaktif"  class="form-check-label">Aktif</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" <?php  if($this->input->get('radioaktif') == "0") { echo 'checked'; }  ?> type="radio" name="radioaktif" id="radiotidakaktif" value="0">
+                          <label for="radiotidakaktif" class="form-check-label">Tidak Aktif</label>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <a href="<?php echo base_url('lecturer/topic'); ?>" class="btn btn-default">Reset</a>
+                    <button type="submit" name="btncari" value="btncari" class="btn btn-primary">Cari</button>
+                  </div>
+              </div>
+            </form>
+          </div> 
              <div class="col-12">
             <div class="card">
               <div class="card-header">

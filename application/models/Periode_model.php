@@ -50,7 +50,7 @@ class Periode_model extends CI_Model {
                 return $data;
         }
 
-        public function add($tahun, $semester, $is_active = 0) {
+        public function add($tahun, $semester, $is_active = 0, $date_start, $date_end) {
                 if($is_active == 1) {
                         $this->db->update('periode', array('is_active' => 0));
                 }
@@ -59,20 +59,24 @@ class Periode_model extends CI_Model {
                         'nama'          => $semester.' '.$tahun,
                         'tahun'         => $tahun,
                         'semester'      => $semester,
-                        'is_active'     => $is_active
+                        'is_active'     => $is_active,
+                        'date_start'    => $date_start,
+                        'date_end'      => $date_end
                 );
 
                 $this->db->insert('periode', $data);
         }
        
 
-        public function update_data($id,$tahun,$semester, $is_active = 0) {
+        public function update_data($id,$tahun,$semester, $is_active = 0, $date_start, $date_end) {
                 $this->db->trans_start();
                 if($is_active == 1) {
                         $this->db->update('periode', array('is_active' => 0));
                 }
 
-                $data = array('nama' => $semester.' '.$tahun, 'tahun' => $tahun, 'semester' => $semester, 'is_active' => $is_active);
+                $data = array('nama' => $semester.' '.$tahun, 'tahun' => $tahun, 'semester' => $semester, 'is_active' => $is_active,
+                        'date_start'    => $date_start,
+                        'date_end'      => $date_end);
                 $this->db->where('id', $id);
                 $this->db->update('periode', $data);
 
@@ -156,22 +160,22 @@ class Periode_model extends CI_Model {
                 return $q->result();
         }
 
-        public function add_periode_sidang_skripsi($date_start, $date_end, $is_active = 0) {
+        public function add_periode_sidang_skripsi($date_start_regis, $date_end_regis, $date_start, $date_end, $is_active = 0) {
                 if($is_active == 1) {
                         $this->db->update('periode_sidang_skripsi', array('is_active' => 0));
                 }
 
-                $data = array('date_start' => $date_start, 'date_end' => $date_end, 'is_active' => $is_active);
+                $data = array('date_start_regis' => $date_start_regis, 'date_end_regis' => $date_end_regis, 'date_start' => $date_start, 'date_end' => $date_end, 'is_active' => $is_active);
                 $this->db->insert('periode_sidang_skripsi', $data);
         }
 
-        public function update_data_periode_sidang_skripsi($id,$date_start, $date_end, $is_active = 0) {
+        public function update_data_periode_sidang_skripsi($id,$date_start_regis, $date_end_regis, $date_start, $date_end, $is_active = 0) {
                 $this->db->trans_start();
                 if($is_active == 1) {
                         $this->db->update('periode_sidang_skripsi', array('is_active' => 0));
                 }
 
-                $data = array('date_start' => $date_start, 'date_end' => $date_end, 'is_active' => $is_active);
+                $data = array('date_start_regis' => $date_start_regis, 'date_end_regis' => $date_end_regis,'date_start' => $date_start, 'date_end' => $date_end, 'is_active' => $is_active);
                 $this->db->where('id', $id);
                 $this->db->update('periode_sidang_skripsi', $data);
 

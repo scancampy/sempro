@@ -42,6 +42,7 @@
                   <thead>
                   <tr>
                     <th>Periode</th>
+                    <th>Rentang</th>
                     <th>Aktif</th>
                     <th width="15%">Aksi</th>
                   </tr>
@@ -52,8 +53,9 @@
                       ?>
                   <tr>
                     <td><?php echo $row->semester.' '.$row->tahun.'/'.($row->tahun+1); ?></td>
+                    <td><?php echo strftime("%d-%m-%Y", strtotime($row->date_start)).' sampai '.strftime("%d-%m-%Y", strtotime($row->date_end)); ?></td>
                     <td><?php if($row->is_active == 1) { echo ' <i class="green text-success nav-icon fas fa-check-square"></i>'; }  ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>" targettahun="<?php echo $row->tahun; ?>" targetsemester="<?php echo $row->semester; ?>" targetactive="<?php echo $row->is_active; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/periode/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
+                    <td ><button targetid="<?php echo $row->id; ?>" targettahun="<?php echo $row->tahun; ?>" targetsemester="<?php echo $row->semester; ?>" targetstart="<?php echo strftime("%m/%d/%Y", strtotime($row->date_start)); ?>" targetend="<?php echo strftime("%m/%d/%Y", strtotime($row->date_end)); ?>" targetactive="<?php echo $row->is_active; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button> <a href="<?php echo base_url('master/periode/del/'.$row->id); ?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin hapus?');">Hapus</a> </td>
                   </tr>
 
                     <?php } }  ?>
@@ -103,6 +105,31 @@
                     <label class="form-check-label" for="radio_semester_genap">Genap</label>
                   </div>
                 </div>
+            </div>
+
+            <!-- Date -->
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Tanggal Mulai</label>
+              <div class="col-sm-8">
+                <div class="input-group date" id="date_start" data-target-input="nearest">
+                    <input type="text" name="date_start" required class="form-control datetimepicker-input" data-target="#date_start"/>
+                    <div class="input-group-append" data-target="#date_start" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- Date -->
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Tanggal Akhir</label>
+              <div class="col-sm-8">
+                <div class="input-group date" id="date_end" data-target-input="nearest">
+                    <input type="text" name="date_end" required class="form-control datetimepicker-input" data-target="#date_end"/>
+                    <div class="input-group-append" data-target="#date_end" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
             </div>
             <div class="form-group row">
                 <div class="offset-sm-4 col-sm-8">
@@ -156,6 +183,30 @@
                     <label class="form-check-label" for="radio_edit_semester_genap">Genap</label>
                   </div>
                 </div>
+            </div>
+            <!-- Date -->
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Tanggal Mulai</label>
+              <div class="col-sm-8">
+                <div class="input-group date" id="date_start_edit" data-target-input="nearest">
+                    <input type="text" name="date_start_edit" id="date_start_edit_id" required class="form-control datetimepicker-input" data-target="#date_start_edit"/>
+                    <div class="input-group-append" data-target="#date_start_edit" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- Date -->
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Tanggal Akhir</label>
+              <div class="col-sm-8">
+                <div class="input-group date" id="date_end_edit" data-target-input="nearest">
+                    <input type="text" name="date_end_edit" id="date_end_edit_id"  class="form-control datetimepicker-input" data-target="#date_end_edit"/>
+                    <div class="input-group-append" data-target="#date_end_edit" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+              </div>
             </div>
             <div class="form-group row">
                 <div class="offset-sm-4 col-sm-8">

@@ -51,7 +51,7 @@
                     <?php if($detail->naskah_filename != null) { ?>
                     <div class="col-md-3 col-sm-12">
                       <p class="text-sm">Download Naskah
-                        <b class="d-block"><a href="<?php echo base_url('uploads/naskah/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+                        <b class="d-block"><a href="<?php echo base_url('uploads/naskahskripsi/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
                       </p>
                     </div>
                   <?php } ?>
@@ -275,7 +275,90 @@
                               Mahasiswa Daftar Sidang Skripsi<br/>
                               <small><i class="fas fa-clock"></i>
                                 <?php echo strftime("%d %B %Y", strtotime($detail->registered_date)); ?>
+
+
                               </small>
+                              <form method="post" action="<?php echo base_url('skripsi/detail/'.$detail->id); ?>" enctype="multipart/form-data" >
+  <div class="row">
+
+ <?php if(!empty($detail->naskah_filename)) { ?>
+                   
+    <div class="col-1">
+     <div class="form-group ">
+        <label for="juduledit" class="col-sm-12 col-form-label">&nbsp;</label>
+        <div class="col-sm-12">
+          <b class="d-block"><a href="<?php echo base_url('uploads/naskahskripsi/'.$detail->naskah_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+        </div>
+      </div>
+    </div>
+  <?php } ?>
+
+    <div class="col-11">
+     <div class="form-group ">
+        <label for="juduledit" class="col-sm-12 col-form-label">Ubah File Naskah Skripsi</label>
+        <div class="col-sm-12">
+          <input type="file"  name="file_naskah_revisi" class="form-control" accept="application/pdf" id="file_naskah_revisi" >
+          <small id="file_naskah_revisi" class="form-text text-muted">File PDF dan Maksimal 10 Mb</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+<?php if(!empty($detail->naskah_drive)) { ?>
+    <div class="col-1">
+     <div class="form-group ">
+        <label for="juduledit" class="col-sm-12 col-form-label">&nbsp;</label>
+        <div class="col-sm-12">
+          <b class="d-block"><a href="<?php echo $detail->naskah_drive; ?>" target="_blank" class="color-green btn btn-outline-warning btn-flat btn-sm"><span class="fa fa-link"></span></a></b>
+        </div>
+      </div>
+    </div>
+  <?php } ?>
+    <div class="col-11">
+      <div class="form-group ">
+        <label for="linknaskahdrive" class="col-sm-12 col-form-label">Input Link Google Drive Naskah Skripsi</label>
+        <div class="col-sm-12">
+          <input type="text"  name="linknaskahdrive" value="<?php echo $detail->naskah_drive; ?>" class="form-control" id="linknaskahdrive" >
+        </div>
+      </div>
+    </div>
+  </div>
+   <div class="row">
+
+<?php if(!empty($detail->kartu_bimbingan_filename)) { ?>
+
+    <div class="col-1">
+     <div class="form-group ">
+        <label for="juduledit" class="col-sm-12 col-form-label">&nbsp;</label>
+        <div class="col-sm-12">
+          <b class="d-block"><a href="<?php echo base_url('uploads/kartubimbingan/'.$detail->kartu_bimbingan_filename); ?>" target="_blank" class="color-red btn btn-outline-primary btn-flat btn-sm"><span class="fa fa-file-pdf"></span></a></b>
+        </div>
+
+      </div>
+    </div>
+  <?php } ?>
+    <div class="col-11">
+       <div class="form-group ">
+        <label for="filekb" class="col-sm-12 col-form-label">Ubah File Kartu Bimbingan</label>
+        <div class="col-sm-12">
+          <input type="file"  name="filekb" class="form-control" id="filekb" >
+          <small id="filekb" class="form-text text-muted">Maksimal 10 Mb</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="col-12">
+      <div class="form-group ">
+        <label for="btnSubmitUpdateSkripsi" class="col-sm-12 col-form-label">&nbsp;</label>
+        <div class="col-sm-12">
+          <input type="submit" class="btn btn-primary" name="btnSubmitUpdateSkripsi" id="btnSubmitUpdateSkripsi" value="Update File" />
+        </div>
+      </div>
+    </div>
+  </form>
                             </div>
                           </div>
                         </div>
@@ -403,31 +486,31 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="row">
-                                          <div class="col-12">
-                                            <div class="form-group">
-                                              <label for="penguji1" class="col-sm-4 col-form-label">Ketua</label>
-                                                <select class="form-control select2bs4" name="penguji1" id="penguji1" style="width: 100%;">
-                                                  <option selected="selected" value="0">[Pilih Ketua]</option>
-                                                  <?php foreach($dosbing as $value) { ?>
-                                                    <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?> 
-                                                  <option value="<?php echo $value->npk; ?>" ><?php echo $value->nama; ?></option>
-                                                  <?php } } ?>
-                                                </select>
-                                            </div>
-                                          </div>
+<div class="row">
+  <div class="col-12">
+    <div class="form-group">
+      <label for="penguji1" class="col-sm-4 col-form-label">Ketua</label>
+        <select class="form-control select2bs4" name="penguji1" id="penguji1" style="width: 100%;">
+          <option selected="selected" value="0">[Pilih Ketua]</option>
+          <?php foreach($dosbing as $value) { ?>
+            <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?> 
+          <option value="<?php echo $value->npk; ?>" <?php if($semprodata[0]->penguji1 == $value->npk) { echo 'selected'; } ?>><?php echo $value->nama; ?></option>
+          <?php } } ?>
+        </select>
+    </div>
+  </div>
 
-                                          <div class="col-12">
-                                            <div class="form-group">
-                                              <label for="penguji2" class="col-sm-4 col-form-label">Sekretaris</label>
-                                                <select class="form-control select2bs4" name="penguji2" id="penguji2" style="width: 100%;">
-                                                  <option selected="selected" value="0">[Pilih Sekretaris]</option>
-                                                  <?php foreach($dosbing as $value) { ?>
-                                                    <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?><option value="<?php echo $value->npk; ?>" ><?php echo $value->nama; ?></option>
-                                                  <?php } }  ?>
-                                                </select>
-                                            </div>
-                                          </div>
+  <div class="col-12">
+    <div class="form-group">
+      <label for="penguji2" class="col-sm-4 col-form-label">Sekretaris</label>
+        <select class="form-control select2bs4" name="penguji2" id="penguji2" style="width: 100%;">
+          <option selected="selected" value="0">[Pilih Sekretaris]</option>
+          <?php foreach($dosbing as $value) { ?>
+            <?php if($value->npk != $detail->lecturer1_npk && $value->npk != $detail->lecturer2_npk ) { ?><option <?php if($semprodata[0]->penguji2 == $value->npk) { echo 'selected'; } ?> value="<?php echo $value->npk; ?>" ><?php echo $value->nama; ?></option>
+          <?php } }  ?>
+        </select>
+    </div>
+  </div>
                                           <div class="col-12 text-right">
                                             <div class="form-group ">
                                                 <a  class="btn btn-primary" id="btnkalabsubmit">Plot Tanggal &amp; Jam</a>
@@ -467,108 +550,6 @@
                               <?php } ?>
                             </div>
                           </div>
-                        </div>
-                        <!-- END timeline item -->
-
-                        
-
-                        
-                          <?php if($detail->revision_required == true) { ?>
-                        <!-- timeline item -->
-                        <div>
-                           <?php if(!is_null($detail->revision_judul_date)) { ?>
-                          <i class="fas fa-check bg-green"></i>
-                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
-                          <div class="timeline-item">
-                            
-                            <div class="timeline-body">
-                              Mahasiswa - Revisi Naskah<br/>
-                              <?php if(!is_null($detail->revision_judul_date)) { ?>
-                                  <small><i class="fas fa-clock"></i>
-                                <?php echo strftime("%d %B %Y", strtotime($detail->revision_judul_date)); ?>
-                              </small><br/>
-                              <small><i class="fas fa-user"></i> <?php echo $detail->nama; ?>
-                              </small>
-                              <?php } ?>
-
-                               <?php if(isset($is_student) && is_null($detail->revision_judul_date)) { ?>
-                               <form method="post" action="<?php echo base_url('skripsi/detail/'.$detail->id); ?>" enctype="multipart/form-data">
-                                  <div class="form-group ">
-                                    <label for="juduledit" class="col-sm-12 col-form-label">Judul</label>
-                                    <div class="col-sm-12">
-                                      <input type="text"  name="revisijudul" class="form-control" value="<?php echo $detail->judul; ?>"/>
-                                    </div>
-                                  </div>
-
-                                  <div class="form-group ">
-                                    <label for="file_naskah_revisi" class="col-sm-12 col-form-label">File Revisi Naskah Sempro</label>
-                                    <div class="col-sm-12">
-                                      <input type="file"  name="file_naskah_revisi" class="form-control" accept="application/pdf" id="file_naskah_revisi" >
-                                    </div>
-                                  </div>
-
-                                  <div class="col-12">
-                                      <div class="form-check">
-                                        <input class="form-check-input" id="cekrevisinaskah" name="cekrevisinaskah" value="valid" type="checkbox">
-                                        <label class="form-check-label" for="cekrevisinaskah">Saya telah merevisi naskah sesuai hasil sidang sempro</label>
-                                      </div>
-                                    </div>
-
-                                   <div class="form-group " style="margin-top: 20px;">
-                                    <div class="col-sm-12 text-right">
-                                      <button type="submit" class="btn btn-primary" value="Submit" name="btnmhssimpanjudul" id="btnmhssimpanjudul" disabled>Submit Revisi</button>
-                                    </div>
-                                  </div>
-                                </form>
-                              <?php } ?>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- END timeline item -->
-                      <?php } ?>
-                        <!-- timeline item -->
-                        <?php if($detail->revision_required == true) { ?>
-                        <div>
-                           <?php if(!is_null($detail->dosbing_validate_date)) { ?>
-                          <i class="fas fa-check bg-green"></i>
-                        <?php } else { ?><i class="fas fa-clock bg-gray"></i><?php } ?>
-                          <div class="timeline-item">
-                            
-                            <div class="timeline-body">
-                              Dosbing - Validasi Revisi Naskah<br/>
-                              <?php if(!is_null($detail->dosbing_validate_date)) { ?>
-                                  <small><i class="fas fa-clock"></i>
-                                <?php echo strftime("%d %B %Y", strtotime($detail->dosbing_validate_date)); ?>
-                              </small><br/>
-                              <small><i class="fas fa-user"></i> <?php echo $detail->namadosbingvalidaterevisi; ?>
-                              </small>
-                              <?php } ?>
-
-                              <?php 
-
-                              if(isset($is_lecturer)) {
-                                if(is_null($detail->dosbing_validate_date) AND !is_null($detail->revision_judul_date) AND ($info[0]->npk == $detail->pembimbing1 || $info[0]->npk == $detail->pembimbing2 )) { ?>
-                              
-                              <form method="post" action="<?php echo base_url('skripsi/detail/'.$detail->id); ?>" >
-                                <div class="col-12">
-                                  <div class="form-check">
-                                    <input class="form-check-input" id="cekjudul" name="cekjudul" value="valid" type="checkbox">
-                                    <label class="form-check-label" for="cekjudul">Saya telah memeriksa hasil revisi naskah mahasiswa ini</label>
-                                  </div>
-                                </div>
-                                <div class="form-group ">
-                                  <div class="col-sm-12 text-right">
-                                    <button type="submit" class="btn btn-primary" value="Submit" name="btndosbingvalidasirevisijudul" disabled id="btndosbingvalidasirevisijudul">Validasi</button>
-                                  </div>
-                                </div>
-                              </form>
-                            <?php } } ?>
-                            </div>
-                          </div>
-                        </div>
-                      <?php } ?>
-                        <!-- END timeline item -->
-
                         </div>
                         <!-- END timeline item -->
 

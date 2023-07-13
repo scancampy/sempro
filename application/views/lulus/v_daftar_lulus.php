@@ -66,7 +66,7 @@
                   </div>
                   <div class="col-12">
                     <p class="text-sm"><strong>Judul</strong>
-                      <input type="text" readonly class="form-control" disabled value="<?php echo strtoupper($sempro[0]->judul); ?>" />
+                      <input type="text"  class="form-control" name="judul" value="<?php echo strtoupper($sempro[0]->judul); ?>" />
                     </p>
                   </div>
                   <div class="col-3">

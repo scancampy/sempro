@@ -32,33 +32,36 @@ class Skripsi extends CI_Controller {
 					// cek apakah saat ini ada periode sidang					
 					$periodeaktif = $this->Periode_model->get_periode_sidang_skripsi_aktif(); 
 
-					if($periodeaktif != false) {
 
-						$data['periode_aktif'] = $periodeaktif;
-						// cek apakah sudah lulus sempro
-						$semprodata = $this->Sempro_model->get_student_sempro($info[0]->nrp);
-						$verified_proposal = false;
-						if($semprodata) {
-							foreach($semprodata as $value) {
-								if($value->is_done == true) {
-									$verified_proposal = true;
-									break;
+					if($periodeaktif != false) {
+						// cek tanggal sekarang apakah dalam periode daftar?
+						if(strtotime(date('Y-m-d')) >= strtotime($periodeaktif->date_start_regis) && strtotime(date('Y-m-d')) <= strtotime($periodeaktif->date_end_regis)) {
+							$data['periode_aktif'] = $periodeaktif;
+							// cek apakah sudah lulus sempro
+							$semprodata = $this->Sempro_model->get_student_sempro($info[0]->nrp);
+							$verified_proposal = false;
+							if($semprodata) {
+								foreach($semprodata as $value) {
+									if($value->is_done == true) {
+										$verified_proposal = true;
+										break;
+									}
 								}
 							}
-						}
 
-						// cek bahwa mhs harus punya ijin pakai lab tervalidasi
-						//$cekijin = $this->Ijin_lab_model->get_where("student.nrp ='".$info[0]->nrp."' AND wd_validated_date IS NOT NULL");
+							// cek bahwa mhs harus punya ijin pakai lab tervalidasi
+							//$cekijin = $this->Ijin_lab_model->get_where("student.nrp ='".$info[0]->nrp."' AND wd_validated_date IS NOT NULL");
 
-						/*if(!$cekijin) {							
-							$verified_proposal = false;
-						}*/
+							/*if(!$cekijin) {							
+								$verified_proposal = false;
+							}*/
 
-						if($verified_proposal != false) {
-							$data['registration_available'] = $verified_proposal;
-						} else {
-							$data['registration_not_eligible'] = true;
-						}
+							if($verified_proposal != false) {
+								$data['registration_available'] = $verified_proposal;
+							} else {
+								//$data['registration_not_eligible'] = true;
+							}
+						}						
 					} 
 				} else {
 					// cek notifikasi upload naskah
@@ -73,11 +76,15 @@ class Skripsi extends CI_Controller {
 				$data['is_lecturer'] = true;
 				$data['roles'] = 'lecturer';
 				if($data['periodeaktif'] != false) {
-					$sempro = $this->Skripsi_model->get_student_skripsi_by_npk($roles[0]->username, $data['periodeaktif']->id); 
+					if(!empty($data['periodeaktif'])) {
+						$sempro = $this->Skripsi_model->get_student_skripsi_by_npk($roles[0]->username, $data['periodeaktif']->id); 
 
-					if($sempro) {
-						$data['sempro'] = $sempro;
+						if($sempro) {
+							$data['sempro'] = $sempro;
 
+						}
+					} else {
+						$data['sempro'] = null;
 					}
 				}
 			
@@ -85,11 +92,15 @@ class Skripsi extends CI_Controller {
 				// cek if kalab
 				$idlab =  $info[0]->lab_id;
 				$data['roles'] = 'kalab';
-				$sempro = $this->Skripsi_model->get_student_skripsi_by_lab($idlab, $roles[0]->username, $data['periodeaktif']->id);
+				if(!empty($data['periodeaktif'])) {
+					$sempro = $this->Skripsi_model->get_student_skripsi_by_lab($idlab, $roles[0]->username, $data['periodeaktif']->id);
 
-				if($sempro) {
-					$data['sempro'] = $sempro;
+					if($sempro) {
+						$data['sempro'] = $sempro;
 
+					}
+				} else {
+					$data['sempro'] = null;
 				}
 
 				break;
@@ -152,76 +163,103 @@ class Skripsi extends CI_Controller {
 					$periodeaktif = $this->Periode_model->get_periode_sidang_skripsi_aktif(); 
 
 					if($periodeaktif != false) {
-						$data['periode_aktif'] = $periodeaktif;
-						// cek apakah ada sudah lulus sempro
-						$semprodata = $this->Sempro_model->get_student_sempro_lulus($info[0]->nrp);
+						if(strtotime(date('Y-m-d')) >= strtotime($periodeaktif->date_start_regis) && strtotime(date('Y-m-d')) <= strtotime($periodeaktif->date_end_regis)) {
+							$data['periode_aktif'] = $periodeaktif;
+							// cek apakah ada sudah lulus sempro
+							$semprodata = $this->Sempro_model->get_student_sempro_lulus($info[0]->nrp);
 
-						if(count($semprodata) >0) {
-							$data['registration_available'] = $semprodata;
-							// hitung sks kum, dan ipk kum
-							$data['ipkkum'] = $this->Student_model->get_ipk_kum($info[0]->nrp);
-							$data['skskum'] = $this->Student_model->get_sks_kum($info[0]->nrp);
-							$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($info[0]->nrp);
+							if(count($semprodata) >0) {
+								$data['registration_available'] = $semprodata;
+								// hitung sks kum, dan ipk kum
+								$data['ipkkum'] = $this->Student_model->get_ipk_kum($info[0]->nrp);
+								$data['skskum'] = $this->Student_model->get_sks_kum($info[0]->nrp);
+								$data['sks_in_ks'] = $this->Student_model->get_jumlah_mk_in_ks($info[0]->nrp);
 
-							if($this->input->post('btnSubmit')) {
-								if($this->input->post('checkbox_setuju') != true) {
-									$this->session->set_flashdata('notif', 'failed_daftar');
-									$this->session->set_flashdata('msg', 'Anda harus menyetujui terlebih dahulu');
-									redirect('skripsi/daftar');
-								} else {
-									// cek upload naskah, gdrive, kartu bimbingan
-									$this->load->library('upload');
-
-									$config['upload_path']          = './uploads/naskahskripsi';
-						            $config['allowed_types']        = 'pdf';
-						            $config['max_size']             = 100000;
-						            $config['file_name']			= 'naskah_'.date('Ymdhis').'.pdf';
-						            $nama_file_naskah = $config['file_name'];
-
-						          	$this->upload->initialize($config);
-						          	$this->load->library('upload', $config);
-
-							        if ( ! $this->upload->do_upload('filekk') && !$this->input->post('linknaskahdrive')) {
-
-							          	$this->session->set_flashdata('notif', 'error_validated');
-							          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
-							          	redirect('skripsi/daftar');
-							        } else if (empty($_FILES['filekk']['name']) && !$this->input->post('linknaskahdrive')) {
-										$this->session->set_flashdata('notif', 'error_validated');
-							          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
-							          	redirect('skripsi/daftar');
-									} else if(empty($_FILES['filekk']['name'])) {
+								if($this->input->post('btnSubmit')) {
+									if($this->input->post('checkbox_setuju') != true) {
+										$this->session->set_flashdata('notif', 'failed_daftar');
+										$this->session->set_flashdata('msg', 'Anda harus menyetujui terlebih dahulu');
+										redirect('skripsi/daftar');
+									} else {
+										// cek upload naskah, gdrive, kartu bimbingan
 										$nama_file_naskah = null;
+										$nama_file_kb = null;
+
+										$this->load->library('upload');
+
+										$config['upload_path']          = './uploads/naskahskripsi';
+							            $config['allowed_types']        = 'pdf';
+							            $config['max_size']             = 100000;
+							            $config['file_name']			= 'naskah_'.date('Ymdhis').'.pdf';
+							            
+							          	$this->upload->initialize($config);
+							          	$this->load->library('upload', $config);
+
+							          	if($this->upload->do_upload('filekk')) {
+							          		$nama_file_naskah = $config['file_name'];
+							          	}
+
+							          	// kartu bimbingan
+
+							          	$this->load->library('upload');
+
+										$config['upload_path']          = './uploads/kartubimbingan';
+							            $config['allowed_types']        = 'pdf|jpg|jpeg|png';
+							            $config['max_size']             = 100000;
+							            $config['file_name']			= 'kb_'.date('Ymdhis');
+							            
+							          	$this->upload->initialize($config);
+							          	$this->load->library('upload', $config);
+
+								        if ($this->upload->do_upload('filekb')) {
+								        	
+								          	$nama_file_kb = $config['file_name'].$this->upload->data('file_ext');
+								        }
+
+								       /* if ( ! $this->upload->do_upload('filekk') && !$this->input->post('linknaskahdrive')) {
+
+								          	$this->session->set_flashdata('notif', 'error_validated');
+								          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
+								          	redirect('skripsi/daftar');
+								        } else if (empty($_FILES['filekk']['name']) && !$this->input->post('linknaskahdrive')) {
+											$this->session->set_flashdata('notif', 'error_validated');
+								          	$this->session->set_flashdata('msg', 'Silahkan upload revisi naskah pdf atau link google drive');
+								          	redirect('skripsi/daftar');
+										} else if(empty($_FILES['filekk']['name'])) {
+											$nama_file_naskah = null;
+										}*/
+
+								        // kartu bimbingan
+								        /*$this->load->library('upload');
+
+										$config['upload_path']          = './uploads/kartubimbingan';
+							            $config['allowed_types']        = 'pdf';
+							            $config['max_size']             = 100000;
+							            $config['file_name']			= 'kb_'.date('Ymdhis').'.pdf';
+							            $nama_file_kb = $config['file_name'];
+
+							          	$this->upload->initialize($config);
+							          	$this->load->library('upload', $config);
+
+								        if ( ! $this->upload->do_upload('filekb')) {
+								          	$this->session->set_flashdata('notif', 'error_validated');
+								          	$this->session->set_flashdata('msg', $this->upload->display_errors());
+								          	redirect('skripsi/daftar');
+								        }*/
+								        //echo $nama_file_naskah;
+								        //die();
+									            
+									  //	$this->Skripsi_model->update_naskah_filename($id, $nama_file_naskah, $nama_file_kb, $this->input->post('linknaskahdrive'));
+										
+										$this->Skripsi_model->insert($data['registration_available'][0]->student_topik_id, $periodeaktif->id, $info[0]->nrp, $nama_file_naskah, $nama_file_kb, $this->input->post('linknaskahdrive'));
+									 	$this->session->set_flashdata('notif', 'success_register');
+									 	redirect('skripsi');								
 									}
-
-							        // kartu bimbingan
-							        $this->load->library('upload');
-
-									$config['upload_path']          = './uploads/kartubimbingan';
-						            $config['allowed_types']        = 'pdf';
-						            $config['max_size']             = 100000;
-						            $config['file_name']			= 'kb_'.date('Ymdhis').'.pdf';
-						            $nama_file_kb = $config['file_name'];
-
-						          	$this->upload->initialize($config);
-						          	$this->load->library('upload', $config);
-
-							        if ( ! $this->upload->do_upload('filekb')) {
-							          	$this->session->set_flashdata('notif', 'error_validated');
-							          	$this->session->set_flashdata('msg', $this->upload->display_errors());
-							          	redirect('skripsi/daftar');
-							        }
-							        //echo $nama_file_naskah;
-							        //die();
-								            
-								  //	$this->Skripsi_model->update_naskah_filename($id, $nama_file_naskah, $nama_file_kb, $this->input->post('linknaskahdrive'));
-									
-									$this->Skripsi_model->insert($data['registration_available'][0]->student_topik_id, $periodeaktif->id, $info[0]->nrp, $nama_file_naskah, $nama_file_kb, $this->input->post('linknaskahdrive'));
-								 	$this->session->set_flashdata('notif', 'success_register');
-								 	redirect('skripsi');								
+									//print_r($_POST);
+									//die();
 								}
-								//print_r($_POST);
-								//die();
+							} else {
+								redirect('dashboard');
 							}
 						} else {
 							redirect('dashboard');
@@ -275,8 +313,11 @@ class Skripsi extends CI_Controller {
 
 		// load id
 		$data['detail'] = $this->Skripsi_model->get_student_skripsi_by_id($id);
-		//print_r($data['detail']);
-		//die();
+		
+		// get data sempro
+		$data['semprodata'] = $this->Sempro_model->get_student_sempro_lulus($data['detail']->nrp);
+
+		
 		if(!$data['detail']) {
 			redirect('dashboard');
 		}
@@ -297,11 +338,12 @@ class Skripsi extends CI_Controller {
 
 				$data['is_student'] = true;
 
-
-
-				if($this->input->post('btnmhssimpanjudul')) {
-					$newjudul = $this->input->post('revisijudul');
-
+				if($this->input->post('btnSubmitUpdateSkripsi')) {
+					//print_r($data['detail']);
+					//die();
+					$newnaskah = $data['detail']->naskah_filename;
+					$newkk = $data['detail']->kartu_bimbingan_filename;
+					
 					$this->load->library('upload');
 
 					$config['upload_path']          = './uploads/naskahskripsi';
@@ -312,16 +354,30 @@ class Skripsi extends CI_Controller {
 		          	$this->upload->initialize($config);
 		          	$this->load->library('upload', $config);
 
-			        if ( ! $this->upload->do_upload('file_naskah_revisi')) {
-			          	$this->session->set_flashdata('notif', 'error_validated');
-			          	$this->session->set_flashdata('msg', $this->upload->display_errors());
-			          	redirect('skripsi/detail/'.$id);
+			        if ($this->upload->do_upload('file_naskah_revisi')) {
+			        	die();
+			          $newnaskah = $config['file_name'];	
 			        }
 
-			        $this->Skripsi_model->update_judul($id, $newjudul, $config['file_name']);
+			        // kartu bimbingan
+			        $this->load->library('upload');
+
+					$config['upload_path']          = './uploads/kartubimbingan';
+		            $config['allowed_types']        = 'pdf|jpg|jpeg|png';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'kb_'.$id.date('Ymdhis');
+		            
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ($this->upload->do_upload('filekb')) {
+			          	$newkk = $config['file_name'].$this->upload->data('file_ext');	
+			        }
+
+			        $this->Skripsi_model->update_naskah_filename($id, $newnaskah,$newkk, $this->input->post('linknaskahdrive'));
 
 					$this->session->set_flashdata('notif', 'success');
-		          	$this->session->set_flashdata('msg', 'Suskes merevisi judul');
+		          	$this->session->set_flashdata('msg', 'Sukses merevisi file naskah');
 		          	redirect('skripsi/detail/'.$id);
 				}
 

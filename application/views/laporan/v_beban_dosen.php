@@ -36,23 +36,48 @@
                 </div>
                 <div class="card-body ">
                   <div class="form-group row">
-                    <label for="nrp" class="col-sm-3 col-form-label">Lab </label>
-                    <div class="col-sm-9">
-                      <select class="form-control" name="filterlab">
-                        <option value="all">Semua Lab</option>
-                        <?php 
-                          $selectedlab = '';
-                          if($this->input->get('filterlab')) {
+                    <div class="col-4">
+                      <div class="form-group ">
+                        <label for="filtersemester" class="col-sm-4 col-form-label">Semester</label>
+                        <div class="col-sm-12">
+                           <?php 
+                              $aktif_str = '';
+                              $selectedsemester = '';
+                              if($this->input->get('filtersemester')) {
 
-                            $selectedlab = $this->input->get('filterlab');
-                          } 
-                        ?>
-                        <?php foreach($lab as $l) { ?>
-                          <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; ?></option>
-                        <?php } ?>
-                      </select>
+                                $selectedsemester = $this->input->get('filtersemester');
+                              } else {
+                                $selectedsemester = $active_semester; 
+                                                              }
+                            ?>
+
+                          <select class="form-control" name="filtersemester">
+                            <?php foreach($semester as $l) {  ?>
+                              <option value="<?php echo $l->id; ?>" <?php if($selectedsemester == $l->id) { echo 'selected';  }  ?>><?php echo $l->nama.'/'.($l->tahun+1); if($l->is_active == 1) { echo ' (Semester Aktif)'; } ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                      </div>
                     </div>
-                  </div> 
+                    <div class="col-4">
+                      <label for="nrp" class="col-sm-3 col-form-label">Lab </label>
+                      <div class="col-sm-9">
+                        <select class="form-control" name="filterlab">
+                          <option value="all">Semua Lab</option>
+                          <?php 
+                            $selectedlab = '';
+                            if($this->input->get('filterlab')) {
+
+                              $selectedlab = $this->input->get('filterlab');
+                            } 
+                          ?>
+                          <?php foreach($lab as $l) { ?>
+                            <option value="<?php echo $l->id; ?>" <?php if($selectedlab == $l->id) { echo 'selected'; } ?>><?php echo $l->nama; ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                    </div> 
+                </div>
                  
                 </div>
                 <!-- /.card-body -->
@@ -78,6 +103,11 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive">
+                <div class="callout callout-info">
+                  <h5>Periode Semester <strong><?php echo $periode[0]->nama.'/'.($periode[0]->tahun+1); ?></strong></h5>
+
+                  <p><?php  echo strftime("%d-%m-%Y", strtotime($periode[0]->date_start)).' sampai '.strftime("%d-%m-%Y", strtotime($periode[0]->date_end));  ?></p>
+                </div>
                 
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>

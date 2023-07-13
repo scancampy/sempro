@@ -919,22 +919,40 @@ class Master extends CI_Controller {
 		// TAMBAH PERIODE
 		if($this->input->post('btntambah')) {
 
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end')));
+			
+			if(strtotime($this->input->post('date_start')) > strtotime($this->input->post('date_end'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periode');
+			}
+
 			$is_active = 0;
 			if($this->input->post('is_active')) {
 				$is_active = 1;
 			}
-			$this->Periode_model->add($this->input->post('tahun'), $this->input->post('radio_semester'), $is_active);	
+			$this->Periode_model->add($this->input->post('tahun'), $this->input->post('radio_semester'), $is_active, $date_start, $date_end);	
 			$this->session->set_flashdata('notif', 'success_add');		
 			redirect('master/periode');
 		}
 
 		// EDIT PERIODE
 		if($this->input->post('btnubah')) {
+			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start_edit')));			
+			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end_edit')));
+
+			if(strtotime($this->input->post('date_start_edit')) > strtotime($this->input->post('date_end_edit'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
+				redirect('master/periode');
+			}
+
 			$is_active = 0;
 			if($this->input->post('is_active_edit')) {
 				$is_active = 1;
 			}
-			$this->Periode_model->update_data($this->input->post('idedit'),$this->input->post('tahunedit'),$this->input->post('radio_edit_semester'),  $is_active);
+			$this->Periode_model->update_data($this->input->post('idedit'),$this->input->post('tahunedit'),$this->input->post('radio_edit_semester'),  $is_active, $date_start, $date_end);
 			$this->session->set_flashdata('notif', 'success_edit');
 			redirect('master/periode');
 		}
@@ -999,6 +1017,15 @@ class Master extends CI_Controller {
     		';
     	}
 
+    	if($this->session->flashdata('notif') == 'error_add') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+    		';
+    	}
+
 
     	// EDIT BTN
     	$data['js'] .= '
@@ -1009,6 +1036,12 @@ class Master extends CI_Controller {
     			var isactive = $(this).attr("targetactive");
     			$("#idedit").val(id);
     			$("#tahunedit").val(tahun);
+
+    			var targetstart = $(this).attr("targetstart");
+    			var targetend = $(this).attr("targetend");
+    			$("#date_start_edit_id").val(targetstart);
+    			$("#date_end_edit_id").val(targetend);
+
 
 
     			if(semester == "Genap") {
@@ -1024,6 +1057,24 @@ class Master extends CI_Controller {
     			}    			 
     		});
     	';
+
+    	// INIT DATE PICKER
+    	$data['js'] .= '
+			    	//Date picker
+			    $("#date_start").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end").datetimepicker({
+			        format: "L"
+			    });
+
+			    $("#date_start_edit").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_edit").datetimepicker({
+			        format: "L"
+			    });
+			';
 
     	$data['js'] .= 'bsCustomFileInput.init(); ';
 		$this->load->view('v_header', $data);
@@ -1210,6 +1261,9 @@ class Master extends CI_Controller {
 		if($this->input->post('btntambah')) {
 			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start')));			
 			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end')));
+
+			$date_start_regis =  date('Y-m-d',strtotime($this->input->post('date_start_regis')));			
+			$date_end_regis =  date('Y-m-d',strtotime($this->input->post('date_end_regis')));
 			
 			if(strtotime($this->input->post('date_start')) > strtotime($this->input->post('date_end'))) {
 				$this->session->set_flashdata('notif', 'error_add');
@@ -1217,11 +1271,17 @@ class Master extends CI_Controller {
 				redirect('master/periodesidangskripsi');
 			}
 
+			if(strtotime($this->input->post('date_start_regis')) > strtotime($this->input->post('date_end_regis'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai daftar lebih besar daripada tanggal akhir daftar');
+				redirect('master/periodesidangskripsi');
+			}
+
 			$is_active = 0;
 			if($this->input->post('is_active')) {
 				$is_active = 1;
 			}
-			$this->Periode_model->add_periode_sidang_skripsi($date_start,$date_end, $is_active);	
+			$this->Periode_model->add_periode_sidang_skripsi($date_start_regis, $date_end_regis, $date_start,$date_end, $is_active);	
 			$this->session->set_flashdata('notif', 'success_add');		
 			redirect('master/periodesidangskripsi');
 		}
@@ -1231,17 +1291,27 @@ class Master extends CI_Controller {
 			$date_start =  date('Y-m-d',strtotime($this->input->post('date_start_edit')));			
 			$date_end =  date('Y-m-d',strtotime($this->input->post('date_end_edit')));
 
+			$date_start_regis =  date('Y-m-d',strtotime($this->input->post('date_start_regis_edit')));			
+			$date_end_regis =  date('Y-m-d',strtotime($this->input->post('date_end_regis_edit')));
+
 			if(strtotime($this->input->post('date_start_edit')) > strtotime($this->input->post('date_end_edit'))) {
 				$this->session->set_flashdata('notif', 'error_add');
 				$this->session->set_flashdata('msg', 'Tanggal mulai lebih besar daripada tanggal akhir');
 				redirect('master/periodesidangskripsi');
 			}
+
+			if(strtotime($this->input->post('date_start_regis_edit')) > strtotime($this->input->post('date_end_regis_edit'))) {
+				$this->session->set_flashdata('notif', 'error_add');
+				$this->session->set_flashdata('msg', 'Tanggal mulai daftar lebih besar daripada tanggal akhir daftar');
+				redirect('master/periodesidangskripsi');
+			}
 			
 			$is_active = 0;
-			if($this->input->post('is_active_edit')) {
+			if($this->input->post('is_active_edit') == 1) {
 				$is_active = 1;
 			}
-			$this->Periode_model->update_data_periode_sidang($this->input->post('hidedit'),$date_start, $date_end, $is_active);
+
+			$this->Periode_model->update_data_periode_sidang_skripsi($this->input->post('hidedit'),$date_start_regis, $date_end_regis,$date_start, $date_end, $is_active);
 			$this->session->set_flashdata('notif', 'success_edit');
 			redirect('master/periodesidangskripsi');
 		}
@@ -1322,10 +1392,15 @@ class Master extends CI_Controller {
     			var id = $(this).attr("targetid");
     			var targetstart = $(this).attr("targetstart");
     			var targetend = $(this).attr("targetend");
+    			var targetstartregis = $(this).attr("targetstartregis");
+    			var targetendregis = $(this).attr("targetendregis");
     			var isactive = $(this).attr("targetactive");
     			$("#hidedit").val(id);
     			$("#date_start_edit_id").val(targetstart);
     			$("#date_end_edit_id").val(targetend);
+
+    			$("#date_start_regis_edit_id").val(targetstartregis);
+    			$("#date_end_regis_edit_id").val(targetendregis);
 
     			if(isactive == 1) {
     				$("#is_active_edit").prop( "checked", true ); 
@@ -1350,6 +1425,21 @@ class Master extends CI_Controller {
 			        format: "L"
 			    });
 			    $("#date_end").datetimepicker({
+			        format: "L"
+			    });
+
+			    	//Date picker
+			    $("#date_start_regis").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_regis").datetimepicker({
+			        format: "L"
+			    });
+
+			    $("#date_start_regis_edit").datetimepicker({
+			        format: "L"
+			    });
+			    $("#date_end_regis_edit").datetimepicker({
 			        format: "L"
 			    });
 

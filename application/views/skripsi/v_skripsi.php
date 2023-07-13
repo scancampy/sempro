@@ -87,7 +87,8 @@
                 <?php } else if(isset($registration_available)) { ?>
                   <div class="callout callout-info">
                     <h5>Daftar Sidang Skripsi</h5>
-                    <p><?php echo 'Periode '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('skripsi/daftar'); ?>">Daftar</a> untuk daftar sidang skripsi.</p>
+                    <p><?php echo 'Periode <strong>daftar sidang</strong> tanggal '.strftime("%d %B %Y", strtotime($periode_aktif->date_start_regis)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end_regis)); ?></p>
+                    <p><?php echo 'Periode <strong>sidang</strong> tanggal '.strftime("%d %B %Y", strtotime($periode_aktif->date_start)).' s/d '.strftime("%d %B %Y", strtotime($periode_aktif->date_end)); ?><br/>Klik tombol <a href="<?php echo base_url('skripsi/daftar'); ?>">Daftar</a> untuk daftar sidang skripsi.</p>
                   </div>
                <?php } else if($periodeaktif !=false) { ?>
                 <div class="callout callout-info">

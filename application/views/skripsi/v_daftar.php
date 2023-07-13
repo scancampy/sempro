@@ -159,6 +159,7 @@
                         <label for="juduledit" class="col-sm-12 col-form-label">File Naskah Skripsi</label>
                         <div class="col-sm-12">
                           <input type="file"  name="filekk" class="form-control" accept="application/pdf" id="filekk" >
+                          <small id="filekk" class="form-text text-muted">File PDF dan Maksimal 10 Mb</small>
                         </div>
                       </div>
                     </div>
@@ -174,7 +175,8 @@
                        <div class="form-group ">
                         <label for="filekb" class="col-sm-12 col-form-label">File Kartu Bimbingan</label>
                         <div class="col-sm-12">
-                          <input type="file"  name="filekb" class="form-control" accept="application/pdf" id="filekb" >
+                          <input type="file"  name="filekb" class="form-control"  id="filekb" >
+                          <small id="filekb" class="form-text text-muted">Maksimal 10 Mb</small>
                         </div>
                       </div>
                     </div>

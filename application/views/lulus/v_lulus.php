@@ -32,7 +32,8 @@
                   </div>
                   <div class="col-2">
                     <?php
-                    $eligible = true;
+                    $eligible = false;
+                    //print_r($skripsi);
                     if($lulus) {
                       foreach($lulus as $value) {
                         if($value->sk_filename != NULL) {
@@ -42,7 +43,15 @@
                       }
                     }
 
-                     if($eligible) { ?>
+                    if($skripsi) {
+                      foreach ($skripsi as $key => $value) {
+                        if(!empty($value->ruang_id)) {
+                          $eligible = true;
+                        }
+                      }
+                    }
+
+                     if($eligible && $roles == 'student') { ?>
                     <a href="<?php echo base_url('lulus/baru'); ?>" class="btn btn-block btn-primary btn-sm" >Daftar</a>
                   <?php } ?>
                   </div>

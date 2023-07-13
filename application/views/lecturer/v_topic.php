@@ -179,7 +179,7 @@
                                   class="btn btn-xs btn-primary validatebtn">Validasi</button>
                               <?php } ?>
 
-                      <?php if($info[0]->npk == $row->lecturer_npk && $row->kalab_verified_date == null) {  ?>
+                      <?php if($info[0]->npk == $row->lecturer_npk ) {  ?>
                       <button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama; ?>" targetkuota="<?php echo $row->kuota; ?>" targetaktif="<?php echo $row->is_active; ?>" targetidlab="<?php echo $row->id_lab; ?>" class="btn btn-xs btn-primary editbtn"  data-toggle="modal" periodebuka="<?php if(count($periode_topik[$k]) >0 ) { 
                         foreach($periode_topik[$k] as $idx => $pt) {
                           if($idx != 0) { echo ', '; }

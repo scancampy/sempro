@@ -47,10 +47,21 @@ class Penyesuaian extends CI_Controller {
 
 		if(empty($this->input->get('filtersemester'))) {
 			$activeid = $this->Periode_model->get_periode_sidang_aktif();
-			
-			$where = 'sempro.periode_sidang_id = '.$activeid->id.' ';
 
-			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
+			if(!empty($activeid)) {
+			
+				$where = 'sempro.periode_sidang_id = '.$activeid->id.' ';
+
+				$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
+			}
+		}
+
+		// UBAH PENGUJI SEMPRO
+		if($this->input->post('btn_submit_ubah_penguji')) {
+			$this->Sempro_model->update_dosbing($this->input->post('hid_sempro_ubah_penguji_id'), $this->input->post('cbo_penguji1_ubah_penguji'), $this->input->post('cbo_penguji2_ubah_penguji'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses mengubah dosbing');
+			redirect('penyesuaian/statussempro');
 		}
 
 		// HAPUS SEMPRO
@@ -338,6 +349,264 @@ class Penyesuaian extends CI_Controller {
 
 		$this->load->view('v_header', $data);
 		$this->load->view('penyesuaian/v_penyesuaian_sempro', $data);
+		$this->load->view('v_footer', $data);
+    }
+
+    public function statusskripsi() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		
+		$data['periode'] = $this->Periode_model->get_periode_sidang_skripsi();
+
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
+			$where = 'skripsi.periode_sidang_id = '.$this->input->get('filtersemester').' ';
+
+			$filtertampilkan = '';
+			if($this->input->get('filtertampilkan') == 'self') {
+				$where .= " AND (skripsi.pembimbing1 = '".$info[0]->npk."' OR skripsi.pembimbing2 = '".$info[0]->npk."' OR skripsi.penguji1 = '".$info[0]->npk."' OR skripsi.penguji2 = '".$info[0]->npk."') ";
+			}
+
+
+			$data['skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+			//print_r($data['sempro']);
+		}
+
+		if(empty($this->input->get('filtersemester'))) {
+			$activeid = $this->Periode_model->get_periode_sidang_skripsi_aktif();
+
+			if(!empty($activeid)) {
+			
+				$where = 'skripsi.periode_sidang_id = '.$activeid->id.' ';
+
+				$data['skripsi'] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+			}
+		}
+
+		// UBAH PENGUJI SKRIPSI
+		if($this->input->post('btn_submit_ubah_penguji')) {
+			$this->Skripsi_model->update_dosbing($this->input->post('hid_skripsi_ubah_penguji_id'), $this->input->post('cbo_penguji1_ubah_penguji'), $this->input->post('cbo_penguji2_ubah_penguji'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses mengubah dosbing');
+			redirect('penyesuaian/statusskripsi');
+		}
+
+		// HAPUS SEMPRO
+		if($this->input->post('btn_hapus_skripsi')) {
+			$this->Skripsi_model->hapus_skripsi($this->input->post('hid_skripsi_id'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses menghapus pendaftaran skripsi');
+			redirect('penyesuaian/statusskripsi');
+		}
+
+		// BATAL STATUS
+		if($this->input->post('btn_batal_validasi_kalab')) {
+
+			$this->Skripsi_model->batal_validasi($this->input->post('hid_skripsi_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi kalab');
+			redirect('penyesuaian/statusskripsi');
+		}
+
+		if($this->input->post('btn_batal_admin_plot_ruang')) {
+			$this->Skripsi_model->batal_plot_ruang($this->input->post('hid_skripsi_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan admin plot ruang');
+			redirect('penyesuaian/statusskripsi');
+		}
+
+		
+
+		//$data['ijinlab'] = $this->Ijin_lab_model->get_detail_where("ijin_lab.wd_validated_date IS NOT NULL AND ijin_lab.is_deleted = 0".$filtersemester.$filterlokasi, "ijin_lab_detail.ruang_lab_id ASC");
+
+		
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    	if($this->session->flashdata('notif') == 'success') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+		// TOMBOL PENYESUAIAN
+		$data['js'] .= "
+			function dateformat( d) {
+				return ( ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1)))  + '/' + d.getFullYear());
+			}
+
+			$('body').on('click', '.btnubahpenguji', function() {
+				$('#judul_ubah_penguji').html('');
+				$('#nrp_ubah_penguji').html('');
+				$('#namamhs_ubah_penguji').html('');
+				$('#ruang_ubah_penguji').html('');
+				$('#sidangdate_ubah_penguji').html('');
+				$('#dosbing2_ubah_penguji').html('');
+				$('#dosbing1_ubah_penguji').html('');
+
+				var semproid = $(this).attr('semproid');
+				$.post('".base_url('ajaxcall/load_sidang_skripsi_by_id')."', {id:semproid}, function(data) {
+					var json = JSON.parse(data);
+					console.log(json);
+					$('#judul_ubah_penguji').html(json['data'].judul);
+					$('#nrp_ubah_penguji').html(json['data'].nrp);
+					$('#namamhs_ubah_penguji').html(json['data'].nama);
+					$('#hid_skripsi_ubah_penguji_id').val(semproid);
+
+					if(json['data'].sidang_date != null) {
+						$('#sidangdate_ubah_penguji').html(dateformat(new Date(json['data'].sidang_date)));
+					} else { $('#sidangdate_ubah_penguji').html('-'); }
+					
+					
+					if(json['data'].roomlabel != null) {
+						$('#ruang_ubah_penguji').html(json['data'].roomlabel);
+					} else { $('#ruang_ubah_penguji').html('-'); }
+
+					if(json['data'].dosbing1 != null) {
+						$('#dosbing1_ubah_penguji').html(json['data'].dosbing1);
+					} else { $('#dosbing1_ubah_penguji').html('-'); }
+					
+					if(json['data'].dosbing2 != null) {
+						$('#dosbing2_ubah_penguji').html(json['data'].dosbing2);
+					} else { $('#dosbing2_ubah_penguji').html('-'); }
+
+					var penguji1 = json['data'].penguji1;
+					var penguji2 = json['data'].penguji2;
+
+					// load available dosen
+					$.post('".base_url('ajaxcall/load_eligible_dosen')."', {exclude_sempro_id:semproid, tglsidang: json['data'].sidang_date, jamsidang: json['data'].sidang_time}, function(data) {
+
+						
+						var json = JSON.parse(data);
+						
+						var cbostr = '';
+						for(var i=0; i<json['data'].length;i++) {
+							var selected = '';
+							if(json['data'][i].npk == penguji1) { selected=' selected=\"selected\" '; }
+							cbostr += '<option '+ selected +' value=\"' + json['data'][i].npk + '\">'+ json['data'][i].nama + '</option>';
+						}
+
+						$('#cbo_penguji1_ubah_penguji').html(cbostr);
+
+						var cbostr = '';
+						for(var i=0; i<json['data'].length;i++) {
+							var selected = '';
+							if(json['data'][i].npk == penguji2) { selected=' selected=\"selected\" '; }
+							cbostr += '<option '+ selected +' value=\"' + json['data'][i].npk + '\">'+ json['data'][i].nama + '</option>';
+						}
+
+						$('#cbo_penguji2_ubah_penguji').html(cbostr);
+					});
+				});
+			});
+
+			$('body').on('click', '.btnpenyesuaian', function() {
+				$('#judul').html('');
+				$('#nrp').html('');
+				$('#namamhs').html('');
+
+				var semproid = $(this).attr('semproid');
+				$.post('".base_url('ajaxcall/load_sidang_skripsi_by_id')."', {id:semproid}, function(data) {
+					var json = JSON.parse(data);
+					console.log(json);
+					$('#judul').html(json['data'].judul);
+					$('#nrp').html(json['data'].nrp);
+					$('#namamhs').html(json['data'].nama);
+					$('#hid_skripsi_id').val(semproid);
+					
+					if(json['data'].sidang_date != null) {
+						$('#sidangdate').html(dateformat(new Date(json['data'].sidang_date)));
+					} else { $('#sidangdate').html('-'); }
+					
+					
+					if(json['data'].roomlabel != null) {
+						$('#ruang').html(json['data'].roomlabel);
+					} else { $('#ruang').html('-'); }
+
+					if(json['data'].dosbing1 != null) {
+						$('#dosbing1').html(json['data'].dosbing1);
+					} else { $('#dosbing1').html('-'); }
+					
+					if(json['data'].dosbing2 != null) {
+						$('#dosbing2').html(json['data'].dosbing2);
+					} else { $('#dosbing2').html('-'); }
+					$('#penguji1').html(json['data'].namapenguji1);
+					$('#penguji2').html(json['data'].namapenguji2);
+
+					$('#tgldaftarsidang').html(dateformat(new Date(json['data'].registered_date)));
+
+					$('#validasikalabclock').removeAttr('class');
+
+					if(json['data'].kalab_npk_verified == null) {
+						$('#validasikalabclock').addClass('fas fa-clock bg-gray');
+						$('#div_validasi_kalab_content').hide();
+						$('#btn_batal_validasi_kalab').hide();
+						$('#tglvalidasikalab').html('');
+					} else {
+						$('#validasikalabclock').addClass('fas fa-check bg-green');
+						$('#div_validasi_kalab_content').show();
+						$('#tglvalidasikalab').html(dateformat(new Date(json['data'].kalab_verified_date)));
+						$('#btn_batal_validasi_kalab').show();
+					}
+
+
+					$('#adminplotruangclock').removeAttr('class');
+					if(json['data'].ruang_id == null) {
+						$('#adminplotruangclock').addClass('fas fa-clock bg-gray');
+						$('#div_admin_plot_ruang_content').hide();
+						$('#btn_batal_admin_plot_ruang').hide();
+						$('#tgladminplotruang').html('');
+					} else {
+						$('#adminplotruangclock').addClass('fas fa-check bg-green');
+						$('#div_admin_plot_ruang_content').show();
+						$('#tgladminplotruang').html(dateformat(new Date(json['data'].admin_plotting_date)));
+						$('#btn_batal_admin_plot_ruang').show();
+					}
+				});
+			});
+		";
+		
+
+		$this->load->view('v_header', $data);
+		$this->load->view('penyesuaian/v_penyesuaian_skripsi', $data);
 		$this->load->view('v_footer', $data);
     }
 
