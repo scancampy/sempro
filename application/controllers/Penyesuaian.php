@@ -352,6 +352,223 @@ class Penyesuaian extends CI_Controller {
 		$this->load->view('v_footer', $data);
     }
 
+    public function statuslulus() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		
+		$data['periode'] = $this->Periode_model->get();
+
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
+			$where = 'sempro.periode_sidang_id = '.$this->input->get('filtersemester').' ';
+
+			$filtertampilkan = '';
+			if($this->input->get('filtertampilkan') == 'self') {
+				$where .= " AND (sempro.pembimbing1 = '".$info[0]->npk."' OR sempro.pembimbing2 = '".$info[0]->npk."' OR sempro.penguji1 = '".$info[0]->npk."' OR sempro.penguji2 = '".$info[0]->npk."') ";
+			}
+
+
+			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
+			//print_r($data['sempro']);
+		}
+
+		if(empty($this->input->get('filtersemester'))) {
+			$activeid = $this->Periode_model->get_active_periode();
+
+			if(!empty($activeid)) {
+				$activeperiode = $this->Periode_model->get($activeid);
+			
+				$where = 'kelulusan.submit_date >= "'.$activeperiode[0]->date_start.'" AND kelulusan.submit_date <= "'.$activeperiode[0]->date_end.'" ';
+
+				$data['sempro'] = $this->Kelulusan_model->get($where);
+			}
+		}
+
+		
+
+		// HAPUS SEMPRO
+		if($this->input->post('btn_hapus_lulus')) {
+			$this->Kelulusan_model->hapus_lulus($this->input->post('hid_lulus_id'));
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses menghapus pendaftaran kelulusan');
+			redirect('penyesuaian/statuslulus');
+		}
+
+		// BATAL STATUS
+		if($this->input->post('btn_batal_validasi_admintu')) {
+
+			$this->Kelulusan_model->batal_validasi_admintu($this->input->post('hid_lulus_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi admin');
+			redirect('penyesuaian/statuslulus');
+		}
+
+		if($this->input->post('btn_batal_validasi_wd')) {
+			$this->Kelulusan_model->batal_validasi_wd($this->input->post('hid_lulus_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi WD');
+			redirect('penyesuaian/statuslulus');
+		}
+
+		
+		if($this->input->post('btn_batal_admin_validasi')) {
+
+			$this->Kelulusan_model->batal_validasi_admin($this->input->post('hid_lulus_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi admin');
+			redirect('penyesuaian/statuslulus');
+		}
+
+		if($this->input->post('btn_batal_validasi_dosbing')) {
+
+			$this->Kelulusan_model->batal_validasi_dosbing($this->input->post('hid_lulus_id'));
+
+			$this->session->set_flashdata('notif', 'success');
+			$this->session->set_flashdata('message', 'Sukses membatalkan validasi dosbing');
+			redirect('penyesuaian/statuslulus');
+		}
+
+		
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    	if($this->session->flashdata('notif') == 'success') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "success",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+    	if($this->session->flashdata('notif') == 'error') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "'.$this->session->flashdata('message').'"
+			      });
+    		';
+    	}
+
+		// TOMBOL PENYESUAIAN
+		$data['js'] .= "
+			function dateformat( d) {
+				return ( ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1)))  + '/' + d.getFullYear());
+			}
+
+			$('body').on('click', '.btnpenyesuaian', function() {
+				$('#judul').html('');
+				$('#nrp').html('');
+				$('#namamhs').html('');
+
+				var lulusid = $(this).attr('lulusid');
+				$.post('".base_url('ajaxcall/load_lulus_by_id')."', {id:lulusid}, function(data) {
+					var json = JSON.parse(data);
+					console.log(json);
+					$('#judul').html(json['data'][0].judul);
+					$('#nrp').html(json['data'][0].nrp);
+					$('#namamhs').html(json['data'][0].nama);
+					$('#hid_lulus_id').val(lulusid);
+
+					
+					if(json['data'][0].submit_date != null) {
+						$('#sidangdate').html(dateformat(new Date(json['data'][0].submit_date)));
+						$('#tgldaftarsidang').html(dateformat(new Date(json['data'][0].submit_date)));
+					} else { $('#sidangdate').html('-'); }
+					
+					
+					$('#validasidosbingclock').removeAttr('class');
+
+					if(json['data'][0].dosbing_validate_date == null) {
+						$('#validasidosbingclock').addClass('fas fa-clock bg-gray');
+						$('#div_validasi_dosbing_content').hide();
+						$('#btn_batal_validasi_dosbing').hide();
+						$('#tglvalidasidosbing').html('');
+					} else {
+						$('#validasidosbingclock').addClass('fas fa-check bg-green');
+						$('#div_validasi_dosbing_content').show();
+						$('#tglvalidasidosbing').html(dateformat(new Date(json['data'][0].dosbing_validate_date)));
+						$('#btn_batal_validasi_dosbing').show();
+					}
+
+
+					$('#adminvalidasiclock').removeAttr('class');
+					if(json['data'][0].admin_validate_date == null) {
+						$('#adminvalidasiclock').addClass('fas fa-clock bg-gray');
+						$('#div_admin_validasi_content').hide();
+						$('#btn_batal_admin_validasi').hide();
+						$('#tgladminvalidasi').html('');
+					} else {
+						$('#adminvalidasiclock').addClass('fas fa-check bg-green');
+						$('#div_admin_validasi_content').show();
+						$('#tgladminvalidasi').html(dateformat(new Date(json['data'][0].admin_validate_date)));
+						$('#btn_batal_admin_validasi').show();
+					}
+
+					$('#validasiwdclock').removeAttr('class');
+
+					if(json['data'][0].wd_validate_date == null) {
+						$('#validasiwdclock').addClass('fas fa-clock bg-gray');
+						$('#div_validasi_wd_content').hide();
+						$('#btn_batal_validasi_wd').hide();
+						$('#tglvalidasiwd').html('');
+					} else {
+						$('#validasiwdclock').addClass('fas fa-check bg-green');
+						$('#div_validasi_wd_content').show();
+						$('#tglvalidasiwd').html(dateformat(new Date(json['data'][0].wd_validate_date)));
+						$('#btn_batal_validasi_wd').show();
+					}
+
+					$('#validasiadmintuclock').removeAttr('class');
+
+					if(json['data'][0].sk_created_date == null) {
+						$('#validasiadmintuclock').addClass('fas fa-clock bg-gray');
+						$('#div_validasi_admintu_content').hide();
+						$('#btn_batal_validasi_admintu').hide();
+						$('#tglvalidasiadmintu').html('');
+					} else {
+						$('#validasiadmintuclock').addClass('fas fa-check bg-green');
+						$('#div_validasi_admintu_content').show();
+						$('#tglvalidasiadmintu').html(dateformat(new Date(json['data'][0].sk_created_date)));
+						$('#btn_batal_validasi_admintu').show();
+					}
+				});
+			});
+		";
+		
+
+		$this->load->view('v_header', $data);
+		$this->load->view('penyesuaian/v_penyesuaian_lulus', $data);
+		$this->load->view('v_footer', $data);
+    }
+
     public function statusskripsi() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		

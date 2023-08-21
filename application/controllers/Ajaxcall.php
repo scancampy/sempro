@@ -26,6 +26,14 @@ class Ajaxcall extends CI_Controller {
 		echo json_encode(array('data' => $sempro));
 	}
 
+	public function load_lulus_by_id() {
+		$id = $this->input->post('id');
+		$lulus = $this->Kelulusan_model->get("kelulusan.id = $id");
+		
+
+		echo json_encode(array('data' => $lulus));
+	}
+
 	public function load_sidang_skripsi_by_id() {
 		$id = $this->input->post('id');
 		$sempro = $this->Skripsi_model->get_student_skripsi_by_id($id);

@@ -107,7 +107,7 @@
                      </table>
                   </div>
 
-
+                  <!--
                   <div class="col-12 ">
                     <p class="text-sm"><strong>Upload Kartu Perwalian</strong>
                        <input type="file"  name="filekartuwali" class="form-control" accept="application/pdf" id="filekartuwali" >
@@ -118,6 +118,7 @@
                        <input type="file"  name="filebebaspakai" class="form-control" accept="application/pdf" id="filebebaspakai" >
                     </p>
                   </div>
+                -->
                   <div class="col-12 ">
                     <p class="text-sm"><strong>Upload Naskah Final</strong>
                        <input type="file"  name="filenaskahfinal" class="form-control" accept="application/pdf" id="filenaskahfinal" >

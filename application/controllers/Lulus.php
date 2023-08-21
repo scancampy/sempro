@@ -89,6 +89,7 @@ class Lulus extends CI_Controller {
     public function detail($id) {
 		$data = array();
 		$data['detail'] = $this->Kelulusan_model->get("kelulusan.id= '".$id."'");
+		//print_r($data['detail']);
 
 		$roles = $this->session->userdata('user')->roles;
 		$info = $this->session->userdata('user')->info;
@@ -97,7 +98,7 @@ class Lulus extends CI_Controller {
 			redirect('dashboard');
 		} else {
 			$data['stopik'] = $this->Student_topik_model->get('',$data['detail'][0]->student_topik_id);
-			$data['connect'] = $this->Student_model->connect_sim($data['stopik'][0]->student_nrp);
+			//$data['connect'] = $this->Student_model->connect_sim($data['stopik'][0]->student_nrp);
 			
 			// ambil mk prasyarat
 			$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0");
@@ -125,6 +126,110 @@ class Lulus extends CI_Controller {
 					$this->session->set_flashdata('notif', 'success');
 					$this->session->set_flashdata('msg', 'Sukses menyimpan judul');
 					redirect('lulus/detail/'.$id);
+				}
+
+				if($this->input->post('btnsubmitulang')) {
+					// filekartuwali
+					$filekartuwali = $data['detail'][0]->filekartuwali;
+					$erroruploadulang = '';
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/lulus';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'kartuwali_'.date('Ymdhis').'.pdf';		            
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ($this->upload->do_upload('filekartuwali')) {
+			          	$filekartuwali = $config['file_name'];
+			        } else {
+			        	if(file_exists($_FILES['filekartuwali']['tmp_name']) && is_uploaded_file($_FILES['filekartuwali']['tmp_name'])) {
+$erroruploadulang .= $this->upload->display_errors().'<br/>';
+ }
+						
+			        }
+
+			        // filebebaspakai
+			        $filebebaspakai = $data['detail'][0]->filebebaspakai;
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/lulus';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'bebaspakai_'.date('Ymdhis').'.pdf';
+
+		            
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ($this->upload->do_upload('filebebaspakai')) {
+			          	$filebebaspakai = $config['file_name'];
+			        } else {
+						if(file_exists($_FILES['filebebaspakai']['tmp_name']) && is_uploaded_file($_FILES['filebebaspakai']['tmp_name'])) {
+$erroruploadulang .= $this->upload->display_errors().'<br/>';
+ }
+			        }
+
+			        // naskah final
+			        $filenaskahfinal = $data['detail'][0]->filenaskahfinal;
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/lulus';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'naskahfinal_'.date('Ymdhis').'.pdf';
+
+		            
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ($this->upload->do_upload('filenaskahfinal')) {
+			          	$filenaskahfinal = $config['file_name'];
+			        } else {
+						if(file_exists($_FILES['filenaskahfinal']['tmp_name']) && is_uploaded_file($_FILES['filenaskahfinal']['tmp_name'])) {
+$erroruploadulang .= $this->upload->display_errors().'<br/>';
+ }
+			        }
+
+			         // file toefl
+			        $filetoefl = $data['detail'][0]->filetoefl;
+					$this->load->library('upload');
+
+					$config['upload_path']          = './uploads/lulus';
+		            $config['allowed_types']        = 'pdf';
+		            $config['max_size']             = 100000;
+		            $config['file_name']			= 'toefl_'.date('Ymdhis').'.pdf';
+
+		            
+
+		          	$this->upload->initialize($config);
+		          	$this->load->library('upload', $config);
+
+			        if ($this->upload->do_upload('filetoefl')) {
+			          	$filetoefl = $config['file_name'];
+			        } else {
+						if(file_exists($_FILES['filetoefl']['tmp_name']) && is_uploaded_file($_FILES['filetoefl']['tmp_name'])) {
+$erroruploadulang .= $this->upload->display_errors().'<br/>';
+ }
+			        }
+
+			        // update file
+			        $this->Kelulusan_model->update_file($data['detail'][0]->id, $filekartuwali, $filebebaspakai, $filenaskahfinal, $filetoefl);
+
+			        if($erroruploadulang != '') {
+						$this->session->set_flashdata('notif', 'error');
+		          		$this->session->set_flashdata('msg', 'Terdapat error:<br/>'.$erroruploadulang);
+			        } else {
+			        	$this->session->set_flashdata('notif', 'success');
+		          		$this->session->set_flashdata('msg', 'Sukses memperbaharui file');
+			        }
+					
+		          	redirect('lulus/detail/'.$id);
+
 				}
 			} else if($role->roles =='lecturer') {
 				// cek apakah betul dosbignya
@@ -224,6 +329,12 @@ class Lulus extends CI_Controller {
 			    });
 		';
 
+		// BUTTON UPLOAD ULANG
+		$data['js'] .= '$("#btnuploadulang").on("click", function(){
+			$("#divuploadulang").show();
+			$(this).hide();
+		});';
+
 		// FILE HANDLE
 		$data['js'] .= '
 			$("#filesklulus").on("change", function() {
@@ -238,6 +349,13 @@ class Lulus extends CI_Controller {
     		$data['js'] .= '
     			Toast.fire({
 			        icon: "success",
+			        title: "'.$this->session->flashdata('msg').'"
+			      });
+    		';
+    	} else if($this->session->flashdata('notif') == 'error') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
 			        title: "'.$this->session->flashdata('msg').'"
 			      });
     		';
@@ -287,7 +405,7 @@ class Lulus extends CI_Controller {
 
 		if($this->input->post('btnajukan')) {
 			// filekartuwali
-			$this->load->library('upload');
+			/*$this->load->library('upload');
 
 			$config['upload_path']          = './uploads/lulus';
             $config['allowed_types']        = 'pdf';
@@ -322,7 +440,7 @@ class Lulus extends CI_Controller {
 	          	$this->session->set_flashdata('notif', 'error_validated');
 	          	$this->session->set_flashdata('msg', $this->upload->display_errors());
 	          	redirect('lulus/baru');
-	        }
+	        }*/
 
 	        // filebebaspakai
 			$this->load->library('upload');
@@ -365,7 +483,7 @@ class Lulus extends CI_Controller {
 	        // update judul
 	        $this->Skripsi_model->update_judul_in_student_topic($data['sempro'][0]->student_topik_id, $this->input->post('judul'));
 
-	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), $filekartuwali, $filebebaspakai, $filenaskahfinal, $filetoefl);
+	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), null, null, $filenaskahfinal, $filetoefl);
 
 			$this->session->set_flashdata('notif', 'success');
           	$this->session->set_flashdata('msg', 'Suskes mendaftar kelulusan');
@@ -401,11 +519,12 @@ class Lulus extends CI_Controller {
 		$data['js'] .= '
 			$("#btnajukan").on("click", function(e) {
 				var jumfile = 0;
-				if($("#filekartuwali").get(0).files.length != 0) { jumfile++; }
-				if($("#filebebaspakai").get(0).files.length != 0) { jumfile++; }
+				// if($("#filekartuwali").get(0).files.length != 0) { jumfile++; }
+				// if($("#filebebaspakai").get(0).files.length != 0) { jumfile++; }
 				if($("#filenaskahfinal").get(0).files.length != 0) { jumfile++; }
+				if($("#filetoefl").get(0).files.length != 0) { jumfile++; }
 
-				if(jumfile < 3) {
+				if(jumfile < 2) {
 					Toast.fire({
 				        icon: "error",
 				        title: "Lengkapi file yang akan diupload"

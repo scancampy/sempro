@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome-free/css/all.min.css'); ?>">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/daterangepicker/daterangepicker.css'); ?>">
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css'); ?>">
    <!-- JQVMap -->
@@ -228,6 +230,12 @@
                   <p>Status Skripsi</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('penyesuaian/statuslulus'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'statuslulus' && $this->uri->segment(1) == 'penyesuaian' ) { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Status Kelulusan</p>
+                </a>
+              </li>
             </ul>
           </li>
             <?php } else if($role->roles == 'adminst') { ?>
@@ -403,6 +411,13 @@
               <a href="<?php echo base_url('laporan/skripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'skripsi') { echo  'active'; } ?>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Sidang Skripsi</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/kelulusan'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'kelulusan') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Kelulusan</p>
               </a>
             </li>
 

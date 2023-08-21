@@ -43,7 +43,7 @@
                       }
                     }
 
-                    if($skripsi) {
+                    if(!empty(@$skripsi)) {
                       foreach ($skripsi as $key => $value) {
                         if(!empty($value->ruang_id)) {
                           $eligible = true;

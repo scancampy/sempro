@@ -16,11 +16,23 @@ class Student_model extends CI_Model {
                 foreach ($mkprasyarat as $key => $value) {
                         $kodemk = explode(',', $value->kode_mk);
                         $where = '';
+                        $newwhere ='';
+
+                        //print_r($kodemk);
                         foreach($kodemk as $kode) {
-                                $this->db->or_where('kode_mk = ',trim($kode));
+                                if($where != '') { $where .= ' OR '; }
+                                $where .= ' kode_mk = "'.trim($kode).'" ';
+                                //$this->db->or_where('kode_mk = ',trim($kode));
                         }
-                        $this->db->where('student_nrp = ', $nrp);
+
+                        if($where != '') { $newwhere .= '('.$where.') AND '; }
+                        $newwhere .= ' student_nrp = "'.$nrp.'" ';
+                        $this->db->where($newwhere);
                         $q = $this->db->get('student_transcript');
+
+                        //echo $this->db->last_query();
+                        $hq = $q->result();
+                       // print_r($hq);
 
                         if($q->num_rows() > 0) {
                                 $qrow = $q->row();
@@ -422,11 +434,16 @@ class Student_model extends CI_Model {
         }
 
         public function get_transcript_from_array($kode_mk_arr, $nrp) {
+                $where = ' (';
                 foreach($kode_mk_arr  as $key => $value) {
-                        $this->db->or_where('kode_mk = ',trim($value));
+                        if($where != ' (') {
+                                $where .= ' OR ';
+                        }
+                        $where .= 'kode_mk = '.trim($value);
                 }
+                $where .= ') AND student_nrp = "'.$nrp.'" ';
                         
-                $this->db->where('student_nrp = ', $nrp);
+                $this->db->where($where);
                 $q = $this->db->get('student_transcript');
 
                 if($q->num_rows() > 0) {

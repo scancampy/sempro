@@ -167,7 +167,7 @@
                           echo '<span class="badge badge-success">Menunggu Validasi Kalab</span>';
                         } else if($row->admin_plotting_date == null) {
                           echo '<span class="badge badge-success">Menunggu Admin TU Ploting Ruang</span>';
-                        }  else if($row->naskah_upload_date == null) {
+                        }  else if(empty($row->naskah_filename)) {
                           echo '<span class="badge badge-success">Menunggu Mahasiswa Upload Naskah</span>';
                         } else {
                           echo '<span class="badge badge-success">Naskah telah diupload</span>';

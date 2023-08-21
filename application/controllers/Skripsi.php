@@ -355,7 +355,7 @@ class Skripsi extends CI_Controller {
 		          	$this->load->library('upload', $config);
 
 			        if ($this->upload->do_upload('file_naskah_revisi')) {
-			        	die();
+			        ///	die();
 			          $newnaskah = $config['file_name'];	
 			        }
 

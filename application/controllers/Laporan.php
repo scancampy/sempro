@@ -551,6 +551,157 @@ class Laporan extends CI_Controller {
 		$this->load->view('v_footer', $data);
     }
 
+    public function excelkelulusan() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		if($this->input->get('btncari')) {
+			$status = $this->input->get('filterstatus');
+			$rangetanggal = explode(' - ',$this->input->get('rangetanggal'));
+			$data['rangetanggal'] = $this->input->get('rangetanggal');
+			
+			$startdate = substr($rangetanggal[0],-4).'-'.substr($rangetanggal[0],0,2).'-'.substr($rangetanggal[0],3,2);
+
+			$enddate = substr($rangetanggal[1],-4).'-'.substr($rangetanggal[1],0,2).'-'.substr($rangetanggal[1],3,2);
+
+			if(strtotime($enddate) >= strtotime($startdate)) {
+				$where = ' kelulusan.submit_date >= "'.$startdate.'" AND kelulusan.submit_date <= "'.date('Y-m-d', strtotime($enddate )+86400).'" ';
+
+				if($status == 'waitdosbing') {
+					$where .= ' AND kelulusan.dosbing_validate_date IS NULL ';
+				} else if($status == 'waitadmin') {
+					$where .= ' AND kelulusan.admin_validate_date IS NULL ';
+				} else if($status == 'waitwd') {
+					$where .= ' AND kelulusan.wd_validate_date IS NULL ';
+				} else if($status == 'waitsk') {
+					$where .= ' AND kelulusan.sk_created_date IS NULL ';
+				} else if($status == 'skterbit') {
+					$where .= ' AND kelulusan.sk_created_date IS NOT NULL ';
+				}
+
+				$data['lulus'] = $this->Kelulusan_model->get($where);
+
+			} else {
+				$this->session->set_flashdata('notif', 'invalid_date');
+				redirect('laporan/kelulusan');
+			}
+		} else {
+			$startdate= date('Y-m-d', strtotime('-30 days'));
+			$enddate= date('Y-m-d', strtotime('+1 days'));
+			$where = ' kelulusan.submit_date BETWEEN "'.$startdate.'" AND "'.$enddate.'" ';
+			$data['lulus'] = $this->Kelulusan_model->get($where);
+
+		}
+
+
+		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: private",false);
+		header("Content-Disposition: attachment; filename=Laporan Kelulusan ".date('Y-m-d his').".xls");
+
+		$this->load->view('laporan/v_kelulusan_excel', $data);
+
+    }
+
+    public function kelulusan() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+		//print_r($info); die();
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		if($this->input->get('btncari')) {
+			$status = $this->input->get('filterstatus');
+			$rangetanggal = explode(' - ',$this->input->get('rangetanggal'));
+			$data['rangetanggal'] = $this->input->get('rangetanggal');
+			
+			$startdate = substr($rangetanggal[0],-4).'-'.substr($rangetanggal[0],0,2).'-'.substr($rangetanggal[0],3,2);
+
+			$enddate = substr($rangetanggal[1],-4).'-'.substr($rangetanggal[1],0,2).'-'.substr($rangetanggal[1],3,2);
+
+			if(strtotime($enddate) >= strtotime($startdate)) {
+				$where = ' kelulusan.submit_date >= "'.$startdate.'" AND kelulusan.submit_date <= "'.date('Y-m-d', strtotime($enddate )+86400).'" ';
+
+				if($status == 'waitdosbing') {
+					$where .= ' AND kelulusan.dosbing_validate_date IS NULL ';
+				} else if($status == 'waitadmin') {
+					$where .= ' AND kelulusan.admin_validate_date IS NULL ';
+				} else if($status == 'waitwd') {
+					$where .= ' AND kelulusan.wd_validate_date IS NULL ';
+				} else if($status == 'waitsk') {
+					$where .= ' AND kelulusan.sk_created_date IS NULL ';
+				} else if($status == 'skterbit') {
+					$where .= ' AND kelulusan.sk_created_date IS NOT NULL ';
+				}
+
+				$data['lulus'] = $this->Kelulusan_model->get($where);
+
+			} else {
+				$this->session->set_flashdata('notif', 'invalid_date');
+				redirect('laporan/kelulusan');
+			}
+		} else {
+			$startdate= date('Y-m-d', strtotime('-30 days'));
+			$enddate= date('Y-m-d', strtotime('+1 days'));
+			$where = ' kelulusan.submit_date BETWEEN "'.$startdate.'" AND "'.$enddate.'" ';
+			$data['lulus'] = $this->Kelulusan_model->get($where);
+
+		}
+
+		// DATE RANGE
+		$data['js'] = '
+			$("#rangetanggal").daterangepicker();
+		';
+
+		if($this->session->flashdata('notif') == 'invalid_date') {
+    		$data['js'] .= '
+    			Toast.fire({
+			        icon: "error",
+			        title: "Range tanggal yang dipilih salah"
+			      });
+    		';
+    	}
+		
+		// DATA TABLE
+		$data['js'] .= '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_kelulusan', $data);
+		$this->load->view('v_footer', $data);
+    }
+
     public function ijinlab() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		

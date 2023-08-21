@@ -60,7 +60,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <a href="<?php echo base_url('laporan/sempro'); ?>" class="btn btn-default">Reset</a>
+                    <a href="<?php echo base_url('penyesuaian/statusskripsi'); ?>" class="btn btn-default">Reset</a>
                     <button type="submit" name="btncari" value="btncari" class="btn btn-primary">Cari</button>
                   </div>
               </div>

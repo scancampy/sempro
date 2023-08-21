@@ -154,16 +154,25 @@
                   <div class="col-12">
                     <p class="text-sm"><strong>Download</strong></p>
                   </div>
+                  <?php if(!empty($detail[0]->filekartuwali)) { ?>
                     <div class="col-2"><a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filekartuwali); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span>Kartu Perwalian</a></div>
+                  <?php } ?>
+
+                  <?php if(!empty($detail[0]->filebebaspakai)) { ?>
                     <div class="col-2">
                       <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filebebaspakai); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span>Bukti Bebas Pakai</a>
                     </div>
+                  <?php } ?>
+                  <?php if(!empty($detail[0]->filenaskahfinal)) { ?>               
                     <div class="col-2">
                       <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filenaskahfinal); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span>Naskah Final</a>
                     </div>
+                  <?php } ?>
+                  <?php if(!empty($detail[0]->filetoefl)) { ?>
                     <div class="col-2">
                       <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->filetoefl); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span>Sertif TOEFL</a>
                     </div>
+                  <?php } ?>
                     <?php if(!is_null($detail[0]->sk_filename)) { ?>
                     <div class="col-2">
                       <a href="<?php echo base_url('uploads/lulus/'.$detail[0]->sk_filename); ?>" target="_blank" class="color-red btn btn-outline-danger btn-flat btn-sm"><span class="fa fa-file-pdf"></span>SK Lulus</a>
@@ -201,6 +210,42 @@
                                     <small><i class="fas fa-clock"></i>
                                       <?php echo strftime("%d %B %Y", strtotime($detail[0]->submit_date)); ?>
                                     </small>
+
+                                    <?php if($is_student) { ?>
+                                    <hr/>
+                                    <span class="btn btn-outline-primary" id="btnuploadulang">Upload Ulang</span>
+
+                  <div style="margin-top:20px; display:none;" id="divuploadulang">
+                    <form enctype="multipart/form-data" method="post" action="<?php echo base_url('lulus/detail/'.$id); ?>">
+                  <div class="col-12 " >
+                    <p class="text-sm"><strong>Upload Kartu Perwalian</strong>
+                       <input type="file"  name="filekartuwali" class="form-control" accept="application/pdf" id="filekartuwali" >
+                    </p>
+                  </div>
+                  <div class="col-12 ">
+                    <p class="text-sm"><strong>Upload Bukti Bebas Pemakaian Alat dan Bahan Lab</strong>
+                       <input type="file"  name="filebebaspakai" class="form-control" accept="application/pdf" id="filebebaspakai" >
+                    </p>
+                  </div>
+                
+                  <div class="col-12 ">
+                    <p class="text-sm"><strong>Upload Naskah Final</strong>
+                       <input type="file"  name="filenaskahfinal" class="form-control" accept="application/pdf" id="filenaskahfinal" >
+                       <small id="" class="form-text text-muted">Naskah lengkap dan final yang sudah selesai revisi</small>
+                    </p>
+                  </div>
+
+                  <div class="col-12 ">
+                    <p class="text-sm"><strong>Upload Sertifikasi TOEFL</strong>
+                       <input type="file"  name="filetoefl" class="form-control" accept="application/pdf" id="filetoefl" >
+                    </p>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-primary" name="btnsubmitulang" id="btnsubmitulang" value="submit">Submit</button>
+                  </div>
+                </form>
+                </div>
+              <?php } ?>
                                   </div>
                                 </div>
                               </div> <!-- end timeline item --> 
