@@ -40,7 +40,7 @@ class Penyesuaian extends CI_Controller {
 				$where .= " AND (sempro.pembimbing1 = '".$info[0]->npk."' OR sempro.pembimbing2 = '".$info[0]->npk."' OR sempro.penguji1 = '".$info[0]->npk."' OR sempro.penguji2 = '".$info[0]->npk."') ";
 			}
 
-
+			echo $where;
 			$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
 			//print_r($data['sempro']);
 		}
@@ -48,10 +48,8 @@ class Penyesuaian extends CI_Controller {
 		if(empty($this->input->get('filtersemester'))) {
 			$activeid = $this->Periode_model->get_periode_sidang_aktif();
 
-			if(!empty($activeid)) {
-			
+			if(!empty($activeid)) {			
 				$where = 'sempro.periode_sidang_id = '.$activeid->id.' ';
-
 				$data['sempro'] = $this->Sempro_model->get_student_sempro_with_where($where);
 			}
 		}
