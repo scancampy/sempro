@@ -547,7 +547,7 @@
 
                                       <div class="form-group">
                                         <label for="ceksyaratwd" class="col-sm-4 col-form-label">Dosbing 1</label>
-                                        <?php print_r($topik[0]->lecturer_npk); ?>
+                                        <?php // print_r($topik[0]->lecturer_npk); ?>
                                         <div class="col-12">
                                           <select class="form-control select2bs4" name="dosbing1" id="dosbing1" style="width: 100%;">
                                             <option selected="selected" value="0">[Pilih Dosbing 1]</option>

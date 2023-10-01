@@ -192,7 +192,7 @@ class Proposal extends CI_Controller {
 		$data['student'] = $this->Student_model->get($data['detail'][0]->student_nrp);
 		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
             	
-	  $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
+	 // $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
             	
 		$data['transcript_prasyarat'] = $this->Student_model->get_transcript($data['prasyarat'], $data['detail'][0]->student_nrp);
 
@@ -229,7 +229,13 @@ class Proposal extends CI_Controller {
             $data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
             if($data['kalab']) {
             	$data['is_kalab'] = true;
-            	 $data['dosbing'] = $this->Lecturer_model->get_with_beban();
+            	// GET BEBAN DOSEN
+							$pa = $this->Periode_model->get_active_periode();
+							
+            	$data['dosbing'] = $this->Lecturer_model->get_with_beban_total('',$pa);
+
+            //	print_r($data['dosbing']);
+
             }
           }
         }
@@ -254,7 +260,11 @@ class Proposal extends CI_Controller {
 	          if($info->user_type == 'lecturer') {
 		          $data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
 		          
-		          $data['dosbing'] = $this->Lecturer_model->get_with_beban();
+		          // GET BEBAN DOSEN
+							$pa = $this->Periode_model->get_active_periode();
+							
+            	$data['dosbing'] = $this->Lecturer_model->get_with_beban_total('',$pa);
+
 
 		        }
         }
@@ -267,7 +277,11 @@ class Proposal extends CI_Controller {
 
 		          if(!is_null($data['detail'][0]->wd_final_npk_rejected)) {
 								$data['kalab'] = $this->Roles_model->is_kalab($info->info[0]->npk,$data['detail'][0]->topik_id );
-		          	$data['dosbing'] = $this->Lecturer_model->get_with_beban();
+		          	// GET BEBAN DOSEN
+							$pa = $this->Periode_model->get_active_periode();
+							
+            	$data['dosbing'] = $this->Lecturer_model->get_with_beban_total('',$pa);
+
 
 		          }
 		        }
