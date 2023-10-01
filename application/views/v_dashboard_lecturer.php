@@ -217,7 +217,7 @@
           <?php if($wd != false) { ?>
             <?php if(count($wd_topic) >0) { ?>
             <div class="col-md-4 col-sm-6 col-12">
-              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+              <a href="<?php echo base_url('lecturer/proposal?selectstatus=validasiwd&filterlab=all&btncari=btncari'); ?>">
                 <div class="info-box">
                   <span class="info-box-icon bg-info"><?php echo count($wd_topic); ?></span>
 
@@ -234,12 +234,12 @@
 
         <?php if(@$need_wd_validation) { ?>
             <div class="col-md-4 col-sm-6 col-12">
-              <a href="<?php echo base_url('lecturer/proposal'); ?>">
+              <a href="<?php echo base_url('lecturer/proposal?selectstatus=validasidosbingwd&filterlab=all&btncari=btncari'); ?>">
                 <div class="info-box">
                   <span class="info-box-icon bg-info"><?php echo $need_wd_validation; ?></span>
 
                   <div class="info-box-content" style="line-height: 14px;">
-                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi anda sebagai WD</span>
+                    <span ><strong>Proposal</strong><br/>Membutuhkan validasi final anda sebagai WD</span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>

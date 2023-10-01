@@ -388,6 +388,10 @@ class Lecturer extends CI_Controller {
 		$data['info'] = $this->session->userdata('user')->info;
 		$data['topik'] = $this->Topik_model->get('', '', 0, $data['info'][0]->npk);
 
+		// GET PERIODE AKTIF
+		$periodeaktif = $this->Periode_model->get_active_periode();
+		$data['dataperiodeaktif'] = $this->Periode_model->get($periodeaktif);
+		
 		// cek kalab
 		$data['is_wd'] = false;
 		$data['is_kalab'] = false;
@@ -407,16 +411,17 @@ class Lecturer extends CI_Controller {
 		$data['lab'] = $this->Lab_model->get();
 	
 		// GET STUDENT TOPIC
-		$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '');
+		$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null ,'student_topik.created_date BETWEEN "'.$data['dataperiodeaktif'][0]->date_start.'" AND "'.$data['dataperiodeaktif'][0]->date_end.'" ');
 		
 		if($this->input->get('topiksaya')) {
 			//die();
-			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, 'topik.lecturer_npk = "'.$data['info'][0]->npk.'"');
+			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, 'topik.lecturer_npk = "'.$data['info'][0]->npk.'" AND student_topik.created_date BETWEEN "'.$data['dataperiodeaktif'][0]->date_start.'" AND "'.$data['dataperiodeaktif'][0]->date_end.'" ');
 		}
 
 		if($this->input->get('bimbingansaya')) {
-			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, ' (student_topik.lecturer1_npk = "'.$data['info'][0]->npk.'" OR student_topik.lecturer2_npk = "'.$data['info'][0]->npk.'")');
+			$data['student_topic'] = $this->Student_topik_model->get('', '', 0, '', '', null, ' (student_topik.lecturer1_npk = "'.$data['info'][0]->npk.'" OR student_topik.lecturer2_npk = "'.$data['info'][0]->npk.'") AND student_topik.created_date BETWEEN "'.$data['dataperiodeaktif'][0]->date_start.'" AND "'.$data['dataperiodeaktif'][0]->date_end.'" ');
 		}
+
 
 		// DATA TABLE
 		$data['js'] = '

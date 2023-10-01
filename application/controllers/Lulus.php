@@ -29,9 +29,9 @@ class Lulus extends CI_Controller {
 			} else if($role->roles == 'lecturer') {
 				$data['roles'] = 'lecturer';
 				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."') AND student_topik.is_deleted = 0");					
-			} else if($role->roles == 'wd') {
+			} else if($role->roles == 'wd') {				
 				$data['roles'] = 'lecturer';
-				$data['lulus'] = $this->Kelulusan_model->get("(student_topik.lecturer1_npk = '".$info[0]->npk."' OR student_topik.lecturer2_npk = '".$info[0]->npk."' OR kelulusan.dosbing_validate_date IS NOT NULL) AND student_topik.is_deleted = 0");	
+				$data['lulus'] = $this->Kelulusan_model->get("(kelulusan.wd_validate_date IS NULL AND kelulusan.admin_validate_date IS NOT NULL) AND student_topik.is_deleted = 0");	
 				//print_r($data['lulus']);
 				//die();				
 			} else if($role->roles == 'adminst') {
