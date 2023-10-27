@@ -174,7 +174,7 @@ class Student_topik_model extends CI_Model {
                 $this->db->order_by('is_verified', 'desc');
                 $q = $this->db->get('student_topik');
 
-               // print_r($this->db->last_query());
+                //print_r($this->db->last_query());
                //echo $this->db->last_query();
                 return $q->result();
         }

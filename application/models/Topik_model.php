@@ -115,9 +115,9 @@ class Topik_model extends CI_Model {
                         $this->db->where('topik.kalab_verified_date IS NOT NULL');
                 }
 
-                if($periode != 'all') {
+              /*  if($periode != 'all') {
                         $this->db->where(' topik.is_active = '.$periode);
-                }
+                }*/
                 
 
                 $this->db->where('topik.is_deleted', $is_deleted);

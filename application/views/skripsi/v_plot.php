@@ -144,7 +144,7 @@
                         $now = time(); 
                         $datediff = $now - $curdate;
 
-                        if(round($datediff / (60 * 60 * 24)) >= -4 && $curdate < strtotime($periodeaktif->date_end.' 00:00:00')) {
+                        if(round($datediff / (60 * 60 * 24)) >= -2 && $curdate < strtotime($periodeaktif->date_end.' 00:00:00')) {
                           $bolehplot = false;
                         }
 

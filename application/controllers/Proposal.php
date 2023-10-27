@@ -154,6 +154,8 @@ class Proposal extends CI_Controller {
     if($this->input->post('btnkalabpilihdosbingsubmit')) {
     	$info = $this->session->userdata('user');
       if($info->user_type == 'lecturer') {
+      	// cek dulu kuota dosbingnya 
+      	$bebandosbing1 = $this->Lecturer_model->get_with_beban_total($idlab, $selectedsemester);
       	$this->Student_topik_model->update_dosbing($id, $this->input->post('dosbing1'),$this->input->post('dosbing2'));
 
           $this->session->set_flashdata('notif', 'success_dosbing');
@@ -188,11 +190,13 @@ class Proposal extends CI_Controller {
 		}
 		$data['prasyarat'] = $this->Topik_model->get_prasyarat_by_id($data['detail'][0]->topik_id);
 		$data['topik'] = $this->Topik_model->get($data['detail'][0]->topik_id);
+		//print_r($data['detail'][0]->topik_id);
+		//die();
 		$data['kuota'] = $this->Topik_model->get_kuota($data['detail'][0]->topik_id);
 		$data['student'] = $this->Student_model->get($data['detail'][0]->student_nrp);
 		$skripsi = $this->Eligibility_model->get('nama_alias = "skripsi"');
             	
-	 // $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
+	  $data['cekks'] = $this->Student_model->check_mk_in_ks($data['detail'][0]->student_nrp, $skripsi[0]->nilai);
             	
 		$data['transcript_prasyarat'] = $this->Student_model->get_transcript($data['prasyarat'], $data['detail'][0]->student_nrp);
 

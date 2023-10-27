@@ -51,7 +51,10 @@
                       }
                     }
 
+                    if(!empty($lulus)) { $eligible = false; }
+
                      if($eligible && $roles == 'student') { ?>
+                    
                     <a href="<?php echo base_url('lulus/baru'); ?>" class="btn btn-block btn-primary btn-sm" >Daftar</a>
                   <?php } ?>
                   </div>

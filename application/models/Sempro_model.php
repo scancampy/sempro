@@ -429,17 +429,39 @@ class Sempro_model extends CI_Model {
         // GET AVAILABLE DOSEN YG BISA SIDANG SEMPRO
         // UNTUK AJAX CALL
         public function get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang) {
-            $q = $this->db->query(
-                "SELECT lecturer.npk, lecturer.nama FROM lecturer WHERE lecturer.npk NOT IN 
-                (SELECT sempro.penguji1 FROM sempro WHERE sempro.id != ".$exclude_sempro_id." 
-                        AND sempro.sidang_time = ".$tglsidang." 
-                        AND sempro.sidang_time= ".$jamsidang.") AND 
-                lecturer.npk NOT IN 
-                (SELECT sempro.penguji2 FROM sempro WHERE sempro.id != ".$exclude_sempro_id."  AND sempro.sidang_time = ".$tglsidang." AND sempro.sidang_time= ".$jamsidang.") AND lecturer.npk NOT IN 
-                (SELECT sempro.pembimbing1 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.") AND lecturer.npk NOT IN (SELECT sempro.pembimbing2 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.")
-                ;");
+            // cek apakah ada pembimbing 2
+            $p = $this->db->get_where('sempro', array('id' => $exclude_sempro_id));
 
-            return $q->result();
+            if($p->num_rows() > 0) {
+                $prow = $p->row();
+                if(empty($prow->pembimbing2)) {
+                        $q = $this->db->query(
+                                "SELECT lecturer.npk, lecturer.nama FROM lecturer WHERE lecturer.npk NOT IN 
+                                (SELECT sempro.penguji1 FROM sempro WHERE sempro.id != ".$exclude_sempro_id." 
+                                        AND sempro.sidang_time = ".$tglsidang." 
+                                        AND sempro.sidang_time= ".$jamsidang.") AND 
+                                lecturer.npk NOT IN 
+                                (SELECT sempro.penguji2 FROM sempro WHERE sempro.id != ".$exclude_sempro_id."  AND sempro.sidang_time = ".$tglsidang." AND sempro.sidang_time= ".$jamsidang.") AND lecturer.npk NOT IN 
+                                (SELECT sempro.pembimbing1 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.")
+                                ;");
+
+                            return $q->result();
+                } else {
+                        $q = $this->db->query(
+                                "SELECT lecturer.npk, lecturer.nama FROM lecturer WHERE lecturer.npk NOT IN 
+                                (SELECT sempro.penguji1 FROM sempro WHERE sempro.id != ".$exclude_sempro_id." 
+                                        AND sempro.sidang_time = ".$tglsidang." 
+                                        AND sempro.sidang_time= ".$jamsidang.") AND 
+                                lecturer.npk NOT IN 
+                                (SELECT sempro.penguji2 FROM sempro WHERE sempro.id != ".$exclude_sempro_id."  AND sempro.sidang_time = ".$tglsidang." AND sempro.sidang_time= ".$jamsidang.") AND lecturer.npk NOT IN 
+                                (SELECT sempro.pembimbing1 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.") AND lecturer.npk NOT IN (SELECT sempro.pembimbing2 FROM sempro WHERE sempro.id = ".$exclude_sempro_id.")
+                                ;");
+
+                            return $q->result();
+                }
+
+            } else { return false; }
+            
         }
 
 

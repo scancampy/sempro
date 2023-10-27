@@ -67,7 +67,7 @@ class Ajaxcall extends CI_Controller {
 
 		$dosenavailable = $this->Sempro_model->get_available_dosen($exclude_sempro_id,$tglsidang,$jamsidang);
 
-		echo json_encode(array('data' => $dosenavailable));
+		echo json_encode(array('data' => $dosenavailable, 'exclude_sempro_id' => $exclude_sempro_id, 'tglsidang' => $tglsidang, 'jamsidang' => $jamsidang));
 	}
 
 	public function load_eligible_dosen_skripsi() {

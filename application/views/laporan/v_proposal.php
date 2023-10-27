@@ -53,8 +53,10 @@
                               }
                             ?>
                           <select class="form-control" name="filtersemester">
-                            <?php foreach($semester as $l) { ?>
-                              <option value="<?php echo $l->id; ?>" <?php if($selectedsemester == $l->id) { echo 'selected'; $aktif_str = ' (aktif)'; } else { $aktif_str = ''; } ?>><?php echo $l->nama.'/'.($l->tahun+1).$aktif_str; ?></option>
+                            <?php foreach($semester as $l) { 
+                              if($l->id==$active_semester) { $aktif_str = ' (aktif)'; } else { $aktif_str = ''; }
+                              ?>
+                              <option value="<?php echo $l->id; ?>" <?php if($selectedsemester == $l->id) { echo 'selected';  }  ?>><?php echo $l->nama.'/'.($l->tahun+1).$aktif_str; ?></option>
                             <?php } ?>
                           </select>
                         </div>

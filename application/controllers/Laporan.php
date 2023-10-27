@@ -55,7 +55,7 @@ class Laporan extends CI_Controller {
 	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
 	    	}
 	    	
-	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
+	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$selsemester[0]->date_start.'" AND "'.$selsemester[0]->date_end.'") ';
 	    } else {
 	    	$data['selsemester'] = $this->Periode_model->get($data['active_semester']);
 	    }
@@ -118,7 +118,7 @@ class Laporan extends CI_Controller {
 	    		$enddate = $selsemester[0]->tahun.'-01-31'; // Januari
 	    	}
 	    	
-	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$startdate.'" AND "'.$enddate.'") ';
+	    	$wherestr .= ' AND (student_topik.created_date BETWEEN "'.$selsemester[0]->date_start.'" AND "'.$selsemester[0]->date_end.'") ';
 	    }
 
 		// GET STUDENT TOPIC

@@ -179,7 +179,7 @@ class Penyesuaian extends CI_Controller {
 				var semproid = $(this).attr('semproid');
 				$.post('".base_url('ajaxcall/load_sidang_by_id')."', {id:semproid}, function(data) {
 					var json = JSON.parse(data);
-					console.log(json);
+					
 					$('#judul_ubah_penguji').html(json['data'].judul);
 					$('#nrp_ubah_penguji').html(json['data'].nrp);
 					$('#namamhs_ubah_penguji').html(json['data'].nama);
@@ -208,7 +208,8 @@ class Penyesuaian extends CI_Controller {
 					// load available dosen
 					$.post('".base_url('ajaxcall/load_eligible_dosen')."', {exclude_sempro_id:semproid, tglsidang: json['data'].sidang_date, jamsidang: json['data'].sidang_time}, function(data) {
 
-						
+
+						console.log(data);
 						var json = JSON.parse(data);
 						
 						var cbostr = '';
