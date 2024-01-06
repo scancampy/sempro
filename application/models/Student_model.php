@@ -380,6 +380,12 @@ class Student_model extends CI_Model {
                 }                       
         }
 
+        public function get_where($where) {
+                $q = $this->db->get_where('student', $where);
+
+                return $q->result();
+        }
+
         public function update($csv) {
                 $i =0;
                 $valid = false;

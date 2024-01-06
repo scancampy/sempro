@@ -427,6 +427,12 @@
                 <p>Beban Dosen</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('laporan/statusmahasiswa'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'statusmahasiswa') { echo  'active'; } ?>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Status Mahasiswa</p>
+              </a>
+            </li>
           </ul>
           <?php } ?>
           <li class="nav-header">SETTINGS</li>

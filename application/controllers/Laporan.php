@@ -74,6 +74,145 @@ class Laporan extends CI_Controller {
 
     }
 
+    public function excelstatusmahasiswa() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		if($this->input->get('angkatan')) {
+			$angkatan = trim(substr($this->input->get('angkatan'), -2));
+			// GET STUDENT
+			$data['student'] = $this->Student_model->get_where("nrp LIKE '%".$angkatan."%'");
+
+			$nrps = array();
+			foreach ($data['student'] as $key => $value) {
+				$nrps[] = $value->nrp;
+			}
+
+			$data['status_proposal'] = $this->_getstatusproposal($nrps);
+			$data['status_sempro'] = $this->_getstatussempro($nrps);
+			$data['status_skripsi'] = $this->_getstatusskripsi($nrps);
+			$data['status_lulus'] = $this->_getstatuskelulusan($nrps);
+		}
+
+
+
+		header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: private",false);
+		header("Content-Disposition: attachment; filename=Laporan Status Mahasiswa ".date('Y-m-d his').".xls");
+
+		$this->load->view('laporan/v_status_mahasiswa_excel', $data);
+
+    }
+
+    private function _getstatusproposal($nrps) {
+
+    	foreach ($nrps as $key => $value) {
+    		$wherestr = 'student_topik.is_deleted = 0 AND student_topik.student_nrp = "'.$value.'"';
+	    
+    		$student_topik[$key] = $this->Student_topik_model->get_where($wherestr);	
+    	}
+
+    	return $student_topik;
+    }
+
+    private function _getstatussempro($nrps) {
+    	foreach ($nrps as $key => $value) {
+    		$where = 'sempro.is_deleted = 0 AND sempro.nrp = "'.$value.'"';
+	    	$sempro[$key] = $this->Sempro_model->get_student_sempro_with_where($where);
+	    }
+
+	    return $sempro;
+    }
+
+    private function _getstatusskripsi($nrps) {
+    	foreach ($nrps as $key => $value) {
+    		$where = 'skripsi.is_deleted = 0 AND skripsi.nrp = "'.$value.'"';
+	    	
+	    	$skripsi[$key] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+	    }
+
+	    return $skripsi;
+    }
+
+    private function _getstatuskelulusan($nrps) {
+    	foreach ($nrps as $key => $value) {
+    		$where = 'kelulusan.is_deleted = 0 AND kelulusan.nrp = "'.$value.'"';
+	    	$lulus[$key] = $this->Kelulusan_model->get($where);
+	    }
+
+	    return $lulus;
+    }
+
+
+    public function statusmahasiswa() {
+    	$data = array();
+		$info = $this->session->userdata('user')->info;		
+		$roles = $this->session->userdata('user')->roles;
+		$data['is_lecturer'] = false;
+
+		foreach($roles as $role) {
+			if($role->roles == 'student') {
+				redirect('dashboard');
+			} else if($role->roles == 'lecturer') {
+				$data['is_lecturer'] = true;
+			}
+		}
+
+		if($this->input->get('angkatan')) {
+			$angkatan = trim(substr($this->input->get('angkatan'), -2));
+			// GET STUDENT
+			$data['student'] = $this->Student_model->get_where("nrp LIKE '%".$angkatan."%'");
+
+			$nrps = array();
+			foreach ($data['student'] as $key => $value) {
+				$nrps[] = $value->nrp;
+			}
+
+			$data['status_proposal'] = $this->_getstatusproposal($nrps);
+			$data['status_sempro'] = $this->_getstatussempro($nrps);
+			$data['status_skripsi'] = $this->_getstatusskripsi($nrps);
+			$data['status_lulus'] = $this->_getstatuskelulusan($nrps);
+		}
+
+		
+		
+
+		//print_r($data['status_proposal']);
+		
+
+		// DATA TABLE
+		$data['js'] = '
+			$("#example2").DataTable({
+		      "paging": true,
+		      "lengthChange": false,
+		      "searching": true,
+		      "ordering": true,
+		      "info": true,
+		      "autoWidth": true,
+		      "responsive": true,
+		       lengthMenu: [
+		            [50, 100, -1],
+		            [50, 100, "All"],
+		        ],
+		    });';
+
+		$this->load->view('v_header', $data);
+		$this->load->view('laporan/v_status_mahasiswa', $data);
+		$this->load->view('v_footer', $data);
+    }
+
     public function proposal() {
     	$data = array();
 		$info = $this->session->userdata('user')->info;		
