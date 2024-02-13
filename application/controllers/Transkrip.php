@@ -23,7 +23,7 @@ class Transkrip extends CI_Controller {
 
 		$lecturer = false;
 		foreach($roles as $value) {
-			if($value->roles =='lecturer') {
+			if($value->roles =='lecturer' || $value->roles == 'adminst') {
 				$lecturer = true;
 			}
 		}
