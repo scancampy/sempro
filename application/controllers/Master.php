@@ -1786,7 +1786,7 @@ class Master extends CI_Controller {
 		$data['eligibility'] = $this->MK_lulus_model->get();
 
 		if($this->input->post('btntambah')) {
-			$this->MK_lulus_model->add($this->input->post('kode_mk'), $this->input->post('nama_mk'));
+			$this->MK_lulus_model->add($this->input->post('kode_mk'), $this->input->post('nama_mk'), $this->input->post('angkatan'), $this->input->post('nisbi'));
 			$this->session->set_flashdata('notif', 'success');
 			$this->session->set_flashdata('message', 'Sukses menambahkan mata kuliah');
 			redirect('master/mklulus');
@@ -1794,7 +1794,7 @@ class Master extends CI_Controller {
 
 		// EDIT ELIGIBILITY
 		if($this->input->post('btnubah')) {
-			$this->MK_lulus_model->update($this->input->post('hid_id'),$this->input->post('edit_kode_mk'), $this->input->post('edit_nama_mk'));
+			$this->MK_lulus_model->update($this->input->post('hid_id'),$this->input->post('edit_kode_mk'), $this->input->post('edit_nama_mk'), $this->input->post('angkatanedit'), $this->input->post('nisbiedit'));
 			$this->session->set_flashdata('notif', 'success');
 			$this->session->set_flashdata('message', 'Sukses mengubah mata kuliah');
 			redirect('master/mklulus');
@@ -1837,9 +1837,13 @@ class Master extends CI_Controller {
     			var id = $(this).attr("targetid");
     			var nama = $(this).attr("targetnama");
     			var kode = $(this).attr("targetkode");
+    			var angkatan = $(this).attr("targetangkatan");
+    			var nisbi = $(this).attr("targetnisbi");
     			$("#hid_id").val(id);
     			$("#edit_nama_mk").val(nama);
     			$("#edit_kode_mk").val(kode);
+    			$("#angkatanedit").val(angkatan);
+    			$("#nisbiedit").val(nisbi);
     		});
     	';
 

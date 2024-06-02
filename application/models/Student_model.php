@@ -34,14 +34,27 @@ class Student_model extends CI_Model {
                         $hq = $q->result();
                        // print_r($hq);
 
+                        $nis ='';
+                        if($value->nisbi == 4) { $nis =  'A'; } 
+                              else if($value->nisbi == 3.5) { $nis =  'AB'; }
+                              else if($value->nisbi == 3) { $nis =  'B'; }
+                              else if($value->nisbi == 2.5) { $nis =  'BC'; }
+                              else if($value->nisbi == 2) { $nis =  'C'; }
+                              else if($value->nisbi == 1) { $nis =  'D'; } 
+                              else { $nis =  'E';   } 
+                              
                         if($q->num_rows() > 0) {
+                                
+                                
                                 $qrow = $q->row();
                                 $html .= '<tr><td>'.$qrow->kode_mk.'</td>';
                                 $html .= '<td>'.$value->nama_mk.'</td>';
+                                $html .= '<td>'.$nis.'</td>';
                                 $html .= '<td>'.$qrow->nisbi.'</td></tr>';
                         } else {
                                 $html .= '<tr><td>'.character_limiter($value->kode_mk, 10).'</td>';
                                 $html .= '<td>'.$value->nama_mk.'</td>';
+                                $html .= '<td>'.$nis.'</td>';
                                 $html .= '<td>-</td></tr>';       
                         }
                 }

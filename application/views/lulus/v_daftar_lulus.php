@@ -113,12 +113,13 @@
                        <input type="file"  name="filekartuwali" class="form-control" accept="application/pdf" id="filekartuwali" >
                     </p>
                   </div>
+                -->
                   <div class="col-12 ">
                     <p class="text-sm"><strong>Upload Bukti Bebas Pemakaian Alat dan Bahan Lab</strong>
                        <input type="file"  name="filebebaspakai" class="form-control" accept="application/pdf" id="filebebaspakai" >
                     </p>
                   </div>
-                -->
+                
                   <div class="col-12 ">
                     <p class="text-sm"><strong>Upload Naskah Final</strong>
                        <input type="file"  name="filenaskahfinal" class="form-control" accept="application/pdf" id="filenaskahfinal" >

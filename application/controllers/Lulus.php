@@ -100,6 +100,7 @@ class Lulus extends CI_Controller {
 			$data['stopik'] = $this->Student_topik_model->get('',$data['detail'][0]->student_topik_id);
 			//$data['connect'] = $this->Student_model->connect_sim($data['stopik'][0]->student_nrp);
 			
+
 			// ambil mk prasyarat
 			$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0");
 			$data['table_prasyarat'] = $this->Student_model->generate_table_prasyarat($mkprasyarat, $data['stopik'][0]->student_nrp);
@@ -121,6 +122,15 @@ class Lulus extends CI_Controller {
 		foreach($roles as $role) {
 			if($role->roles =='student') {
 				$data['is_student'] = true;
+
+				$angkatan = '20'.substr($info[0]->nrp, 4, 2);
+				$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0 AND angkatan = '".$angkatan."'");
+
+				$data['table_prasyarat'] = $this->Student_model->generate_table_prasyarat($mkprasyarat, $data['stopik'][0]->student_nrp);
+
+//				print_r($mkprasyarat);
+//				die();	
+
 				if($this->input->post('btnsimpanjudul')) {
 					$this->Student_topik_model->update($data['detail'][0]->student_topik_id, array("judul" => $this->input->post("txtjudul")));
 					$this->session->set_flashdata('notif', 'success');
@@ -375,6 +385,13 @@ $erroruploadulang .= $this->upload->display_errors().'<br/>';
 		$roles = $this->session->userdata('user')->roles;
 		$data['roles'] = '';
 
+		// cek udah ada data kelulusan belum
+		$cek = $this->Kelulusan_model->get(array('kelulusan.nrp' => $info[0]->nrp, 'kelulusan.is_deleted' => 0));
+		if($cek) {
+			redirect('dashboard');
+		}
+		
+
 		foreach($roles as $role) {
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
@@ -421,7 +438,7 @@ $erroruploadulang .= $this->upload->display_errors().'<br/>';
 	          	$this->session->set_flashdata('notif', 'error_validated');
 	          	$this->session->set_flashdata('msg', $this->upload->display_errors());
 	          	redirect('lulus/baru');
-	        }
+	        } */
 
 	        // filebebaspakai
 			$this->load->library('upload');
@@ -440,7 +457,7 @@ $erroruploadulang .= $this->upload->display_errors().'<br/>';
 	          	$this->session->set_flashdata('notif', 'error_validated');
 	          	$this->session->set_flashdata('msg', $this->upload->display_errors());
 	          	redirect('lulus/baru');
-	        }*/
+	        }
 
 	        // filebebaspakai
 			$this->load->library('upload');
@@ -483,7 +500,7 @@ $erroruploadulang .= $this->upload->display_errors().'<br/>';
 	        // update judul
 	        $this->Skripsi_model->update_judul_in_student_topic($data['sempro'][0]->student_topik_id, $this->input->post('judul'));
 
-	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), null, null, $filenaskahfinal, $filetoefl);
+	        $this->Kelulusan_model->add($info[0]->nrp, $this->input->post('hid_sempro_id'), null, $filebebaspakai, $filenaskahfinal, $filetoefl);
 
 			$this->session->set_flashdata('notif', 'success');
           	$this->session->set_flashdata('msg', 'Suskes mendaftar kelulusan');

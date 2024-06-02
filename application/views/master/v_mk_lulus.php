@@ -40,8 +40,10 @@
                 <table id="example2" class="table table-bordered table-hover" style="width:100%;">
                   <thead>
                   <tr>
+                    <th>Angkatan</th>
                     <th>Kode Mata Kuliah</th>
                     <th>Nama Mata Kuliah</th>
+                    <th>Nisbi</th>
                     <th>Aksi</th>
                   </tr>
                   </thead>
@@ -50,9 +52,17 @@
                       foreach($eligibility as $row) { 
                       ?>
                   <tr>
+                    <td><?php echo $row->angkatan; ?></td>
                     <td><?php echo $row->kode_mk; ?></td>
                     <td><?php echo $row->nama_mk; ?></td>
-                    <td ><button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama_mk; ?>" targetkode="<?php echo $row->kode_mk; ?>"  class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button>
+                    <td><?php if($row->nisbi == 4) { echo 'A'; } 
+                              else if($row->nisbi == 3.5) { echo 'AB'; }
+                              else if($row->nisbi == 3) { echo 'B'; }
+                              else if($row->nisbi == 2.5) { echo 'BC'; }
+                              else if($row->nisbi == 2) { echo 'C'; }
+                              else if($row->nisbi == 1) { echo 'D'; } 
+                              else { echo 'E';   } ?></td>
+                    <td ><button targetid="<?php echo $row->id; ?>" targetnama="<?php echo $row->nama_mk; ?>" targetkode="<?php echo $row->kode_mk; ?>" targetangkatan="<?php echo $row->angkatan; ?>" targetnisbi="<?php echo $row->nisbi; ?>"  class="btn btn-xs btn-primary editbtn"  data-toggle="modal" data-target="#modal-edit" >Edit</button>
                     </td>
                   </tr>
 
@@ -81,6 +91,12 @@
           </div>
           <div class="modal-body">
            <div class="form-group row">
+              <label for="angkatan" class="col-sm-4 col-form-label">Angkatan</label>
+              <div class="col-sm-8">
+                <input type="text" name="angkatan" class="form-control" id="angkatan" >
+              </div>
+            </div>
+           <div class="form-group row">
               <label for="kode_mk" class="col-sm-4 col-form-label">Kode Mata Kuliah</label>
               <div class="col-sm-8">
                 <input type="text" name="kode_mk" class="form-control" id="kode_mk" >
@@ -94,6 +110,23 @@
                
               </div>
             </div>
+            <div class="form-group row">
+              <label for="nisbi" class="col-sm-4 col-form-label">Minimal Nisbi</label>
+              <div class="col-sm-8">
+                <select class="form-control" id="nisbi" name="nisbi">
+                  <option value="4">A</option>
+                  <option value="3.5">AB</option>
+                  <option value="3">B</option>
+                  <option value="2.5">BC</option>
+                  <option value="2">C</option>
+                  <option value="1">D</option>
+                  <option value="0">E</option>
+                </select>
+               
+              </div>
+            </div>
+
+              
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -118,6 +151,12 @@
             </button>
           </div>
           <div class="modal-body">
+            <div class="form-group row">
+              <label for="angkatanedit" class="col-sm-4 col-form-label">Angkatan</label>
+              <div class="col-sm-8">
+                <input type="text" name="angkatanedit" class="form-control" id="angkatanedit" >
+              </div>
+            </div>
            <div class="form-group row">
               <label for="edit_kode_mk" class="col-sm-4 col-form-label">Kode Mata Kuliah</label>
               <div class="col-sm-8">
@@ -129,6 +168,21 @@
               <label for="edit_nama_mk" class="col-sm-4 col-form-label">Nama Mata Kuliah</label>
               <div class="col-sm-8">
                 <input type="text" name="edit_nama_mk" class="form-control" id="edit_nama_mk" >
+               
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="nisbiedit" class="col-sm-4 col-form-label">Minimal Nisbi</label>
+              <div class="col-sm-8">
+                <select class="form-control" id="nisbiedit" name="nisbiedit">
+                  <option value="4">A</option>
+                  <option value="3.5">AB</option>
+                  <option value="3">B</option>
+                  <option value="2.5">BC</option>
+                  <option value="2">C</option>
+                  <option value="1">D</option>
+                  <option value="0">E</option>
+                </select>
                
               </div>
             </div>
@@ -159,6 +213,7 @@
             </button>
           </div>
           <div class="modal-body">
+            
            <div class="form-group row">
               <label for="namaedit" class="col-sm-2 col-form-label">Nama</label>
               <div class="col-sm-10">

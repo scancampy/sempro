@@ -143,7 +143,8 @@
                         <tr>
                           <th>Kode Mata Kuliah</th>
                           <th>Nama Mata Kuliah</th>
-                          <th>Nilai</th>
+                          <th>Nisbi Minimal</th>
+                          <th>Nilai Mhs</th>
                         </tr>
                       </thead>
                       <tbody>

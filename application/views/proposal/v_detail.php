@@ -747,7 +747,7 @@
                               WD - Validasi Final Dosbing <?php if($detail[0]->is_rejected == 1) { echo "Ditolak";  } ?>
                               <?php if($detail[0]->is_verified == 1) { ?>
                                 <br/><small><i class="fas fa-clock"></i>
-                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->wd_verified_date)); ?>
+                                <?php echo strftime("%d %B %Y", strtotime($detail[0]->wd_final_verified_date)); ?>
                               </small><br/>
                               <small><i class="fas fa-user"></i>
                                 <?php echo $detail[0]->wdnama; ?>
