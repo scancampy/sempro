@@ -48,9 +48,19 @@
                     <div class="callout callout-danger">
                       <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
                       Anda tidak dapat mengajukan pendaftaran kelulusan dengan alasan:
-                      <ol>
+                      <ul>
                         <?php echo $alasan; ?>
-                      </ol>
+                      </ul>
+                    </div>
+                  </div>
+                  <?php } else if(!$eligible_prasyarat) { ?>
+                  <div class="col-12">
+                    <div class="callout callout-danger">
+                      <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
+                      Anda tidak dapat mengajukan pendaftaran kelulusan dengan alasan:
+                      <ul>
+                        <?php echo $alasan; ?>
+                      </ul>
                     </div>
                   </div>
                   <?php } ?>
@@ -98,7 +108,8 @@
                         <tr>
                           <th>Kode Mata Kuliah</th>
                           <th>Nama Mata Kuliah</th>
-                          <th>Nilai</th>
+                          <th>Nisbi Minimal</th>
+                          <th>Nilai Mhs</th>
                         </tr>
                       </thead>
                       <tbody>

@@ -396,15 +396,16 @@ $erroruploadulang .= $this->upload->display_errors().'<br/>';
 			if($role->roles == 'student') {
 				$data['roles'] = 'student';
 				$data['info'] = $info;
+
+				//print_r($data['info']);
 				//$data['connect'] = $this->Student_model->connect_sim($info[0]->nrp);
 			}
 		}
 
 		if($data['roles'] == '') { redirect('dashboard'); }
 
-
-		$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0");
-			
+		$angkatan = '20'.substr($info[0]->nrp, 4, 2);
+		$mkprasyarat = $this->MK_lulus_model->get("is_deleted = 0 AND angkatan = '".$angkatan."'");			
 		$data['table_prasyarat'] = $this->Student_model->generate_table_prasyarat($mkprasyarat, $info[0]->nrp);
 		$data['eligible_prasyarat'] = $this->Student_model->check_eligible_mk_prasyarat_lulus($mkprasyarat, $info[0]->nrp);
 

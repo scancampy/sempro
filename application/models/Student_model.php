@@ -42,7 +42,7 @@ class Student_model extends CI_Model {
                               else if($value->nisbi == 2) { $nis =  'C'; }
                               else if($value->nisbi == 1) { $nis =  'D'; } 
                               else { $nis =  'E';   } 
-                              
+
                         if($q->num_rows() > 0) {
                                 
                                 
@@ -64,25 +64,38 @@ class Student_model extends CI_Model {
         }
 
         public function check_eligible_mk_prasyarat_lulus($mkprasyarat, $nrp) { 
+               // echo $nrp;
                 $this->load->helper('text');
                 $html = '';
 
                 foreach ($mkprasyarat as $key => $value) {
+                        //echo $value->nisbi;
                         $kodemk = explode(',', $value->kode_mk);
-                        $where = '';
-                        foreach($kodemk as $kode) {
-                                $this->db->or_where('kode_mk = ',trim($kode));
+                        $where = '(';
+                        foreach($kodemk as $key => $kode) {
+                                $where .= 'kode_mk="'.trim($kode).'"';
+
+                                if($key != count($kodemk)-1) { $where .= ' OR '; }
+                                //$this->db->or_where('kode_mk = ',trim($kode));
                         }
-                        $this->db->where('student_nrp = ', $nrp);
+                      //  echo $nrp;
+                        $where .= ') AND student_nrp = "'.$nrp.'"';
+                        //$this->db->where('student_nrp = ', $nrp);
+                        $this->db->where($where);
                         $q = $this->db->get('student_transcript');
+
+//                        echo $this->db->last_query();
 
                         if($q->num_rows() > 0) {
                                 $qrow = $q->row();
-                                if($qrow->nisbi == "D") {
+                               // print_r($value);
+                                //echo $qrow->nisbi_value.' '.$value->nisbi;
+                                //echo '<br/>';
+                                //print_r($qrow);
+                                //echo '<br/>';
+                                if($qrow->nisbi_value < $value->nisbi) {
                                         return false;
-                                } else if($qrow->nisbi == "E") {
-                                        return false;
-                                }
+                                } 
                         } else {
                                 return false;
                         }
