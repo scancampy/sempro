@@ -132,17 +132,127 @@ class Skripsi extends CI_Controller {
 
 		// Success Register
 		if($this->session->flashdata('notif') == 'success_register') {
-  		$data['js'] .= '
-  			Toast.fire({
-		        icon: "success",
-		        title: "Sukses daftar Ujian Proposal"
-		      });
-  		';
-    }
+	  		$data['js'] .= '
+	  			Toast.fire({
+			        icon: "success",
+			        title: "Sukses daftar Ujian Proposal"
+			      });
+	  		';
+    	}
 		
 
 		$this->load->view('v_header', $data);
 		$this->load->view('skripsi/v_skripsi', $data);
+		$this->load->view('v_footer', $data);
+	}
+
+	public function inputhasil() {
+		$data = array();
+
+		$roles = $this->session->userdata('user')->roles;
+		$info = $this->session->userdata('user')->info;
+
+		
+
+		$data['periode'] = $this->Periode_model->get_periode_sidang_skripsi();
+
+		$filtersemester = '';
+		if($this->input->get('filtersemester') != 'all' && $this->input->get('filtersemester')) {
+			$where = 'skripsi.periode_sidang_id = '.$this->input->get('filtersemester').' AND skripsi.sidang_date IS NOT NULL AND skripsi.sidang_time IS NOT NULL AND skripsi.ruang_id IS NOT NULL';
+
+			$data['sempro'] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+			
+		}
+
+		if(empty($this->input->get('filtersemester'))) {
+			$activeid = $this->Periode_model->get_periode_sidang_skripsi_aktif();
+			
+			$where = 'skripsi.periode_sidang_id = '.$activeid->id.' AND skripsi.sidang_date IS NOT NULL AND skripsi.sidang_time IS NOT NULL AND skripsi.ruang_id IS NOT NULL';
+
+			$data['sempro'] = $this->Skripsi_model->get_student_skripsi_with_where($where);
+			//die();
+		}
+
+		if ($this->input->server('REQUEST_METHOD') === 'POST') {
+			$sidangids = $this->input->post('sidangid');
+			$lulus = $this->input->post('luluscek');
+
+			foreach ($sidangids as $key => $value) {
+				$this->Skripsi_model->update_lulus($value, 0);
+			}
+
+			foreach ($lulus as $key => $value) {
+				$this->Skripsi_model->update_lulus($value, 1);
+			}
+
+			//die();
+
+			$this->session->set_flashdata('notif', 'success');
+          	$this->session->set_flashdata('msg', 'Sukses update status lulus sidang');
+
+          	$link = '';
+          	//print_r($_POST);
+          	if($this->input->post('hid_filter_semester')) {
+          		$link = '?filtersemester='.$this->input->post('hid_filter_semester').'&btncari=btncari';
+          	//	echo $link;
+          	}
+
+          	//die();
+          	redirect('skripsi/inputhasil'.$link);
+		}
+
+		$data['isadminst'] = false;
+		foreach($roles as $role) {
+			if($role->roles == 'adminst') {
+				$data['isadminst'] = true;
+			}
+		}
+
+		if($data['isadminst'] == false) {
+			redirect('dashboard');
+		}
+
+		// check all
+		$data['js'] = '
+		$("#checkall").on("click", function() {
+			if($(this).prop("checked")) {
+				$("input[type=\"checkbox\"]").prop("checked", true);
+			} else {
+				$("input[type=\"checkbox\"]").prop("checked", false);
+			}
+		});';
+
+		// NOTIF
+		$data['js'] .= '
+				var Toast = Swal.mixin({
+			      toast: true,
+			      position: "top-end",
+			      showConfirmButton: false,
+			      timer: 3000
+			    });
+		';
+
+    if($this->session->flashdata('notif') == 'failed') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "error",
+		        title: "'.$this->session->flashdata('msg').'"
+		      });
+  		';
+  	}
+
+  	if($this->session->flashdata('notif') == 'success') {
+  		$data['js'] .= '
+  			Toast.fire({
+		        icon: "success",
+		        title: "'.$this->session->flashdata('msg').'"
+		      });
+  		';
+  	}
+		
+
+		$this->load->view('v_header', $data);
+		$this->load->view('skripsi/v_input_hasil', $data);
 		$this->load->view('v_footer', $data);
 	}
 

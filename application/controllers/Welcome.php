@@ -14,6 +14,8 @@ class Welcome extends CI_Controller {
 	{
 		$data = array();
 		if($this->input->post('btnlogin')) {
+			//$this->session->sess_destroy();
+				
 			$this->form_validation->set_rules('userid', 'NRP / NPK', 'required');
 			$this->form_validation->set_rules('password', 'Password', 'required');
 			$this->form_validation->set_error_delimiters('<li>', '</li>');
@@ -23,6 +25,7 @@ class Welcome extends CI_Controller {
             } else { 
             	$login = $this->User_model->do_login();
 				if($login) {
+
 					// create session & redirect
 					if($login->user_type == 'staff') {
 						$login->info = $this->Staff_model->get($login->username);

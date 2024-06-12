@@ -282,7 +282,8 @@ class Student_topik_model extends CI_Model {
         }
 
         public function get_proposal_need_final_wd_validation() {
-                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'kalab_npk_verified_judul_date !=' => null, 'wd_verified_date !=' => null, 'is_deleted' => 0));
+                $q = $this->db->get_where('student_topik', array('wd_npk_final_verified' => null, 'kalab_npk_verified_judul_date !=' => null, 'wd_verified_date !=' => null, 'is_deleted' => 0, 'is_rejected' => 0));
+                //echo $this->db->last_query();
                 return $q->num_rows();
         }
 

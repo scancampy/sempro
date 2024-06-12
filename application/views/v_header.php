@@ -249,13 +249,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo base_url('admintu/stskripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'admintu') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('admintu/stskripsi'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'stskripsi') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ST Skripsi</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('sempro/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('sempro/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'plotruang' && $this->uri->segment(1) == 'sempro') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     Plot Ruang Sempro
@@ -263,10 +263,18 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url('skripsi/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
+                <a href="<?php echo base_url('skripsi/plotruang'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'plotruang' && $this->uri->segment(1) == 'skripsi') { echo  'active'; } ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     Plot Ruang Skripsi
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url('skripsi/inputhasil'); ?>" class="nav-link <?php if($this->uri->segment(2) == 'inputhasil') { echo  'active'; } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Input Hasil Skripsi
                   </p>
                 </a>
               </li>

@@ -37,7 +37,7 @@ class Lulus extends CI_Controller {
 			} else if($role->roles == 'adminst') {
 				$data['roles'] = 'adminst';
 				$data['is_admin_st'] = true;
-				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.sk_filename IS NULL AND kelulusan.dosbing_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
+				$data['lulus'] = $this->Kelulusan_model->get("kelulusan.admin_validate_date IS NULL AND kelulusan.dosbing_validate_date IS NOT NULL AND student_topik.is_deleted = 0");
 
 				//print_r($data['lulus']); die();
 			}

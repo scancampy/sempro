@@ -45,7 +45,7 @@
                   
                   <?php if(!$dataskripsi) { ?>
                   <div class="col-12">
-                    <div class="callout callout-danger">
+                    <div class="alert alert-danger">
                       <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
                       Anda tidak dapat mengajukan pendaftaran kelulusan dengan alasan:
                       <ul>
@@ -55,7 +55,7 @@
                   </div>
                   <?php } else if(!$eligible_prasyarat) { ?>
                   <div class="col-12">
-                    <div class="callout callout-danger">
+                    <div class="alert alert-danger">
                       <h5><i class="icon fas fa-exclamation-triangle"></i> Perhatian!</h5>
                       Anda tidak dapat mengajukan pendaftaran kelulusan dengan alasan:
                       <ul>
@@ -125,6 +125,7 @@
                     </p>
                   </div>
                 -->
+                <?php if($alasan == "") { ?>
                   <div class="col-12 ">
                     <p class="text-sm"><strong>Upload Bukti Bebas Pemakaian Alat dan Bahan Lab</strong>
                        <input type="file"  name="filebebaspakai" class="form-control" accept="application/pdf" id="filebebaspakai" >
@@ -143,8 +144,7 @@
                        <input type="file"  name="filetoefl" class="form-control" accept="application/pdf" id="filetoefl" >
                     </p>
                   </div>
-
-                  <?php if($alasan == "") { ?>
+                  
                   <div class="col-12">
                     <input type="hidden" name="hid_sempro_id" value="<?php echo $sempro[0]->student_topik_id; ?>">
                     <button type="submit" value="submit" class="btn btn-primary" name="btnajukan" id="btnajukan" >Submit Form Pendaftaran</button>

@@ -458,6 +458,12 @@ class Skripsi_model extends CI_Model {
                 $this->db->where('id', $idsempro);
                 $this->db->update('skripsi', $data);
         }
+
+        public function update_lulus($idskripsi, $lulus) {
+                $data = array('is_lulus' => $lulus);
+                $this->db->where('id', $idskripsi);
+                $this->db->update('skripsi', $data);
+        }
 }
 
 ?>
